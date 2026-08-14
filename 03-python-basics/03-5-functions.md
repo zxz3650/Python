@@ -1,10 +1,12 @@
 # 03-5. 함수와 스코프
 
-## 학습 목표
+{% hint style="info" %}
+### 🧭 학습 목표
 
 - 함수로 책임을 분리한다.
 - 인자와 반환값을 사용한다.
 - 지역 변수와 전역 변수의 차이를 이해한다.
+{% endhint %}
 
 ```python
 def parse_line(line):
@@ -47,8 +49,10 @@ def is_suspicious(count):
 
 전역 변수를 함수 안에서 변경하기보다 인자로 전달하고 반환값으로 결과를 받는다.
 
-## 실습
+{% hint style="success" %}
+## 🧪 실습
 
 - `parse_line()`, `validate_record()`, `summarize()`를 구현한다.
 - 각 함수가 하나의 책임만 갖는지 점검한다.
 - 정상·오류·경계값을 함수별로 테스트한다.
+{% endhint %}
