@@ -210,4 +210,4 @@ if __name__ == "__main__":
 
 ---
 
-다음 절: [04-7. NumPy 배열과 대용량 수치 처리](04-7-numpy-array.md)
+다음 절: [04-7. 간단한 파일 분석기](04-7-file-analyzer.md)
