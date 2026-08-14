@@ -1,5 +1,7 @@
 # 07. HTTP와 API
 
+![HTTP와 API 핵심 흐름](assets/07-http-api-overview.svg)
+
 06장에서 소켓으로 바이트를 직접 주고받았다면, 이 장에서는 그 위에서 동작하는 HTTP의 규칙을 학습합니다. URL, 요청·응답, 상태 코드, 헤더, JSON API를 이해하고 Python으로 안전하게 검증합니다.
 
 {% hint style="info" %}
@@ -30,12 +32,33 @@
 6. [07-6. HTTP 보안 검증 기초](07-http-api/07-6-http-security-validation.md)
 7. [07-7. 로컬 네트워크·웹 보안 점검 프로젝트](07-http-api/07-7-local-web-security-project.md)
 
+### 한눈에 보는 학습 지도
+
+```mermaid
+flowchart LR
+    A["07-1<br/>URL·메시지"] --> B["07-2<br/>requests"]
+    B --> C["07-3<br/>JSON 검증"]
+    C --> D["07-4<br/>세션·인증"]
+    D --> E["07-5<br/>오류·재시도"]
+    E --> F["07-6<br/>보안 검증"]
+    F --> G["07-7<br/>로컬 프로젝트"]
+```
+
+{% hint style="info" %}
+그림의 화살표는 단순 목차가 아니라 **앞 절의 산출물이 다음 절의 입력이 되는 관계**를 뜻합니다. 예를 들어 07-2에서 받은 `Response` 객체를 07-3에서 검증하고, 그 검증 함수를 07-7 프로젝트에서 재사용합니다.
+{% endhint %}
+
 ## 06장과 07장의 연결
 
-```text
-06장: IP·포트 → TCP 연결 → bytes 송수신 → 타임아웃
-                              ↓
-07장: URL → HTTP 요청 → 상태·헤더·본문 → 보안 검증 → JSON 보고서
+```mermaid
+flowchart TB
+    subgraph L6["06장: 통신 기반"]
+        A["IP·포트"] --> B["TCP 연결"] --> C["bytes 송수신"] --> D["타임아웃"]
+    end
+    subgraph L7["07장: HTTP 의미 해석"]
+        E["URL"] --> F["HTTP 요청"] --> G["상태·헤더·본문"] --> H["보안 검증"] --> I["JSON 보고서"]
+    end
+    D --> E
 ```
 
 HTTP는 네트워크와 별개의 기술이 아닙니다. 클라이언트가 서버의 IP와 포트에 TCP로 연결한 뒤, HTTP 형식의 요청을 보내고 응답을 받습니다. `requests`가 소켓 처리의 상당 부분을 대신하지만 연결 실패, 시간 제한, 잘린 응답은 여전히 고려해야 합니다.
