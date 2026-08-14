@@ -18,20 +18,19 @@
 
 ## 1. 프로젝트 구조
 
-```text
-training_server.py
-├─ /health       정상 JSON과 기본 보안 헤더
-├─ /api/echo     쿼리 입력을 JSON으로 반환
-├─ /headers      일부 보안 헤더가 없는 학습 응답
-└─ /redirect     /health로 이동
-
-security_validator.py
-├─ URL·loopback 범위 검증
-├─ TCP 연결 확인
-├─ 상태·Content-Type·JSON 검사
-├─ 보안 헤더 검사
-├─ 리다이렉트 출처 검사
-└─ JSON 보고서 저장
+```mermaid
+flowchart LR
+    U["학습자"] --> V["security_validator.py"]
+    V --> S["범위 검증<br/>localhost only"]
+    S --> T["TCP 연결 확인"]
+    T --> H["training_server.py<br/>127.0.0.1:8080"]
+    H --> E1["/health<br/>정상 JSON"]
+    H --> E2["/api/echo<br/>입력 반영"]
+    H --> E3["/headers<br/>헤더 누락 실습"]
+    H --> E4["/redirect<br/>같은 출처 이동"]
+    E1 --> R["JSON 보고서"]
+    E3 --> R
+    E4 --> R
 ```
 
 ## 2. 점검 관점과 코드 연결
@@ -44,6 +43,28 @@ security_validator.py
 | 헤더 정책 | `check_security_headers()` | 누락 헤더를 warning으로 기록 |
 | 이동 경로 | `check_redirect()` | scheme·host·port가 같은지 확인 |
 | 자원 제한 | timeout, `read_limited()` | 무한 대기·과도한 응답 방지 |
+
+### 한 번의 실행에서 일어나는 일
+
+```mermaid
+sequenceDiagram
+    participant U as 학습자
+    participant V as Validator
+    participant S as Local Server
+    participant F as JSON Report
+    U->>V: base_url 입력
+    V->>V: host·IP가 loopback인지 검증
+    V->>S: TCP 연결 확인
+    S-->>V: 연결 성공
+    V->>S: GET /health
+    S-->>V: 200 + JSON
+    V->>S: GET /headers
+    S-->>V: 일부 보안 헤더 누락
+    V->>S: GET /redirect
+    S-->>V: 302 + Location
+    V->>F: pass·warning·fail 기록
+    F-->>U: web-security-report.json
+```
 
 ## 3. 실행
 
@@ -68,6 +89,22 @@ python examples/07-local-web-security-lab/security_validator.py \
 
 기본 보고서는 `web-security-report.json`에 저장됩니다.
 
+### 핵심 코드 읽기
+
+```python
+host, port, normalized = validate_loopback_url(base_url)
+checks = [check_tcp_connection(host, port)]
+
+with requests.Session() as session:
+    checks.extend([
+        check_health(session, normalized),
+        check_security_headers(session, normalized),
+        check_redirect(session, normalized),
+    ])
+```
+
+코드의 실행 순서는 위 시퀀스 다이어그램과 같습니다. 먼저 대상을 제한하고 TCP 연결을 확인한 뒤, HTTP 검사를 작은 함수 단위로 실행합니다.
+
 ## 4. 예상 결과
 
 - TCP 연결: pass
@@ -76,6 +113,38 @@ python examples/07-local-web-security-lab/security_validator.py \
 - `/redirect` 같은 출처 이동: pass
 
 `warning`은 프로젝트가 의도적으로 만든 누락 설정을 발견한 결과입니다. 실제 환경에서는 애플리케이션 용도, 프록시, HTTPS 종단 위치를 함께 확인해야 합니다.
+
+예상 보고서의 핵심 구조:
+
+```json
+{
+  "target": "http://127.0.0.1:8080",
+  "scope": "loopback-only training lab",
+  "summary": {"pass": 3, "warning": 1, "fail": 0},
+  "checks": [
+    {
+      "check": "tcp_connection",
+      "status": "pass",
+      "evidence": "connected to 127.0.0.1:8080"
+    },
+    {
+      "check": "security_headers",
+      "status": "warning",
+      "evidence": "missing: Content-Security-Policy, X-Content-Type-Options, Referrer-Policy"
+    }
+  ]
+}
+```
+
+```mermaid
+flowchart LR
+    P["pass<br/>기대 조건 충족"] --> R["보고서"]
+    W["warning<br/>추가 검토 필요"] --> R
+    F["fail<br/>검사 실패·조건 불충족"] --> R
+    R --> A["근거 확인 후 사람이 최종 판단"]
+```
+
+`warning`과 `fail`은 침해 확정이 아니라 관찰된 사실을 분류한 값입니다.
 
 ## 5. 안전장치 확인
 
