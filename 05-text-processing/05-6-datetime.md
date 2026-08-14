@@ -170,4 +170,4 @@ print(ordered)
 
 ---
 
-다음 절: [05-7. 약 3GB 웹 로그 분석 실습](05-7-web-log-analysis.md)
+다음 절: [05-7. NumPy 배열과 대용량 수치 처리](05-7-numpy-array.md)
