@@ -1,113 +1,17 @@
 # 03-9. 실무 보강 문법
 
-앞선 챕터에서 다룬 문법을 실제 로그·파일·자동화 코드에 적용하기 위해 자주 빠지는 Python 문법을 보강한다.
+앞 절에서 기초를 익힌 뒤 코드의 표현력·성능·안전성을 높이는 문법을 다룬다. 처음부터 모두 암기할 필요는 없으며 실제 문제에서 필요할 때 다시 찾아본다.
 
 {% hint style="info" %}
 ### 🧭 학습 목표
 
-- 연산자와 인덱싱·슬라이싱을 정확히 사용한다.
-- `range()`, `sorted()`, `reversed()`로 반복을 제어한다.
-- 함수 인자와 타입 힌트를 활용한다.
-- 컴프리헨션과 generator의 차이를 이해한다.
-- 모듈·패키지와 예외 계층을 안전하게 사용한다.
-- 보안 자동화 코드에서 피해야 할 Python 기능을 설명한다.
+- 정렬과 컴프리헨션을 읽고 작성한다.
+- generator로 대용량 데이터를 지연 처리한다.
+- 가변 인자와 lambda의 사용 범위를 이해한다.
+- 예외 원인을 보존하고 외부 입력을 안전하게 다룬다.
 {% endhint %}
 
-## 1. 연산자
-
-### 산술 연산자
-
-```python
-total = 17
-count = 5
-
-print(total / count)   # 일반 나눗셈: 3.4
-print(total // count)  # 몫: 3
-print(total % count)   # 나머지: 2
-print(2 ** 3)          # 거듭제곱: 8
-```
-
-### 비교·논리·멤버십·동일성
-
-```python
-action = "DENY"
-failed = 5
-
-is_suspicious = action == "DENY" and failed >= 3
-is_known = action in {"ALLOW", "DENY"}
-
-value = None
-print(value is None)       # None 여부는 is로 확인
-print(value is not None)
-```
-
-`==`는 값의 같음을 비교하고, `is`는 같은 객체인지 비교한다. `None` 비교에는 `is None`을 사용한다.
-
-## 2. 인덱싱·슬라이싱·복사
-
-```python
-ips = ["10.0.0.5", "198.51.100.9", "203.0.113.7"]
-
-print(ips[0])
-print(ips[-1])
-print(ips[1:])      # 두 번째부터 끝까지
-print(ips[::2])     # 한 칸씩 건너뛰기
-print(ips[::-1])    # 역순
-```
-
-리스트와 딕셔너리는 변경 가능한 객체다. 같은 객체를 가리키는 대입과 복사를 구분한다.
-
-```python
-original = {"tags": ["auth"]}
-alias = original
-alias["tags"].append("deny")
-print(original)     # 함께 변경됨
-
-copied = original.copy()  # 얕은 복사
-```
-
-중첩 구조를 독립적으로 복사해야 한다면 `copy.deepcopy()`를 검토한다.
-
-## 3. 문자열과 안전한 데이터 접근
-
-```python
-line = "DENY,198.51.100.9,/admin"
-action, ip, path = line.split(",", maxsplit=2)
-
-if path.startswith("/admin") and path.endswith("min"):
-    print(f"{ip} 접근: {action}")
-
-parts = ["DENY", ip, path]
-print("|".join(parts))
-```
-
-외부 데이터는 키나 필드가 없을 수 있으므로 딕셔너리에서 직접 접근하기 전에 `get()`을 사용할 수 있다.
-
-```python
-event = {"action": "DENY"}
-ip = event.get("ip")
-if ip is None:
-    print("IP 누락")
-```
-
-원문이 필요한 분석에서는 정규화한 문자열과 원문을 별도로 보존한다.
-
-## 4. 반복 도구
-
-```python
-events = ["ALLOW", "DENY", "DENY"]
-
-for index in range(len(events)):
-    print(index, events[index])
-
-for event in reversed(events):
-    print(event)
-
-for event in sorted(events):
-    print(event)
-```
-
-정렬 기준은 `key` 함수로 명시할 수 있다.
+## 1. 정렬과 key 함수
 
 ```python
 records = [
@@ -115,100 +19,116 @@ records = [
     {"ip": "198.51.100.9", "count": 7},
 ]
 
-for record in sorted(records, key=lambda item: item["count"], reverse=True):
+sorted_records = sorted(
+    records,
+    key=lambda record: record["count"],
+    reverse=True,
+)
+
+for record in sorted_records:
     print(record)
 ```
 
-반복이 정상적으로 끝났을 때만 실행되는 `else`도 있다.
+`sorted()`는 새 리스트를 반환한다. `list.sort()`는 원본 리스트를 직접 변경한다. `lambda`는 한 표현식으로 된 짧은 함수를 인자로 전달할 때만 제한적으로 사용한다.
+
+## 2. 딕셔너리·세트 컴프리헨션
 
 ```python
-for event in events:
-    if event == "CRITICAL":
-        break
-else:
-    print("중대 이벤트 없음")
-```
-
-## 5. 컴프리헨션과 generator
-
-```python
-records = [
+events = [
     {"action": "DENY", "ip": "10.0.0.5"},
     {"action": "ALLOW", "ip": "198.51.100.9"},
 ]
 
-denied = [r["ip"] for r in records if r["action"] == "DENY"]
-counts = {ip: denied.count(ip) for ip in set(denied)}
-unique_actions = {r["action"] for r in records}
+denied_by_ip = {
+    event["ip"]: event
+    for event in events
+    if event["action"] == "DENY"
+}
+
+unique_actions = {event["action"] for event in events}
 ```
 
-리스트 컴프리헨션은 결과를 메모리에 만든다. 대용량 로그에는 generator expression 또는 `yield`를 사용한다.
+집계는 `list.count()`를 반복하기보다 한 번의 반복으로 누적한다.
+
+```python
+counts = {}
+
+for event in events:
+    ip = event["ip"]
+    counts[ip] = counts.get(ip, 0) + 1
+```
+
+## 3. generator와 yield
+
+리스트 컴프리헨션은 결과 전체를 메모리에 만든다. generator는 필요한 값을 하나씩 생성한다.
 
 ```python
 def non_empty_lines(lines):
     for line in lines:
-        line = line.strip()
-        if line:
-            yield line
+        clean = line.strip()
+        if clean:
+            yield clean
 
-for line in non_empty_lines(["", "first", "second"]):
+lines = ["", "first", "second"]
+for line in non_empty_lines(lines):
     print(line)
 ```
 
-## 6. 함수 인자와 타입 힌트
+대용량 로그처럼 전체를 동시에 메모리에 올릴 필요가 없을 때 유용하다. generator는 한 번 소비하면 다시 사용하려면 새로 만들어야 한다.
+
+## 4. 가변 인자
 
 ```python
-def classify(count: int, threshold: int = 3) -> str:
-    """실패 횟수를 위험 수준으로 분류한다."""
-    if count >= threshold:
-        return "WARNING"
-    return "NORMAL"
+def make_event(action, *tags, **metadata):
+    return {
+        "action": action,
+        "tags": list(tags),
+        "metadata": metadata,
+    }
 
-print(classify(count=5, threshold=4))
+event = make_event(
+    "DENY",
+    "auth",
+    "critical",
+    ip="198.51.100.9",
+    port=443,
+)
 ```
 
-기본값 인자는 변경 가능한 객체를 사용하지 않는다.
+- `*args`: 위치 인자를 튜플로 받음
+- `**kwargs`: 키워드 인자를 딕셔너리로 받음
+
+고정된 매개변수로 충분하다면 가변 인자를 남용하지 않는다.
+
+## 5. 날짜와 시간
 
 ```python
-def add_tag(tag: str, tags: list[str] | None = None) -> list[str]:
-    if tags is None:
-        tags = []
-    tags.append(tag)
-    return tags
-```
-
-필요하면 가변 인자와 키워드 인자를 사용할 수 있다.
-
-```python
-def make_event(action, *values, **metadata):
-    return {"action": action, "values": values, "metadata": metadata}
-```
-
-## 7. 모듈과 패키지
-
-```python
-import ipaddress
-from pathlib import Path
 from datetime import datetime, timezone
 
-address = ipaddress.ip_address("198.51.100.9")
-print(address.is_private)
-print(datetime.now(timezone.utc))
+timestamp = "2026-08-10T10:00:00+00:00"
+parsed = datetime.fromisoformat(timestamp)
+
+now = datetime.now(timezone.utc)
+print(parsed, now)
 ```
 
-프로젝트 코드는 기능별 모듈로 나누고 실행 진입점을 명확히 한다.
+시간 데이터는 문자열 상태로만 비교하지 않고 timezone 정보를 포함한 `datetime`으로 변환한다.
+
+## 6. 명령줄 인자
 
 ```python
-def main() -> None:
-    print("분석 시작")
+import argparse
 
-if __name__ == "__main__":
-    main()
+parser = argparse.ArgumentParser()
+parser.add_argument("--input", required=True)
+parser.add_argument("--output", default="result.json")
+parser.add_argument("--threshold", type=int, default=3)
+args = parser.parse_args()
 ```
 
-`import` 시 실행되는 부수효과를 줄이고, 모듈은 함수·상수·클래스 중심으로 구성한다.
+반복 실행되는 실무 도구는 코드 안의 경로·기준값을 직접 수정하지 않고 인자로 받는다.
 
-## 8. 예외 계층과 원인 보존
+## 7. 예외 원인 보존
 
 ```python
 try:
@@ -217,36 +137,36 @@ except ValueError as exc:
     raise ValueError("포트 형식이 올바르지 않습니다") from exc
 ```
 
-가능한 구체적인 예외를 처리한다.
+구체적인 예외를 처리하고 원래 오류를 유지한다.
 
-- `ValueError`: 값의 형식이 잘못됨
-- `TypeError`: 자료형이 예상과 다름
-- `KeyError`: 딕셔너리 키가 없음
-- `IndexError`: 인덱스 범위를 벗어남
-- `FileNotFoundError`: 파일이 없음
-
-`except Exception`으로 모든 오류를 숨기면 프로그래밍 오류까지 놓칠 수 있다.
-
-## 9. 보안 자동화에서 피할 것
+## 8. 보안 자동화에서 피할 것
 
 ```python
-# 사용자가 입력한 문자열을 코드로 실행하지 않는다.
+# 외부 입력을 Python 코드로 실행하지 않는다.
 # eval(user_input)
 # exec(user_input)
 ```
 
 - `eval()`, `exec()`로 외부 입력을 실행하지 않는다.
-- `subprocess` 사용 시 문자열 명령어 조합보다 인자 리스트를 사용한다.
-- 비밀번호·토큰·API 키를 소스 코드에 저장하지 않는다.
-- 파일 경로는 허용된 기준 디렉터리 안에 있는지 검증한다.
-- `assert`를 사용자 입력 검증이나 권한 판정에 사용하지 않는다.
+- `subprocess`에는 문자열 명령보다 인자 리스트를 전달한다.
+- 비밀번호·토큰·API 키를 소스 코드에 넣지 않는다.
+- 입력 파일 경로가 허용된 기준 디렉터리 안인지 검증한다.
+- `assert`를 권한 판정과 사용자 입력 검증에 사용하지 않는다.
+- 로그 출력 전에 토큰과 개인정보를 마스킹한다.
 
 {% hint style="success" %}
 ## 🧪 실습
 
-1. IP별 DENY 횟수를 딕셔너리 컴프리헨션으로 만든다.
+1. DENY 횟수 기준으로 레코드를 내림차순 정렬한다.
 2. 대용량 로그를 generator로 한 줄씩 처리한다.
-3. 함수에 타입 힌트와 기본값 인자를 추가한다.
-4. `ValueError`, `FileNotFoundError`를 구분해 처리한다.
-5. 외부 입력을 `eval()` 없이 안전하게 처리한다.
+3. 03-8 프로젝트에 명령줄 인자를 추가한다.
+4. timestamp를 timezone-aware datetime으로 변환한다.
+5. 외부 입력을 `eval()` 없이 안전하게 해석한다.
 {% endhint %}
+
+## 핵심 정리
+
+- 03-9의 문법은 기초 문법을 대체하지 않고 실무 코드를 확장한다.
+- 짧은 표현보다 읽기 쉬운 코드를 우선한다.
+- 대용량 입력에는 generator, 반복 실행 도구에는 명령줄 인자를 고려한다.
+- 외부 입력은 코드·명령·경로로 사용하기 전에 검증한다.
