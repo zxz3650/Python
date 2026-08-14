@@ -29,6 +29,7 @@
   - [05-4. 그룹과 캡처](05-text-processing/05-4-groups-capture.md)
   - [05-5. 데이터 검증](05-text-processing/05-5-validation.md)
   - [05-6. 날짜와 시간](05-text-processing/05-6-datetime.md)
+  - [05-7. 약 3GB 웹 로그 분석 실습](05-text-processing/05-7-web-log-analysis.md)
 - [06. 시스템 자동화](06-system-automation.md)
 - [07. 네트워크 프로그래밍](07-network-programming.md)
 - [08. HTTP와 API](08-http-api.md)
