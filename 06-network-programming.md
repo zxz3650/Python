@@ -85,5 +85,5 @@
 
 ---
 
-다음 장: [07. 시스템 자동화](07-system-automation.md)
+다음 장: [07. HTTP와 API](07-http-api.md)
 
