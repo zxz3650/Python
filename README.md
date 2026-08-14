@@ -5,7 +5,7 @@
 ## 과정 설계 원칙
 
 - 문법과 프로그래밍 기반을 먼저 학습합니다.
-- 파일·데이터·운영체제·네트워크·HTTP 순서로 적용 범위를 확장합니다.
+- 파일·데이터·네트워크·운영체제·HTTP 순서로 적용 범위를 확장합니다.
 - 각 장은 개념, 최소 예제, 실패 사례, 종합 실습, 완료 기준 순서로 구성합니다.
 - 취약점 진단과 CSIRT 시나리오는 공통 기반과정 이후의 심화과정에서 적용합니다.
 - 실습은 소유하거나 명시적으로 허가받은 환경에서만 수행합니다.
@@ -17,8 +17,8 @@
 3. [03. Python 기초 문법](03-python-basics.md)
 4. [04. 파일 입출력과 데이터 형식](04-file-io.md)
 5. [05. 텍스트 파싱과 데이터 분석](05-text-processing.md)
-6. [06. 시스템 자동화](06-system-automation.md)
-7. [07. 네트워크 프로그래밍](07-network-programming.md)
+6. [06. 네트워크 프로그래밍](06-network-programming.md)
+7. [07. 시스템 자동화](07-system-automation.md)
 8. [08. HTTP와 API](08-http-api.md)
 9. [09. 테스트와 디버깅](09-testing-debugging.md)
 10. [10. 프로그램 구조화](10-program-architecture.md)
