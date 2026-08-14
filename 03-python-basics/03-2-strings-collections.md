@@ -8,6 +8,63 @@
 - 자료구조를 선택하면 로그 분석과 탐지 로직이 어떻게 쉬워지는가?
 {% endhint %}
 
+## `list`와 `dict`를 먼저 이해하기
+
+### 리스트(`list`): 순서가 있는 여러 값
+
+리스트는 여러 값을 순서대로 담는 자료구조다. 대괄호(`[]`)로 만들며, 인덱스는 0부터 시작한다. 로그 이벤트처럼 **같은 종류의 데이터가 여러 개 있고 순서대로 처리해야 할 때** 사용한다.
+
+```python
+ports = [22, 80, 443]
+
+print(ports[0])       # 22
+print(ports[-1])      # 443
+ports.append(8080)    # 값 추가
+print(ports)          # [22, 80, 443, 8080]
+
+for port in ports:
+    print(port)
+```
+
+리스트에는 서로 다른 자료형도 담을 수 있지만, 한 리스트에는 가능한 한 의미가 비슷한 값을 담는 것이 읽기 쉽고 안전하다.
+
+### 딕셔너리(`dict`): 이름표가 붙은 값의 묶음
+
+딕셔너리는 키(key)와 값(value)을 연결한다. 중괄호(`{}`)로 만들며, **한 대상을 여러 속성으로 표현할 때** 사용한다.
+
+```python
+event = {
+    "action": "DENY",
+    "ip": "198.51.100.9",
+    "port": 443,
+}
+
+print(event["ip"])          # 키로 값 조회
+event["user"] = "bob"       # 새 필드 추가
+event["action"] = "REVIEW"  # 기존 값 수정
+
+for key, value in event.items():
+    print(key, value)
+```
+
+키가 없을 수 있는 외부 데이터는 대괄호로 바로 조회하면 `KeyError`가 날 수 있다. 이때는 기본값을 정하는 `get()`을 사용한다.
+
+```python
+path = event.get("path", "(경로 없음)")
+```
+
+실무에서는 보통 **여러 이벤트를 리스트에 담고, 이벤트 하나는 딕셔너리로 표현**한다.
+
+```python
+events = [
+    {"action": "ALLOW", "ip": "10.0.0.5"},
+    {"action": "DENY", "ip": "198.51.100.9"},
+]
+
+denied_ips = [event["ip"] for event in events if event["action"] == "DENY"]
+print(denied_ips)
+```
+
 ## 자료구조란 무엇인가
 
 자료구조(data structure)는 여러 데이터를 **어떤 규칙으로 묶고, 찾고, 추가하고, 수정할지** 정한 형태다. 같은 데이터라도 구조에 따라 처리 방법과 속성이 달라진다.
