@@ -28,6 +28,147 @@
 실제 로그에는 IP 주소, 요청 경로, 식별자 등 민감 정보가 포함될 수 있습니다. 조직의 승인·보존·반출 정책을 확인하고 원본 로그는 읽기 전용으로 다룹니다.
 {% endhint %}
 
+## 분석 관점과 코드 연결
+
+웹 로그에는 하나의 정답이 들어 있지 않습니다. 먼저 어떤 질문에 답할 것인지 정한 뒤 그 질문에 필요한 필드와 지표를 선택해야 합니다. 이 실습은 다음 다섯 관점으로 로그를 분석합니다.
+
+| 분석 관점 | 답하려는 질문 | 핵심 지표 | 주요 코드 |
+| --- | --- | --- | --- |
+| 데이터 신뢰성 | 분석에 사용할 수 있는 로그인가? | 전체·정상·오류 행, 오류율 | `parse_combined_log()`, `assert` |
+| 서비스 상태 | 서버가 정상적으로 응답했는가? | 상태 코드, 응답 바이트 | `value_counts()`, `Counter.update()` |
+| 이용 패턴 | 누가 언제 무엇을 요청했는가? | 메서드·IP·경로·시간대 | `urlsplit()`, UTC 변환, `Counter` |
+| 보안 조사 | 추가 확인이 필요한 요청은 무엇인가? | IP별 404, 민감 경로 요청 | 정규표현식 마스크, 임계값 필터 |
+| 처리 성능 | 3GB급 파일을 안정적으로 반복 분석할 수 있는가? | 처리 시간, 처리량, 배치 크기 | 스트리밍 반복문, `BATCH_SIZE` |
+
+{% hint style="info" %}
+분석 순서는 **데이터 신뢰성 → 서비스 상태·이용 패턴 → 보안 조사**입니다. 파싱 오류가 많은 데이터를 먼저 보안 관점으로 해석하면 잘못된 결론을 만들 수 있습니다.
+{% endhint %}
+
+### 관점 A. 데이터 신뢰성
+
+가장 먼저 “몇 행을 읽었고 몇 행을 해석하지 못했는가?”를 확인합니다.
+
+```python
+summary["total_lines"] += 1
+
+try:
+    batch.append(parse_combined_log(line))
+except ValueError:
+    summary["malformed_lines"] += 1
+```
+
+분석이 끝난 뒤 다음 검증으로 누락 여부를 확인합니다.
+
+```python
+assert summary["total_lines"] == (
+    summary["parsed_lines"] + summary["malformed_lines"]
+)
+```
+
+이 검증이 실패하면 상태 코드나 IP 순위를 해석하기 전에 처리 로직부터 수정해야 합니다.
+
+### 관점 B. 서비스 상태
+
+상태 코드는 웹 서비스가 요청을 어떻게 처리했는지 보여 줍니다.
+
+```python
+summary["status"].update(
+    frame["status"].value_counts().to_dict()
+)
+summary["total_bytes"] += int(frame["bytes"].sum())
+```
+
+- `2xx`: 정상 처리 여부
+- `3xx`: 리다이렉션 동작
+- `4xx`: 잘못된 요청, 없는 경로, 인증 문제
+- `5xx`: 서버 내부 오류 가능성
+
+단, `404`가 많다는 사실만으로 공격이라고 판단하지 않습니다. 잘못된 링크나 배포 직후 정적 파일 누락도 원인이 될 수 있습니다.
+
+### 관점 C. 이용 패턴
+
+“어떤 IP가 언제 어떤 경로를 요청했는가?”를 집계해 평상시 트래픽의 형태를 파악합니다.
+
+```python
+request_path = urlsplit(fields["target"]).path or "/"
+timestamp = datetime.strptime(
+    fields["timestamp"],
+    "%d/%b/%Y:%H:%M:%S %z",
+).astimezone(timezone.utc)
+```
+
+`urlsplit()`은 `/login?next=/admin`에서 경로 `/login`을 분리해 같은 기능의 요청을 묶습니다. 시간은 UTC로 통일해야 서로 다른 시간대의 로그를 같은 기준으로 비교할 수 있습니다.
+
+```python
+summary["method"].update(frame["method"].value_counts())
+summary["ip"].update(frame["ip"].value_counts())
+summary["path"].update(frame["path"].value_counts())
+summary["hour"].update(frame["hour"].value_counts())
+```
+
+상위값은 이상 행위를 확정하는 결과가 아니라 평상시 패턴과 비교할 기준입니다.
+
+### 관점 D. 보안 조사 우선순위
+
+이 실습에서는 두 가지 신호를 조합합니다.
+
+1. 한 IP에서 반복적으로 발생한 `404`
+2. `.env`, `.git`, `wp-admin`, `phpmyadmin` 같은 민감 경로 요청
+
+```python
+not_found = frame.loc[frame["status"] == 404, "ip"]
+summary["not_found_by_ip"].update(
+    not_found.value_counts().to_dict()
+)
+
+sensitive_mask = frame["path"].str.contains(
+    SENSITIVE_PATH_PATTERN,
+    regex=True,
+    na=False,
+)
+```
+
+이후 두 신호 중 하나라도 임계값을 넘은 IP를 후보로 만듭니다.
+
+```python
+if (
+    not_found_count >= not_found_threshold
+    or sensitive_count >= sensitive_path_threshold
+):
+    triage_rows.append(candidate)
+```
+
+여기서 `or`를 사용한 이유는 두 신호를 모두 만족하지 않더라도 반복 404 또는 민감 경로 집중 중 하나가 뚜렷하면 후속 확인 가치가 있기 때문입니다. 후보는 침해 확정이 아니며 원본 요청, 프록시 구조, 승인된 스캐너 정보를 함께 확인해야 합니다.
+
+### 관점 E. 대용량 처리 성능
+
+파일 전체 대신 일정한 수의 행만 DataFrame으로 만듭니다.
+
+```python
+for line in file:
+    batch.append(parse_combined_log(line))
+
+    if len(batch) >= BATCH_SIZE:
+        merge_batch(summary, batch)
+        batch.clear()
+```
+
+- `batch`: 현재 처리 중인 일부 행
+- `merge_batch()`: 배치 통계를 전체 집계에 누적
+- `batch.clear()`: 처리한 상세 행을 메모리에서 제거
+- `Counter`: 전체 상세 로그 대신 항목별 개수만 유지
+
+처리 속도는 다음처럼 계산합니다.
+
+```python
+throughput_mb_s = (
+    LOG_PATH.stat().st_size / (1024 ** 2) / elapsed_seconds
+)
+```
+
+이 값은 저장장치, CPU, 로그 형식에 따라 달라지므로 다른 환경의 절대값보다 같은 환경에서 배치 크기를 바꿨을 때의 차이를 비교합니다.
+
+
 ## 1. 왜 전체 파일을 DataFrame으로 읽지 않는가
 
 약 3GB 텍스트 파일은 DataFrame으로 변환될 때 문자열 객체, 인덱스, 열별 자료구조가 추가되어 파일 크기보다 훨씬 많은 메모리를 사용할 수 있습니다.
