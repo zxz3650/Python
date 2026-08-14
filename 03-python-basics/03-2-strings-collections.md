@@ -1,10 +1,12 @@
 # 03-2. 문자열과 자료구조
 
-## 학습 목표
+{% hint style="info" %}
+### 🧭 학습 목표
 
 - 문자열을 정규화하고 분리한다.
 - `list`, `tuple`, `set`, `dict`의 차이를 설명한다.
 - 로그 이벤트를 구조화한다.
+{% endhint %}
 
 ## 문자열 처리
 
@@ -41,8 +43,10 @@ for key, value in event.items():
     print(key, value)
 ```
 
-## 실습
+{% hint style="success" %}
+## 🧪 실습
 
 1. 로그 한 줄을 `dict`로 변환한다.
 2. 중복 IP를 `set`으로 제거한다.
 3. IP별 이벤트 목록을 딕셔너리에 저장한다.
+{% endhint %}
