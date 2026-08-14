@@ -10,6 +10,24 @@ import json
 SAMPLE_BYTES = 8192
 HASH_CHUNK_SIZE = 1024 * 1024
 
+FILE_SIGNATURES = (
+    ("PDF document", b"%PDF-", {".pdf"}),
+    ("PNG image", b"\x89PNG\r\n\x1a\n", {".png"}),
+    ("JPEG image", b"\xff\xd8\xff", {".jpg", ".jpeg"}),
+    ("GIF image", b"GIF8", {".gif"}),
+    ("ZIP archive", b"PK\x03\x04", {
+        ".zip", ".docx", ".xlsx", ".pptx", ".jar", ".apk"
+    }),
+    ("GZIP archive", b"\x1f\x8b", {".gz", ".tgz"}),
+    ("ELF executable", b"\x7fELF", {".elf", ".so", ""}),
+    ("RAR archive", b"Rar!\x1a\x07", {".rar"}),
+    ("7-Zip archive", b"7z\xbc\xaf\x27\x1c", {".7z"}),
+    ("Mach-O binary", b"\xfe\xed\xfa\xce", {".dylib", ""}),
+    ("Mach-O binary", b"\xfe\xed\xfa\xcf", {".dylib", ""}),
+    ("Mach-O binary", b"\xce\xfa\xed\xfe", {".dylib", ""}),
+    ("Mach-O binary", b"\xcf\xfa\xed\xfe", {".dylib", ""}),
+)
+
 
 def calculate_sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -17,6 +35,58 @@ def calculate_sha256(path: Path) -> str:
         while chunk := file.read(HASH_CHUNK_SIZE):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def has_pe_signature(path: Path, header: bytes) -> bool:
+    if not header.startswith(b"MZ") or len(header) < 64:
+        return False
+
+    pe_offset = int.from_bytes(header[0x3C:0x40], byteorder="little")
+    if pe_offset <= 0 or pe_offset > path.stat().st_size - 4:
+        return False
+
+    with path.open("rb") as file:
+        file.seek(pe_offset)
+        return file.read(4) == b"PE\x00\x00"
+
+
+def identify_file_header(path: Path) -> dict:
+    with path.open("rb") as file:
+        header = file.read(4096)
+
+    name = "unknown"
+    expected_extensions = set()
+
+    if has_pe_signature(path, header):
+        name = "Windows PE executable"
+        expected_extensions = {".exe", ".dll", ".sys", ".scr"}
+    else:
+        for signature_name, magic, extensions in FILE_SIGNATURES:
+            if header.startswith(magic):
+                name = signature_name
+                expected_extensions = extensions
+                break
+
+    suffix = path.suffix.lower()
+    extension_matches = (
+        suffix in expected_extensions
+        if expected_extensions
+        else None
+    )
+
+    result = {
+        "detected_format": name,
+        "header_hex": header[:16].hex(" "),
+        "expected_extensions": sorted(expected_extensions),
+        "extension_matches": extension_matches,
+    }
+
+    if extension_matches is False:
+        result["warning"] = (
+            f"확장자 {suffix or '(없음)'}와 식별된 파일 형식이 다릅니다."
+        )
+
+    return result
 
 
 def classify_content(path: Path) -> dict:
@@ -112,6 +182,7 @@ def analyze_file(path: Path) -> dict:
             tz=timezone.utc,
         ).isoformat(),
         "sha256": calculate_sha256(resolved),
+        "file_header": identify_file_header(resolved),
         **classification,
     }
 
