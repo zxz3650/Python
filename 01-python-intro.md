@@ -39,11 +39,10 @@ flowchart LR
     B --> C["03 기초 문법<br/>자료형·조건·반복·함수"]
     C --> D["04 심화<br/>보안 라이브러리·CTF"]
     D --> E["Final 프로젝트<br/>네트워크·Pwn·Web·Malware·Crypto·Forensics"]
-    C -. 관심 분야 선택 .-> E
 ```
 
 {% hint style="info" %}
-**🗺️ 학습 흐름**: 01 → 02 → 03 → 04를 순서대로 진행한 뒤, Final 프로젝트는 관심 분야에 따라 선택한다.
+**🗺️ 학습 흐름**: 01 → 02 → 03 → 04 → Final 프로젝트 순서로 진행한다.
 {% endhint %}
 
 | 단계 | 구분 | 내용 |
@@ -54,7 +53,7 @@ flowchart LR
 | 4 | 심화교안 | Offensive Security & CTF 관련 라이브러리 사용법 학습 |
 | Fin. | 프로젝트 | 네트워크 통신, pwntools CTF, 웹 CTF, 악성코드 분석, 암호 CTF, 포렌식 카빙 |
 
-각 단계는 이전 단계를 선행으로 가진다. 3→4단계는 순서대로 진행하는 것을 권장하지만, 프로젝트는 관심 카테고리(네트워크/Pwn/Web/Malware/Crypto/Forensics)에 따라 자유롭게 선택해도 된다.
+각 단계는 이전 단계를 선행으로 가진다. 3→4단계는 순서대로 진행한다.
 {% hint style="danger" %}
 # 1.4 ⚠️ 실습 윤리와 법적 고지
 > 💡 **필독**
