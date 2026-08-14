@@ -112,7 +112,7 @@ for mod in ["requests", "bs4", "Crypto", "pwn"]:
 
 **풀이 보기**
 
-	*[풀이 이미지 생략: 노션 임시 인증 링크]*
+*[풀이 이미지 생략]*
 	`[없음]`으로 뜨는 모듈은 다음 매핑으로 설치한다.
 	```bash
 pip install requests beautifulsoup4 pycryptodome pwntools
