@@ -1,124 +1,212 @@
-# 03-1. 변수와 자료형
+# 03-1. 변수와 기본 자료형
 
-{% hint style="info" %}
-### 🧭 이 절의 핵심 질문
-
-- 변수는 값을 저장하는 상자인가, 아니면 이름인가?
-- 왜 같은 숫자처럼 보여도 문자열과 정수는 다르게 다뤄야 하는가?
-- 입력 데이터의 자료형을 확인하는 것이 보안 자동화에서 왜 중요한가?
-{% endhint %}
-
-## 변수란 무엇인가
-
-변수는 데이터를 담아 두는 상자라기보다 **값을 가리키는 이름**이다. 대입 연산자 `=`는 “같다”가 아니라 오른쪽의 값을 왼쪽 이름에 연결한다는 뜻이다.
-
-```python
-port = 443
-another_port = port
-port = 8443
-
-print(another_port)  # 443: 이름을 복사한 것이 아니라 당시 값을 다시 가리킴
-print(port)          # 8443
-```
-
-변수 이름을 사용하면 복잡한 데이터를 기억할 필요 없이 의미를 부여할 수 있다. `443`보다 `https_port`가 코드의 의도를 잘 설명한다. 이름은 `snake_case`로 쓰고, 무엇을 담는지 드러내도록 작성한다.
-
-## 값과 자료형은 왜 중요한가
-
-자료형(type)은 값의 종류뿐 아니라 **그 값에 적용할 수 있는 연산과 해석 방법**을 결정한다.
-
-```python
-port_number = 443       # int: 계산·비교 가능
-port_text = "443"       # str: 문자 조합·검색에 사용
-
-print(port_number + 1)  # 444
-print(port_text + "1")  # "4431"
-```
-
-외부 입력은 대부분 문자열로 들어온다. 따라서 로그의 횟수나 포트처럼 계산해야 하는 값은 숫자로 변환하고, 변환 실패도 처리해야 한다.
-
-## `443`과 `"443"`은 왜 다른가
-
-겉으로는 같은 숫자를 표현하는 것처럼 보이지만 자료형이 다르다.
-
-- `443`: 정수(`int`). 계산과 크기 비교를 위한 값이다.
-- `"443"`: 문자열(`str`). 문자 `4`, `4`, `3`이 이어진 텍스트다.
-
-따라서 같은 연산을 해도 결과가 달라진다.
-
-```python
-port_number = 443
-port_text = "443"
-
-print(port_number + 1)        # 444
-print(port_text + "1")         # 4431
-print(port_number == port_text) # False
-
-# 로그·input()에서 받은 문자열을 계산에 사용하려면 변환한다.
-port = int(port_text)
-print(port + 1)                # 444
-```
-
-문자열 `"443"`에 숫자 `1`을 바로 더하면 `TypeError`가 발생한다. Python은 자료형이 다른 값을 자동으로 적당히 바꾸지 않기 때문에, **데이터의 의미에 맞는 자료형을 선택하거나 명시적으로 변환해야 한다.**
-
-## 객체와 가변성의 기초
-
-Python에서 변수는 객체 자체가 아니라 객체를 참조하는 이름이다. `int`, `str`, `tuple`처럼 변경할 수 없는(immutable) 객체와 `list`, `dict`, `set`처럼 내부 내용을 변경할 수 있는(mutable) 객체를 구분해야 한다. 이 차이는 03-2에서 다루는 자료구조를 함수에 전달할 때 특히 중요하다.
+변수와 자료형은 Python이 데이터를 기억하고 해석하는 출발점이다. 같은 `443`이라도 숫자인지 문자열인지에 따라 가능한 연산과 결과가 달라진다.
 
 {% hint style="info" %}
 ### 🧭 학습 목표
 
-- 변수와 객체의 관계를 이해한다.
+- 변수·값·객체·자료형의 관계를 설명한다.
 - `int`, `float`, `bool`, `str`, `None`, `bytes`를 구분한다.
-- 보안 데이터의 값에 적절한 자료형을 선택한다.
+- `type()`, `isinstance()`와 명시적 형변환을 사용한다.
+- 변환 오류와 유효 범위를 확인한다.
 {% endhint %}
 
-## 변수와 값
+## 1. 변수와 대입
 
-Python 변수는 값을 담는 상자라기보다 객체를 가리키는 이름이다.
+변수는 값을 담는 고정 크기 상자가 아니라 **객체를 가리키는 이름**이다. `=`는 같다는 비교가 아니라 오른쪽 값을 왼쪽 이름에 연결하는 대입 연산자다.
 
 ```python
 port = 443
 service = "https"
 is_open = True
 
-print(type(port))
-print(type(service))
-print(type(is_open))
+print(port, service, is_open)
 ```
 
-## 기본 자료형
-
-| 자료형 | 예시 | 보안 실무 활용 |
-|---|---|---|
-| `int` | `443` | 포트, 횟수, PID |
-| `float` | `0.95` | 점수, 비율, 시간 |
-| `bool` | `True` | 탐지 여부, 상태 |
-| `str` | `"/admin"` | 로그, URL, 명령어 |
-| `None` | `None` | 값 없음, 미확인 |
-| `bytes` | `b"MZ"` | 파일 헤더, 패킷, 인코딩 데이터 |
-
-## 연산자와 형변환
+값 비교에는 `==`를 사용한다.
 
 ```python
-failed = "3"
-threshold = 5
-
-failed_count = int(failed)
-print(failed_count + 1)
-print(failed_count >= threshold)
-
-# input()은 항상 str을 반환한다.
-value = input("포트 번호: ")
-port = int(value)
+port = 443
+print(port == 443)  # True
 ```
 
-외부 입력은 항상 신뢰하지 않는다. 변환 전 형식과 범위를 검증한다.
+변수 이름은 문자 또는 밑줄로 시작하며 숫자로 시작할 수 없다. 의미가 드러나는 `snake_case` 이름을 사용한다.
+
+```python
+failed_count = 3       # 권장
+x = 3                  # 의미가 불분명
+# 3failed = 3          # SyntaxError
+```
+
+## 2. 값·객체·자료형
+
+값은 실제 데이터이고, 객체는 Python이 값을 메모리에서 다루는 단위다. 자료형은 객체가 어떤 값이며 어떤 연산을 지원하는지 결정한다.
+
+```python
+port = 443
+
+print(type(port))              # <class 'int'>
+print(isinstance(port, int))   # True
+print(isinstance(port, str))   # False
+```
+
+`type()`은 정확한 자료형을 확인하고, `isinstance()`는 특정 자료형 또는 그 하위 자료형인지 검사한다.
+
+## 3. `443`과 `"443"`이 다른 이유
+
+- `443`: 정수 `int` — 계산과 크기 비교에 사용
+- `"443"`: 문자열 `str` — 문자 `4`, `4`, `3`의 순서
+
+```python
+print(443 + 1)          # 444
+print("443" + "1")      # 4431
+print(443 == "443")     # False
+```
+
+자료형이 맞지 않으면 오류가 발생한다.
+
+```python
+# print("443" + 1)
+# TypeError: 문자열과 정수는 바로 더할 수 없음
+
+print(int("443") + 1)   # 444
+# int("443a")           # ValueError: 정수로 변환할 수 없음
+```
+
+{% hint style="warning" %}
+외부 입력과 `input()`의 결과는 기본적으로 문자열이다. 계산하기 전에 형식과 범위를 검증하고 변환한다.
+{% endhint %}
+
+## 4. 숫자: int와 float
+
+```python
+failed_count = 3       # int
+risk_score = 0.85      # float
+
+print(7 / 2)   # 3.5
+print(7 // 2)  # 3
+print(7 % 2)   # 1
+print(2 ** 3)  # 8
+```
+
+`int`는 포트·횟수·PID처럼 정수값에, `float`는 비율·점수·측정 시간에 사용한다. 부동소수점은 일부 소수를 정확히 표현하지 못한다.
+
+```python
+print(0.1 + 0.2)  # 0.30000000000000004
+```
+
+정확한 금액이나 정밀 계산에는 목적에 따라 `decimal.Decimal`을 검토한다.
+
+## 5. bool과 비교 결과
+
+`bool`은 `True` 또는 `False` 두 값을 가진다. 비교식의 결과도 bool이다.
+
+```python
+port = 443
+is_https = port == 443
+is_privileged = port < 1024
+
+print(is_https)      # True
+print(is_privileged) # True
+```
+
+`True`와 `False`는 문자열 `"True"`, `"False"`와 다르다.
+
+```python
+print(bool(""))       # False
+print(bool("False"))  # True: 비어 있지 않은 문자열
+```
+
+## 6. None: 값이 없음을 표현
+
+`None`은 값이 아직 없거나 확인되지 않았음을 나타낸다. 숫자 `0`이나 빈 문자열과 의미가 다르다.
+
+```python
+count = 0
+country = None
+
+print(count == 0)        # True
+print(country is None)   # True
+```
+
+`None`은 `==`보다 `is None`으로 확인한다.
+
+## 7. str과 bytes
+
+`str`은 사람이 읽는 문자, `bytes`는 파일 헤더·패킷처럼 바이트 단위의 원시 데이터에 사용한다.
+
+```python
+text = "MZ"
+raw = b"MZ"
+
+print(type(text))  # str
+print(type(raw))   # bytes
+
+encoded = text.encode("utf-8")
+decoded = raw.decode("utf-8")
+```
+
+문자열과 bytes를 직접 결합할 수 없다. 인코딩 또는 디코딩으로 같은 자료형으로 맞춘다.
+
+## 8. 형변환과 입력 검증
+
+```python
+raw_port = "443"
+
+try:
+    port = int(raw_port)
+except ValueError:
+    print("숫자 형식이 아닙니다")
+else:
+    if not 1 <= port <= 65535:
+        print("포트 범위를 벗어났습니다")
+    else:
+        print("유효한 포트:", port)
+```
+
+변환 성공만 확인하지 말고 업무 범위도 검증한다.
+
+## 9. 여러 변수 대입과 언패킹
+
+```python
+action, ip, port = "DENY", "198.51.100.9", 443
+x, y = 10, 20
+x, y = y, x
+
+print(x, y)  # 20 10
+```
+
+항목 수가 맞지 않으면 `ValueError`가 발생한다.
+
+## 10. 객체의 변경 가능성
+
+`int`, `float`, `bool`, `str`, `tuple`은 생성 후 내부 값을 바꿀 수 없는 불변 객체다. `list`, `dict`, `set`은 내용을 바꿀 수 있다.
+
+```python
+a = 443
+b = a
+a = 8443
+
+print(a)  # 8443
+print(b)  # 443
+```
+
+`a`에 새 값을 대입해도 `443` 객체 자체를 고친 것이 아니라 `a`가 새 객체를 가리키게 된다.
 
 {% hint style="success" %}
 ## 🧪 실습
 
-1. 문자열로 입력된 포트 번호를 정수로 변환한다.
-2. `None`과 숫자 `0`을 구분한다.
-3. IP, 포트, 탐지 여부를 적절한 자료형으로 저장한다.
+1. `443`, `"443"`, `443.0`의 자료형과 비교 결과를 확인한다.
+2. `"443a"`를 `int()`로 변환하고 오류를 읽는다.
+3. `None`, `0`, `""`, `False`의 차이를 출력한다.
+4. 입력된 포트가 정수이며 1~65535 범위인지 검증한다.
+5. IP·포트·탐지 여부를 적절한 자료형으로 저장한다.
 {% endhint %}
+
+## 핵심 정리
+
+- 변수는 객체를 가리키는 이름이다.
+- 자료형은 값의 의미와 가능한 연산을 결정한다.
+- 외부 입력은 문자열일 가능성이 높으므로 변환과 검증이 필요하다.
+- `None`, `0`, 빈 문자열은 업무 의미가 서로 다르다.
+- 불변 객체와 변경 가능한 객체의 차이는 자료구조와 함수에서 중요하다.
