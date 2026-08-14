@@ -4,13 +4,19 @@
 
 ## 1. 오류 계층
 
-```text
-이름 해석 실패
-→ TCP 연결 실패
-→ 연결·읽기 타임아웃
-→ HTTP 오류 상태
-→ 형식이 다른 본문
-→ 필드·자료형 검증 실패
+```mermaid
+flowchart TD
+    A["URL 입력"] --> B{"이름 해석 성공?"}
+    B -- "아니오" --> E1["DNS 오류"]
+    B -- "예" --> C{"TCP 연결 성공?"}
+    C -- "아니오" --> E2["ConnectionError"]
+    C -- "예" --> D{"제한 시간 내 응답?"}
+    D -- "아니오" --> E3["Timeout"]
+    D -- "예" --> F{"HTTP 상태 성공?"}
+    F -- "아니오" --> E4["HTTPError"]
+    F -- "예" --> G{"형식·필드 검증 성공?"}
+    G -- "아니오" --> E5["데이터 계약 오류"]
+    G -- "예" --> P["정상 처리"]
 ```
 
 같은 “API 실패”라도 원인과 대응이 다르므로 단계별로 구분합니다.
@@ -49,6 +55,27 @@ for attempt in range(3):
 
 재시도에는 최대 횟수, 지수 백오프, 전체 작업 제한을 둡니다. POST처럼 중복 실행의 영향이 있는 요청은 멱등성과 API 정책을 먼저 확인합니다.
 
+```mermaid
+flowchart TD
+    A["요청 실패"] --> B{"일시적 오류인가?"}
+    B -- "아니오" --> X["즉시 원인 수정"]
+    B -- "예" --> C{"멱등하거나 중복 방지되는가?"}
+    C -- "아니오" --> Y["자동 재시도 금지·정책 확인"]
+    C -- "예" --> D{"최대 횟수 이내인가?"}
+    D -- "아니오" --> Z["최종 실패 기록"]
+    D -- "예" --> E["백오프 후 재시도"] --> A
+```
+
+지수 백오프 예시:
+
+```text
+1차 실패 → 1초 대기
+2차 실패 → 2초 대기
+3차 실패 → 재시도 종료
+```
+
+재시도는 오류를 숨기는 기능이 아니라 **일시적인 실패에 한해서 회복 기회를 제한적으로 제공하는 기능**입니다.
+
 ## 4. 리다이렉트
 
 Requests는 일반적인 GET 요청의 리다이렉트를 기본적으로 따라갑니다. 보안 점검에서는 목적지를 먼저 확인하도록 자동 이동을 끕니다.
@@ -60,6 +87,17 @@ response = requests.get(
     timeout=(2, 3),
 )
 location = response.headers.get("Location")
+```
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant A as /start
+    participant B as Location 목적지
+    C->>A: GET /start (redirect 비활성)
+    A-->>C: 302 + Location: /health
+    C->>C: scheme·host·port 검증
+    C->>B: 검증 통과 후 별도 요청
 ```
 
 ## 5. 응답 크기 제한
