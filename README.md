@@ -1,26 +1,38 @@
-# 🐍 Python Basic
-## 보안 실무자를 위한 Python 기초 과정
+# Python Basic
 
-Python을 처음 배우는 보안 실무자가 **소개 → 설치 → 문법 기초 → 실습** 순서로 학습할 수 있는 GitBook 교재입니다.
+보안엔지니어가 실무 심화과정에 진입하기 전에 필요한 Python 프로그래밍 기반을 학습하는 과정입니다.
 
-### 학습 순서
+## 과정 설계 원칙
 
-1. [파이썬 소개 — 보안 실무자를 위한 언어 선택](01-python-intro.md)
-2. [파이썬 설치 — 기본 설치 vs 아나콘다](02-python-setup.md)
-3. [Python 문법 기초교안](03-python-basics.md)
-4. [주피터 실습](notebooks/03_python_basic.ipynb)
+- 문법과 프로그래밍 기반을 먼저 학습합니다.
+- 파일·데이터·운영체제·네트워크·HTTP 순서로 적용 범위를 확장합니다.
+- 각 장은 개념, 최소 예제, 실패 사례, 종합 실습, 완료 기준 순서로 구성합니다.
+- 취약점 진단과 CSIRT 시나리오는 공통 기반과정 이후의 심화과정에서 적용합니다.
+- 실습은 소유하거나 명시적으로 허가받은 환경에서만 수행합니다.
 
-### 학습 규칙
+## 학습 순서
 
-- 각 챕터의 개념을 읽은 뒤 코드 블록을 직접 실행합니다.
-- 실습 데이터는 합성 데이터 또는 명시적으로 허가된 데이터만 사용합니다.
-- 외부 시스템에 대한 스캔·요청·분석은 소유권 또는 서면 허가가 있는 환경에서만 수행합니다.
+1. [01. Python 소개](01-python-intro.md)
+2. [02. 개발 및 실습 환경](02-python-setup.md)
+3. [03. Python 기초 문법](03-python-basics.md)
+4. [04. 파일 입출력과 데이터 형식](04-file-io.md)
+5. [05. 텍스트 파싱과 정규표현식](05-text-processing.md)
+6. [06. 시스템 자동화](06-system-automation.md)
+7. [07. 네트워크 프로그래밍](07-network-programming.md)
+8. [08. HTTP와 API](08-http-api.md)
+9. [09. 테스트와 디버깅](09-testing-debugging.md)
+10. [10. 프로그램 구조화](10-program-architecture.md)
+11. [11. 동시성과 비동기 처리](11-concurrency.md)
+12. [12. Python 활용 종합 프로젝트](12-capstone.md)
 
-### 실행 환경
+## 학습 산출물
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m pytest
-```
+- 실행 가능한 Python 프로그램
+- 명령줄 인터페이스
+- 파일·JSON·CSV 처리 기능
+- TCP 및 HTTP 클라이언트
+- 예외 처리와 실행 로그
+- pytest 테스트
+- 재현 가능한 프로젝트 문서
+
+이 과정을 완료한 뒤 취약점 진단 자동화 또는 CSIRT 분석·대응 자동화 심화과정으로 분기합니다.
