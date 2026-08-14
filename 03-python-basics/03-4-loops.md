@@ -1,10 +1,12 @@
 # 03-4. 반복문: while, True, for
 
-## 학습 목표
+{% hint style="info" %}
+### 🧭 학습 목표
 
 - `for`와 `while`의 차이를 이해한다.
 - `while True`와 종료 조건을 안전하게 사용한다.
 - `break`, `continue`, `enumerate`, `zip`을 활용한다.
+{% endhint %}
 
 ## for 반복
 
@@ -73,8 +75,10 @@ for ip, action in zip(ips, actions):
 denied = [ip for ip, action in zip(ips, actions) if action == "DENY"]
 ```
 
-## 실습
+{% hint style="success" %}
+## 🧪 실습
 
 1. `while True`로 로그를 읽되 빈 입력에서 종료한다.
 2. 오류 행은 건너뛰고 행 번호를 기록한다.
 3. DENY 이벤트만 별도 목록으로 만든다.
+{% endhint %}
