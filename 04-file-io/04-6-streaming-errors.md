@@ -210,4 +210,4 @@ if __name__ == "__main__":
 
 ---
 
-다음 절: [04-7. pandas와 DataFrame 기반 대용량 처리](04-7-pandas-dataframe.md)
+다음 절: [04-7. NumPy 배열과 대용량 수치 처리](04-7-numpy-array.md)
