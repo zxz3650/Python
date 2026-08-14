@@ -16,7 +16,7 @@
 2. [02. 개발 및 실습 환경](02-python-setup.md)
 3. [03. Python 기초 문법](03-python-basics.md)
 4. [04. 파일 입출력과 데이터 형식](04-file-io.md)
-5. [05. 텍스트 파싱과 정규표현식](05-text-processing.md)
+5. [05. 텍스트 파싱과 데이터 분석](05-text-processing.md)
 6. [06. 시스템 자동화](06-system-automation.md)
 7. [07. 네트워크 프로그래밍](07-network-programming.md)
 8. [08. HTTP와 API](08-http-api.md)
