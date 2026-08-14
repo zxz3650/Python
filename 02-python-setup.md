@@ -1,12 +1,15 @@
 ![02 Python Setup](https://placehold.co/1500x400/c2410c/ffffff.png?text=02+Python+Setup&font=montserrat)
 # 개요
 전 OS(Windows/macOS/Linux)에서 실습 환경을 구축한다. 두 가지 경로를 제시한다. 1안은 [python.org](http://python.org) 기본 설치 + venv 가상환경, 2안은 Anaconda/Miniconda 기반 환경이다.
-# 학습 목표
+{% hint style="info" %}
+## 🧭 학습 목표
 - 1안(기본 설치): [python.org](http://python.org) 설치 + venv로 격리된 실습 환경을 만든다
 - 2안(아나콘다): conda 환경을 만들고 패키지를 관리한다
 - requests/pwntools/pycryptodome 등 과정 필수 패키지를 설치한다
 - 설치가 올바른지 검증 스크립트로 확인한다
+{% endhint %}
 ---
+{% hint style="info" %}
 # 2.1 기본 설치 ([python.org](http://python.org) + venv)
 시스템을 가볍게 유지하고 싶거나, 컴파일 의존성(pwntools 등)을 사용자 제어로 관리하고 싶을 때 선택한다. 보안 실무자에게는 가장 무난한 설치 경로다. 
 **Windows**
@@ -34,6 +37,9 @@ sudo dnf install -y python3 python3-pip                                    # RHE
 sudo pacman -S python python-pip                                           # Arch
 ```
 > 🎯 **Kali Linux / Parrot OS 사용자라면 **보안 실습용 배포판(Kali Linux, Parrot OS)은 Python 3와 pip이 이미 기본으로 설치되어 있어 위 설치 단계가 **별도로 필요 없다**. `python3 --version`으로 버전만 확인하고 바로 2.2절(venv 가상환경)로 넘어가면 된다. 본인 장비를 보안 실습용으로 따로 구성할 계획이라면, nmap·Burp Suite·pwntools 같은 도구가 미리 포함된 **Kali Linux 또는 Parrot OS 사용을 권장한다** — 이 커리큘럼 전체(pwntools CTF, 네트워크 진단, 포렌식 등)와 설치 부담 없이 바로 호환된다.
+{% endhint %}
+
+{% hint style="success" %}
 # 2.2 venv 가상환경 — 3개 OS 공통
 가상환경은 과정 전용 패키지를 시스템과 분리해 설치하는 상자다. 반드시 사용한다. **이 커리큘럼은 3장(기초교안)의 실습 폴더 구조와 동일하게 프로젝트 폴더명 ****`python-security-lab`****, 가상환경명 ****`.venv`****를 그대로 따른다.**
 ```bash
@@ -45,6 +51,9 @@ source .venv/bin/activate          # macOS/Linux
 deactivate # 가상환경 비활성화 시
 ```
 > ✅ **\[심화과정에서는\]** 이 venv 안에 이 과정 전체에 필요한 패키지가 다 들어간다. 랩을 새로 구성할 때마다 이 상자만 새로 만들면 시스템 Python은 항상 깨끗하게 유지된다.
+{% endhint %}
+
+{% hint style="info" %}
 # 2.3 아나콘다 (Anaconda/Miniconda)
 데이터 분석·과학 패키지가 미리 빌드된 배포본이다. 용량이 크므로(Anaconda 수 GB) 가벼운 **Miniconda**를 권장한다.
 ```bash
@@ -68,6 +77,9 @@ conda env remove -n python-security-lab
 | 적합 대상 | pwntools/socket 중심(이 커리큘럼 기본) | numpy/pandas·ML 분석 병행 시 |
 
 > 💡 이 커리큘럼은 의존 패키지가 가벼워 **1안(venv)을 기본**으로 사용한다. 대용량 데이터 분석처럼 numpy/pandas·로컬 LLM 의존성이 커지는 단계에서만 conda로 전환을 고려한다.
+{% endhint %}
+
+{% hint style="warning" %}
 # 2.4 공통 패키지와 Jupyter
 ```bash
 (venv) python -m pip install requests beautifulsoup4 lxml pwntools pycryptodome scapy jupyter ipykernel
@@ -79,7 +91,8 @@ conda env remove -n python-security-lab
 (venv) jupyter notebook   # 또는 jupyter lab
 ```
 기초부터 캡스톤까지 실행 가능한 MyST Markdown 노트북으로 구성한 Jupyter Book을 프로젝트 폴더에 제공한다. Notion 각 과정 페이지 하단에도 핵심 실습 셀을 직접 수록해 별도 파일 없이 내용을 확인할 수 있다.
-# 직접 해보기
+{% hint style="success" %}
+# 🧪 직접 해보기
 > 📝 **연습**: 아래 검증 스크립트를 본인 환경에 저장해 실행하고, 누락된 패키지가 있다면 `pip install`로 설치해 전부 `[OK]`가 뜨게 만들어라.
 ```python
 import sys
@@ -101,8 +114,11 @@ pip install requests beautifulsoup4 pycryptodome pwntools
 	모듈명과 패키지명이 다른 경우에 주의한다: `bs4` 모듈은 `beautifulsoup4` 패키지, `Crypto` 모듈은 `pycryptodome` 패키지, `pwn` 모듈은 `pwntools` 패키지다. 이 이름 불일치는 파이썬 생태계에서 자주 겪는 함정이다.
 	핵심: 설치 검증은 "import가 되는지"로 확인하는 것이 가장 확실하다. `pip list`만으로는 실제 코드에서 import가 되는지 보장하지 못한다(예: 대소문자, 버전 충돌).
 
+{% endhint %}
+
 ---
-# Jupyter Book 빌드 실습
+{% hint style="info" %}
+# 🧰 Jupyter Book 빌드 실습
 ```bash
 cd whitehat-jupyter-book
 python3.12 -m venv .venv
@@ -122,5 +138,6 @@ assert sys.version_info >= (3, 11)
 1. `sys.executable`이 가상환경 아래인지 확인한다.
 2. `python -m pip --version`이 같은 Python을 가리키는지 확인한다.
 3. 노트북 커널과 패키지 설치 환경이 같은지 확인한다.
+{% endhint %}
 ---
 [3. Python 문법 기초교안](https://app.notion.com/p/3a7436c34cbd8195994afa9c5e3341b1)으로 이동한다
