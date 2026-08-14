@@ -12,6 +12,7 @@ Python의 핵심 문법을 보안 실무 데이터 처리와 연결해 학습한
 6. [03-6 파일·JSON·CSV·bytes](03-python-basics/03-6-files-data.md)
 7. [03-7 예외·assert·모듈·테스트](03-python-basics/03-7-errors-modules.md)
 8. [03-8 인증 로그 분석 미니 프로젝트](03-python-basics/03-8-log-project.md)
+9. [03-9 실무 보강 문법](03-python-basics/03-9-practical-syntax.md)
 
 ## 학습 방법
 
