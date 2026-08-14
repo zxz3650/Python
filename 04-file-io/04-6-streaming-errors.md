@@ -210,4 +210,4 @@ if __name__ == "__main__":
 
 ---
 
-다음 장: [05. 텍스트 파싱과 정규표현식](../05-text-processing.md)
+다음 절: [04-7. pandas와 DataFrame 기반 대용량 처리](04-7-pandas-dataframe.md)
