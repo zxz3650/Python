@@ -1,10 +1,12 @@
 # 03-6. 파일, JSON, CSV, str과 bytes
 
-## 학습 목표
+{% hint style="info" %}
+### 🧭 학습 목표
 
 - 파일을 안전하게 읽고 쓴다.
 - `pathlib`, JSON, CSV를 사용한다.
 - `str`과 `bytes`를 구분한다.
+{% endhint %}
 
 ## pathlib와 파일 I/O
 
@@ -54,8 +56,10 @@ assert restored == text
 
 파일 헤더나 패킷처럼 바이트 단위 데이터는 `bytes`로 처리한다. 문자열과 bytes를 암묵적으로 섞지 않는다.
 
-## 실습
+{% hint style="success" %}
+## 🧪 실습
 
 - 인증 로그를 파일에서 한 줄씩 읽는다.
 - 분석 결과를 JSON으로 저장하고 재로드한다.
 - CSV 로그를 `csv.DictReader`로 읽는다.
+{% endhint %}
