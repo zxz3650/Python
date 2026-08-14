@@ -20,6 +20,7 @@
   - [04-4. CSV 읽기와 쓰기](04-file-io/04-4-csv.md)
   - [04-5. JSON 직렬화](04-file-io/04-5-json.md)
   - [04-6. 대용량 파일과 오류 처리](04-file-io/04-6-streaming-errors.md)
+  - [04-7. pandas와 DataFrame 기반 대용량 처리](04-file-io/04-7-pandas-dataframe.md)
 - [05. 텍스트 파싱과 정규표현식](05-text-processing.md)
   - [05-1. 문자열 정규화](05-text-processing/05-1-normalization.md)
   - [05-2. 분리·검색·치환](05-text-processing/05-2-split-search-replace.md)
