@@ -170,4 +170,4 @@ print(ordered)
 
 ---
 
-다음 장: [06. 시스템 자동화](../06-system-automation.md)
+다음 절: [05-7. 약 3GB 웹 로그 분석 실습](05-7-web-log-analysis.md)
