@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+<title id="title">Python HTTP와 API 학습 흐름</title>
+<desc id="desc">Python 클라이언트에서 TCP 연결과 HTTP 요청을 거쳐 API 서버 응답을 검증하는 과정</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a2b"/><stop offset="1" stop-color="#103a52"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity=".28"/></filter>
+</defs>
+<rect width="1600" height="720" rx="36" fill="url(#bg)"/>
+<text x="90" y="92" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="42" font-weight="700">HTTP와 API — 코드가 요청에서 근거 있는 판정까지 가는 길</text>
+<text x="90" y="137" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="23">Python · TCP · HTTP · JSON · Security Validation</text>
+
+<g filter="url(#shadow)">
+  <rect x="90" y="210" width="360" height="250" rx="26" fill="#102f46" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="155" cy="275" r="34" fill="#2563eb"/>
+  <text x="155" y="286" text-anchor="middle" fill="white" font-family="monospace" font-size="29">Py</text>
+  <text x="210" y="280" fill="#f2fbff" font-family="Arial, sans-serif" font-size="30" font-weight="700">Python Client</text>
+  <text x="130" y="345" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">requests.get()</text>
+  <text x="130" y="388" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">timeout=(2, 3)</text>
+  <text x="130" y="431" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">allow_redirects=False</text>
+
+  <rect x="620" y="210" width="360" height="250" rx="26" fill="#102f46" stroke="#22d3ee" stroke-width="3"/>
+  <text x="800" y="276" text-anchor="middle" fill="#f2fbff" font-family="Arial, sans-serif" font-size="30" font-weight="700">TCP + HTTP</text>
+  <text x="660" y="345" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">연결: host : port</text>
+  <text x="660" y="388" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">요청: method · headers · body</text>
+  <text x="660" y="431" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="23">응답: status · headers · body</text>
+
+  <rect x="1150" y="210" width="360" height="250" rx="26" fill="#102f46" stroke="#34d399" stroke-width="3"/>
+  <circle cx="1215" cy="275" r="34" fill="#059669"/>
+  <text x="1215" y="286" text-anchor="middle" fill="white" font-family="monospace" font-size="26">API</text>
+  <text x="1270" y="280" fill="#f2fbff" font-family="Arial, sans-serif" font-size="30" font-weight="700">Server</text>
+  <text x="1190" y="345" fill="#c8f7e6" font-family="Arial, sans-serif" font-size="23">/health · /api/echo</text>
+  <text x="1190" y="388" fill="#c8f7e6" font-family="Arial, sans-serif" font-size="23">JSON response</text>
+  <text x="1190" y="431" fill="#c8f7e6" font-family="Arial, sans-serif" font-size="23">security headers</text>
+</g>
+
+<path d="M470 335 H595" stroke="url(#blue)" stroke-width="8" stroke-linecap="round"/>
+<path d="M575 316 L605 335 L575 354" fill="none" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1000 335 H1125" stroke="url(#blue)" stroke-width="8" stroke-linecap="round"/>
+<path d="M1105 316 L1135 335 L1105 354" fill="none" stroke="#34d399" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+<rect x="90" y="520" width="1420" height="125" rx="24" fill="#0b2538" stroke="#2b6179" stroke-width="2"/>
+<text x="130" y="570" fill="#f8fafc" font-family="Arial, sans-serif" font-size="27" font-weight="700">검증 순서</text>
+<text x="130" y="613" fill="#a9d8e9" font-family="Arial, sans-serif" font-size="23">① 대상 범위  →  ② TCP 연결  →  ③ 상태 코드  →  ④ Content-Type·JSON  →  ⑤ 보안 헤더·리다이렉트  →  ⑥ 보고서</text>
+</svg>
