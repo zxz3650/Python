@@ -21,6 +21,7 @@ EXPECTED_SECURITY_HEADERS = {
     "X-Content-Type-Options": "MIME 추측 방지 정책",
     "Referrer-Policy": "참조 정보 전달 정책",
 }
+ALLOWED_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 
 def validate_loopback_url(base_url: str) -> tuple[str, int, str]:
@@ -36,14 +37,19 @@ def validate_loopback_url(base_url: str) -> tuple[str, int, str]:
     if parts.path not in ("", "/"):
         raise ValueError("기준 URL의 path는 비워 두어야 합니다")
 
+    hostname = parts.hostname.lower()
+    if hostname not in ALLOWED_HOSTS:
+        raise ValueError("외부 호스트는 허용하지 않습니다: localhost만 사용하세요")
+
     port = parts.port or 80
-    addresses = socket.getaddrinfo(parts.hostname, port, type=socket.SOCK_STREAM)
+    addresses = socket.getaddrinfo(hostname, port, type=socket.SOCK_STREAM)
     resolved = {item[4][0] for item in addresses}
     if not resolved or not all(ipaddress.ip_address(address).is_loopback for address in resolved):
         raise ValueError("외부 주소는 허용하지 않습니다: loopback 대상만 사용하세요")
 
-    normalized = f"http://{parts.hostname}:{port}"
-    return parts.hostname, port, normalized
+    url_host = f"[{hostname}]" if ":" in hostname else hostname
+    normalized = f"http://{url_host}:{port}"
+    return hostname, port, normalized
 
 
 def result(check: str, status: str, evidence: str) -> dict[str, str]:
