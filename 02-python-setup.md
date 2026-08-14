@@ -1,5 +1,7 @@
 ![02 Python Setup](https://placehold.co/1500x400/c2410c/ffffff.png?text=02+Python+Setup&font=montserrat)
-# 개요
+# 02. Python 설치 및 실습 환경 구성
+
+## 개요
 전 OS(Windows/macOS/Linux)에서 실습 환경을 구축한다. 두 가지 경로를 제시한다. 1안은 [python.org](http://python.org) 기본 설치 + venv 가상환경, 2안은 Anaconda/Miniconda 기반 환경이다.
 {% hint style="info" %}
 ## 🧭 학습 목표
@@ -79,9 +81,10 @@ conda env remove -n python-security-lab
 > 💡 이 커리큘럼은 의존 패키지가 가벼워 **1안(venv)을 기본**으로 사용한다. 대용량 데이터 분석처럼 numpy/pandas·로컬 LLM 의존성이 커지는 단계에서만 conda로 전환을 고려한다.
 {% endhint %}
 
-{% hint style="warning" %}
-# 2.4 공통 패키지와 Jupyter
+## 2.4 공통 패키지와 Jupyter
 ```bash
+
+{% hint style="warning" %}
 (venv) python -m pip install requests beautifulsoup4 lxml pwntools pycryptodome scapy jupyter ipykernel
 ```
 > 💡 **pwntools와 Windows**: Linux/macOS 공식 지원. Windows는 WSL2(`wsl --install -d Ubuntu`) 안에서 위 Linux 항목을 그대로 따르는 것을 권장한다.
