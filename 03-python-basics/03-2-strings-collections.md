@@ -15,6 +15,14 @@
 - 자료구조에서 자주 발생하는 `IndexError`, `KeyError`, 복사 오류를 진단한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 문자열 정규화·검색·분리·결합, 리스트와 딕셔너리 |
+| 권장 | 튜플·집합 선택, 중첩 자료구조, 정렬과 안전한 조회 |
+| 심화 | 별칭, 얕은 복사·깊은 복사, 자료구조 선택 의사결정 |
+
 ## 학습 범위와 순서
 
 이 절은 다음 경계를 지킨다.
@@ -811,6 +819,24 @@ print(deny_count_by_ip)
 - DENY 이벤트만 별도 리스트로 분리되는가?
 - IP별 DENY 횟수가 정확히 누적되는가?
 
+### 연습 6. 전이 연습 — 도서 정보 구조화
+
+다음 입력을 보안 이벤트가 아닌 도서 데이터로 구조화한다. 조건문과 반복문은 사용하지 않는다.
+
+```python
+raw_title = "  Python Patterns  "
+raw_authors = "Kim,Lee"
+raw_tags = "python,education,python"
+raw_year = "2026"
+```
+
+1. 제목의 양쪽 공백을 제거한다.
+2. 저자 문자열을 분리해 변경하지 않을 튜플로 만든다.
+3. 태그 문자열을 분리해 중복 없는 집합으로 만든다.
+4. 연도는 정수로 변환한다.
+5. 결과를 `title`, `authors`, `tags`, `year` 키가 있는 딕셔너리로 묶는다.
+6. 원본 문자열이 그대로 남아 있는지 확인한다.
+
 ## 17. 정답과 해설
 
 <details>
@@ -920,6 +946,31 @@ report = {
 
 </details>
 
+<details>
+<summary>연습 6 전이 연습 예시 답안</summary>
+
+```python
+raw_title = "  Python Patterns  "
+raw_authors = "Kim,Lee"
+raw_tags = "python,education,python"
+raw_year = "2026"
+
+book = {
+    "title": raw_title.strip(),
+    "authors": tuple(raw_authors.split(",")),
+    "tags": set(raw_tags.split(",")),
+    "year": int(raw_year),
+}
+
+assert book["title"] == "Python Patterns"
+assert book["authors"] == ("Kim", "Lee")
+assert book["tags"] == {"python", "education"}
+assert book["year"] == 2026
+assert raw_title == "  Python Patterns  "
+```
+
+</details>
+
 ## 완료 기준
 
 - [ ] 문자열의 인덱스와 슬라이스 결과를 예측할 수 있다.
@@ -931,6 +982,7 @@ report = {
 - [ ] `list[dict]`와 중첩 딕셔너리의 접근 경로를 읽을 수 있다.
 - [ ] 별칭, 얕은 복사, 깊은 복사의 결과 차이를 설명할 수 있다.
 - [ ] 미니 실습의 모든 `assert`를 통과했다.
+- [ ] 도서 정보 전이 연습에 목적에 맞는 자료구조를 선택했다.
 
 ## 핵심 정리
 

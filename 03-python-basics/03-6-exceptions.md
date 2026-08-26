@@ -19,13 +19,21 @@
 - 원인과 해결 기준은 담되 민감정보는 노출하지 않는 오류 메시지를 작성한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | traceback 읽기, `try`·`except`, 구체적 예외 유형, `raise` |
+| 권장 | `else`·`finally`, 예외 전파, 복구 경계, `assert`와 예외 구분 |
+| 심화 | 예외 연쇄·재발생, LBYL·EAFP, fail-fast·best-effort 정책 |
+
 ## 학습 범위와 연결
 
 - 비교·논리 조건은 [03-3](03-3-conditions.md), 반복 처리는 [03-4](03-4-loops.md)에서 학습했다.
 - 함수의 입력·반환값·부수 효과 계약은 [03-5](03-5-functions.md)에서 학습했다.
 - 이 절에서는 함수가 약속한 결과를 만들 수 없을 때 실패를 전달하고 복구하는 방법을 다룬다.
 - 파일·JSON·CSV에서 발생하는 실제 입출력 예외는 04장에서 다룬다.
-- 예외 처리 코드를 모듈로 분리하는 방법은 [03-7](03-7-errors-modules.md)에서 다룬다.
+- 예외 처리 코드를 모듈로 분리하는 방법은 [03-7](03-7-modules-packages.md)에서 다룬다.
 - 사용자 정의 예외 클래스는 03-8 클래스 기초 이후 확장할 수 있다.
 
 전용 실습은 [`notebooks/03-6-exceptions.ipynb`](../notebooks/03-6-exceptions.ipynb)에서 진행할 수 있다.
@@ -757,7 +765,20 @@ except:
 3. 반환 결과에 `skipped`와 `stopped_early`를 포함한다.
 4. 정상 입력, 빈 입력, 연속 오류, 경계 포트를 검증한다.
 
+### 19.9 전이 연습 — 센서 배치 변환
+
+`["21.5", "bad", "", "19.8"]`을 온도 실수로 변환한다.
+
+- 빈 문자열은 `skipped`로 집계한다.
+- 변환 실패는 위치·예외 유형·메시지를 `errors`에 저장한다.
+- 정상값은 `temperatures`에 저장한다.
+- 한 건의 실패가 다음 항목 처리를 막지 않는 best-effort 정책을 사용한다.
+- 모든 값이 유효해야 하는 fail-fast 정책이라면 무엇을 바꿀지도 설명한다.
+
 ## 20. 연습문제 정답과 해설
+
+<details>
+<summary>정답과 해설 펼치기</summary>
 
 ### 20.1 오류 분류
 
@@ -891,20 +912,53 @@ def parse_event_lines_limited(lines, *, max_errors=3):
     }
 ```
 
+### 20.9 전이 연습 예시 답안
+
+```python
+raw_temperatures = ["21.5", "bad", "", "19.8"]
+temperatures = []
+errors = []
+skipped = 0
+
+for position, text in enumerate(raw_temperatures):
+    if text == "":
+        skipped += 1
+        continue
+    try:
+        temperature = float(text)
+    except ValueError as exc:
+        errors.append({
+            "position": position,
+            "type": type(exc).__name__,
+            "message": str(exc),
+        })
+        continue
+    temperatures.append(temperature)
+
+assert temperatures == [21.5, 19.8]
+assert [error["position"] for error in errors] == [1]
+assert skipped == 1
+```
+
+fail-fast 정책이라면 첫 `ValueError`를 기록한 뒤 다시 발생시키거나, 오류 목록을 확인한 호출 경계에서 전체 결과를 거부한다.
+
+</details>
+
 ## 21. 완료 기준
 
-다음 항목을 코드와 말로 설명할 수 있으면 이 절의 목표를 달성한 것이다.
+다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
 
-- 문법 오류·실행 예외·논리 오류를 구분한다.
-- traceback의 마지막 줄과 호출 프레임에서 원인 위치를 찾는다.
-- 처리하지 않은 예외가 호출자에게 전파됨을 설명한다.
-- 복구 방법에 맞는 구체적인 예외 유형을 잡는다.
-- `try`, `except`, `else`, `finally`의 실행 순서를 예측한다.
-- `raise`, 맨몸 `raise`, `raise ... from ...`을 구분한다.
-- 정상 업무 상태는 반환하고 계약 실패는 예외로 표현한다.
-- fail-fast와 best-effort 처리 정책을 요구사항에 맞게 선택한다.
-- 사용자 입력 검증에 `assert`를 사용하지 않는 이유를 설명한다.
-- 오류를 숨기지 않으면서 민감정보를 제외한 메시지를 작성한다.
+- [ ] 문법 오류·실행 예외·논리 오류를 구분한다.
+- [ ] traceback의 마지막 줄과 호출 프레임에서 원인 위치를 찾는다.
+- [ ] 처리하지 않은 예외가 호출자에게 전파됨을 설명한다.
+- [ ] 복구 방법에 맞는 구체적인 예외 유형을 잡는다.
+- [ ] `try`, `except`, `else`, `finally`의 실행 순서를 예측한다.
+- [ ] `raise`, 맨몸 `raise`, `raise ... from ...`을 구분한다.
+- [ ] 정상 업무 상태는 반환하고 계약 실패는 예외로 표현한다.
+- [ ] fail-fast와 best-effort 처리 정책을 요구사항에 맞게 선택한다.
+- [ ] 사용자 입력 검증에 `assert`를 사용하지 않는 이유를 설명한다.
+- [ ] 오류를 숨기지 않으면서 민감정보를 제외한 메시지를 작성한다.
+- [ ] 센서 배치 전이 연습에서 정상·오류·건너뜀 결과를 분리한다.
 
 ## 핵심 정리
 
@@ -920,4 +974,4 @@ def parse_event_lines_limited(lines, *, max_errors=3):
 
 ---
 
-다음 절: [03-7. 모듈과 패키지](03-7-errors-modules.md)
+다음 절: [03-7. 모듈과 패키지](03-7-modules-packages.md)
