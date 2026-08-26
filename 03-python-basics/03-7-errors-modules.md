@@ -13,6 +13,7 @@
 - 직접 실행, import, `python -m` 실행을 구분한다.
 - `main()`과 `__main__.py`로 실행 진입점을 구성한다.
 - 표준·외부·프로젝트 모듈을 구분하고 의존성을 재현한다.
+- 이후 과정의 주요 표준 모듈과 외부 패키지를 목적에 맞게 선택한다.
 - 순환 import, 이름 충돌, import 부수 효과 같은 안티패턴을 피한다.
 {% endhint %}
 
@@ -516,6 +517,187 @@ from pathlib import Path
 
 import 문은 보통 표준 라이브러리, 외부 패키지, 프로젝트 모듈 순으로 그룹 사이에 빈 줄을 둔다.
 
+### 12.1 이후 과정의 모듈·패키지 지도
+
+앞으로 모든 도구를 한꺼번에 외우지는 않는다. 먼저 **표준 라이브러리인지 외부 패키지인지**, **어떤 문제를 해결하는지**, **입력과 출력이 무엇인지**를 구분한다. 세부 함수는 해당 장에서 직접 실습한다.
+
+| 과정 | 주로 사용할 모듈·패키지 | 해결하는 문제 |
+| --- | --- | --- |
+| 04. 파일 입출력 | `pathlib`, `csv`, `json`, `io`, `hashlib` | 경로, 텍스트·CSV·JSON, 메모리 스트림, 해시 |
+| 05. 텍스트·데이터 | `re`, `unicodedata`, `datetime`, `collections`, `ipaddress`, NumPy, pandas | 정규화, 추출, 시간·IP 검증, 집계, 배열·표 분석 |
+| 06. 네트워크 | `socket`, `struct`, `ipaddress`, `time` | TCP·UDP, 메시지 경계, 바이너리 형식, 타임아웃 |
+| 07. HTTP·API | `urllib.parse`, `http.server`, requests, `json` | URL 분해, 로컬 학습 서버, HTTP 요청·응답 |
+| 08. 시스템 자동화 | `os`, `pathlib`, `subprocess`, `argparse`, `logging` | 운영체제 정보, 명령 실행, CLI, 실행 기록 |
+| 09. 테스트·디버깅 | pytest, `unittest.mock`, `traceback` | 자동 검증, 의존성 대체, 실패 원인 확인 |
+| 10. 프로그램 구조화 | `typing`, `dataclasses`, 패키징 도구 | 인터페이스 표현, 데이터 모델, 프로젝트 배포 구조 |
+| 11. 동시성·비동기 | `concurrent.futures`, `threading`, `asyncio` | 여러 I/O 작업 조정, 비동기 실행 |
+| 보안 심화 실습 | Beautiful Soup, lxml, Scapy, pwntools, PyCryptodome | HTML 파싱, 패킷, 바이너리 통신, 암호 연산 |
+
+08~12장의 세부 구성에 따라 일부 모듈의 첫 실습 위치는 조정될 수 있다. 이 표는 “설치 목록”이 아니라 어떤 도구를 언제 선택하는지 보여 주는 학습 지도다.
+
+### 12.2 자주 사용할 표준 라이브러리
+
+표준 라이브러리는 Python과 함께 제공되므로 보통 별도 `pip install`이 필요 없다.
+
+#### 파일·데이터 처리
+
+| import | 역할 | 기억할 점 |
+| --- | --- | --- |
+| `from pathlib import Path` | 운영체제에 맞는 경로와 파일 작업 | 경로를 문자열 `+`로 조합하지 않고 `/` 연산자나 메서드를 사용한다. |
+| `import csv` | CSV 행 읽기·쓰기 | 파일을 열 때 인코딩과 `newline=""`을 명시한다. |
+| `import json` | Python 값과 JSON 텍스트 변환 | 파싱 성공이 데이터 구조와 값의 유효성을 보장하지는 않는다. |
+| `from io import StringIO, BytesIO` | 문자열·바이트를 파일처럼 처리 | 테스트와 메모리 변환에 유용하다. |
+| `import hashlib` | 데이터의 해시 계산 | 해시는 암호화가 아니며 일반 해시만으로 비밀번호를 저장하지 않는다. |
+
+```python
+from io import StringIO
+from pathlib import Path
+import csv
+import hashlib
+import json
+
+payload = {"action": "ALLOW", "port": 443}
+encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+digest = hashlib.sha256(encoded).hexdigest()
+
+rows = list(csv.DictReader(StringIO("action,port\nALLOW,443\n")))
+
+assert Path("logs/events.json").suffix == ".json"
+assert rows == [{"action": "ALLOW", "port": "443"}]
+assert len(digest) == 64
+```
+
+#### 텍스트·시간·주소 처리
+
+| import | 역할 | 기억할 점 |
+| --- | --- | --- |
+| `import re` | 정규표현식 검색·추출·치환 | 정규식 문자열은 보통 raw string `r"..."`을 사용하고 복잡도를 제한한다. |
+| `import unicodedata` | Unicode 정규화와 문자 정보 | 화면상 같은 문자열도 코드 포인트가 다를 수 있다. |
+| `from datetime import datetime, timezone` | 날짜·시간 파싱과 계산 | 시스템 간 교환에서는 시간대가 있는 값을 우선한다. |
+| `from collections import Counter, defaultdict` | 빈도 집계와 그룹화 | 직접 카운트 딕셔너리를 만드는 반복 코드를 줄인다. |
+| `from ipaddress import ip_address, ip_network` | IP 주소·네트워크 파싱과 범위 판정 | 문자열 형식 검증 도구이며 실제 네트워크 연결을 수행하지 않는다. |
+
+```python
+from collections import Counter
+from datetime import datetime, timezone
+from ipaddress import ip_address
+import re
+import unicodedata
+
+normalized = unicodedata.normalize("NFC", "Cafe\u0301")
+match = re.fullmatch(r"[A-Z]+", "ALLOW")
+timestamp = datetime.fromisoformat("2026-08-26T12:00:00+00:00")
+address = ip_address("192.0.2.10")
+counts = Counter(["ALLOW", "DENY", "ALLOW"])
+
+assert normalized == "Café"
+assert match is not None
+assert timestamp.tzinfo == timezone.utc
+assert address.version == 4
+assert counts["ALLOW"] == 2
+```
+
+#### 네트워크·HTTP 기반 모듈
+
+| import | 역할 | 기억할 점 |
+| --- | --- | --- |
+| `import socket` | TCP·UDP와 DNS 주소 해석 | 항상 타임아웃과 메시지 경계를 고려한다. |
+| `import struct` | 정수와 바이너리 필드의 pack·unpack | 바이트 순서와 필드 크기를 명시한다. |
+| `from urllib.parse import urlsplit, urljoin` | URL 분해와 결합 | 파싱되었다는 사실만으로 URL이 안전하거나 허용된 대상이라는 뜻은 아니다. |
+| `from http.server import ...` | 로컬 HTTP 학습 서버 | 개발·교육용이며 운영 서비스로 사용하지 않는다. |
+| `import ssl` | TLS 설정과 인증서 처리 | 인증서 검증을 임의로 끄지 않는다. |
+
+```python
+from urllib.parse import urlsplit
+import struct
+
+parts = urlsplit("https://example.test:8443/api/events?q=allow")
+header = struct.pack("!I", 1024)
+
+assert parts.scheme == "https"
+assert parts.hostname == "example.test"
+assert parts.port == 8443
+assert struct.unpack("!I", header)[0] == 1024
+```
+
+`socket`과 `http.server`는 해당 장의 로컬·허가된 실습 환경에서 실행한다. 03-7에서는 import 가능 여부와 역할만 이해한다.
+
+#### 프로그램 운영과 구조화
+
+| import | 역할 | 기억할 점 |
+| --- | --- | --- |
+| `import sys` | 인터프리터, 인자, 종료 상태, 검색 경로 | `sys.executable`로 현재 Python을 확인한다. |
+| `import os` | 환경 변수와 일부 운영체제 기능 | 비밀값을 출력하거나 로그에 남기지 않는다. |
+| `import subprocess` | 외부 프로그램 실행 | 가능하면 인자 리스트와 `shell=False`를 사용하고 입력을 검증한다. |
+| `import argparse` | 명령행 인자 정의·도움말·검증 | CLI 입력을 함수 인자로 변환하는 경계 역할을 한다. |
+| `import logging` | 수준별·구조적 실행 기록 | 비밀번호, 토큰, 전체 민감 원문을 기록하지 않는다. |
+| `from dataclasses import dataclass` | 데이터 중심 클래스 작성 | 03-8에서 딕셔너리와 클래스의 선택 기준을 다룬다. |
+| `from typing import ...` | 함수·데이터 형태 표현 | 실행 중 데이터 검증을 자동으로 대신하지는 않는다. |
+
+### 12.3 자주 사용할 외부 패키지
+
+외부 패키지는 활성화한 가상환경에 설치한다. 설치 이름과 import 이름을 함께 확인한다.
+
+| 설치 이름 | 대표 import | 주 사용 과정 | 역할과 주의점 |
+| --- | --- | --- | --- |
+| `requests` | `import requests` | 07장 | HTTP 클라이언트. 타임아웃, 상태 코드, 응답 크기·형식을 호출자가 검증한다. |
+| `numpy` | `import numpy as np` | 05-7 | 같은 자료형의 다차원 배열과 벡터 연산. 자료형과 shape를 확인한다. |
+| `pandas` | `import pandas as pd` | 05-8~9 | 표 형식 데이터의 필터·집계·결합. 큰 파일은 열·dtype·chunksize를 조절한다. |
+| `pytest` | `import pytest` | 09장 | 간결한 assert, fixture, 예외 검증. 테스트가 외부 네트워크에 의존하지 않게 한다. |
+| `jupyterlab` | 명령: `jupyter lab` | 전 과정 실습 | 노트북 실행 도구다. 보통 `import jupyterlab`을 학습 코드에 쓰지 않는다. |
+| `ipykernel` | 커널 등록·선택 | 전 과정 실습 | 노트북 커널과 패키지를 설치한 Python 환경을 일치시킨다. |
+
+```python
+# 외부 패키지는 해당 과정의 가상환경에서 설치한 뒤 사용한다.
+# import numpy as np
+# import pandas as pd
+# import pytest
+# import requests
+```
+
+외부 패키지 선택 기준:
+
+- 단순한 CSV 순회는 표준 `csv`, 표 전체의 집계·결합은 pandas를 우선 검토한다.
+- 일반 Python 리스트로 충분한 작은 계산에 NumPy를 억지로 사용하지 않는다.
+- HTTP에서는 저수준 `socket`으로 프로토콜 원리를 먼저 이해하고, 실제 API 작업은 requests로 추상화한다.
+- 검증 코드를 실행 예제에만 두지 않고 09장에서 pytest 테스트로 분리한다.
+
+### 12.4 보안 심화 과정에서 사용할 외부 패키지
+
+다음 패키지는 환경 구성에서 미리 소개하지만, 현재 기초 문법의 필수 import는 아니다. 허가된 실습 환경과 해당 심화 장에서 사용한다.
+
+| 설치 이름 | 대표 import | 주요 용도 | 주의점 |
+| --- | --- | --- | --- |
+| `beautifulsoup4` | `from bs4 import BeautifulSoup` | HTML 문서 탐색·요소 추출 | 설치명과 import명이 다르다. 파서 선택에 따라 결과가 달라질 수 있다. |
+| `lxml` | `from lxml import etree` | 빠른 HTML·XML 파싱 | 신뢰하지 않는 XML의 외부 개체·네트워크 접근 설정을 제한한다. |
+| `scapy` | `from scapy.all import IP, TCP` | 패킷 구성·분석·캡처 실습 | 관리자 권한과 네트워크 영향이 있을 수 있어 허가된 랩에서만 사용한다. |
+| `pwntools` | `from pwn import process, remote` | 프로세스·소켓·바이트 중심 CTF 실습 | 설치명과 import명이 다르며 Windows에서는 WSL2를 우선한다. |
+| `pycryptodome` | `from Crypto.Cipher import AES` | 해시·대칭키·공개키 암호 실습 | 설치명과 import명이 다르다. 실제 보안 설계에서 알고리즘·모드를 임의 조합하지 않는다. |
+
+```python
+# 설치 이름과 import 이름의 차이 예
+# python -m pip install beautifulsoup4 pycryptodome pwntools
+
+# from bs4 import BeautifulSoup
+# from Crypto.Cipher import AES
+# from pwn import process
+```
+
+{% hint style="warning" %}
+`bs4`, `Crypto`, `pwn`을 import하지 못한다고 해서 그 이름으로 된 임의의 PyPI 패키지를 설치하지 않는다. 과정 문서의 정확한 배포 패키지 이름을 확인한다.
+{% endhint %}
+
+### 12.5 어떤 도구를 선택할지 묻는 순서
+
+새 문제를 만났을 때 다음 순서로 판단한다.
+
+1. Python 기본 문법과 자료구조만으로 명확하게 해결할 수 있는가?
+2. 표준 라이브러리에 이미 목적에 맞는 모듈이 있는가?
+3. 외부 패키지가 복잡도와 오류 가능성을 실제로 줄이는가?
+4. 패키지의 출처·버전·라이선스·실행 권한을 확인했는가?
+5. 입력 크기, 타임아웃, 메모리, 민감정보 등 실패 조건을 처리했는가?
+6. 그 선택을 requirements와 실행 문서로 재현할 수 있는가?
+
 ## 13. 가상환경과 의존성 재현
 
 가상환경 생성·활성화는 [02장](../02-python-setup.md)에서 실습했다. 이 절에서는 import와 의존성의 관계만 확인한다.
@@ -893,6 +1075,8 @@ def format_summary(summary):
 다음 항목을 코드와 말로 설명할 수 있으면 목표를 달성한 것이다.
 
 - 모듈, 일반 패키지, 배포 패키지를 구분한다.
+- 이후 과정에서 사용할 파일·데이터·네트워크·HTTP·테스트 도구의 역할을 설명한다.
+- 외부 패키지의 설치 이름과 import 이름이 다를 수 있음을 예로 설명한다.
 - 각 import 문이 현재 이름 공간에 만드는 이름을 예측한다.
 - 모듈 최상위 코드의 실행 시점과 캐시를 설명한다.
 - `__name__`, `__file__`, `dir()`, `sys.modules`로 모듈을 확인한다.
@@ -917,6 +1101,8 @@ def format_summary(summary):
 - 패키지 내부 상대 import가 있다면 프로젝트 루트에서 `python -m`으로 실행한다.
 - 실행 로직은 `main()`에 두고 import 가능한 함수와 분리한다.
 - `__main__.py`는 패키지를 `python -m package`로 실행하는 진입점이다.
+- 앞으로 사용할 도구는 표준 라이브러리, 과정 핵심 외부 패키지, 보안 심화 패키지로 구분해 선택한다.
+- 설치 이름과 import 이름이 다른 `beautifulsoup4`/`bs4`, `pwntools`/`pwn`, `pycryptodome`/`Crypto`를 혼동하지 않는다.
 - 의존성은 깨끗한 가상환경과 명시적인 파일로 재현한다.
 - import는 코드를 실행하므로 출처, 이름 충돌, 부수 효과를 함께 관리한다.
 
