@@ -2,7 +2,7 @@
 # 02. Python 설치 및 실습 환경 구성
 
 ## 개요
-전 OS(Windows/macOS/Linux)에서 실습 환경을 구축한다. 두 가지 경로를 제시한다. 1안은 [python.org](http://python.org) 기본 설치 + venv 가상환경, 2안은 Anaconda/Miniconda 기반 환경이다.
+전 OS(Windows/macOS/Linux)에서 실습 환경을 구축한다. 이 과정은 **Python 3.10 이상**을 지원하고 **Python 3.12 사용을 권장**한다. 두 가지 경로를 제시한다. 1안은 [python.org](http://python.org) 기본 설치 + venv 가상환경, 2안은 Anaconda/Miniconda 기반 환경이다.
 {% hint style="info" %}
 ## 🧭 학습 목표
 - 1안(기본 설치): [python.org](http://python.org) 설치 + venv로 격리된 실습 환경을 만든다
@@ -48,12 +48,15 @@ sudo pacman -S python python-pip                                           # Arc
 가상환경은 과정 전용 패키지를 시스템과 분리해 설치하는 상자다. 반드시 사용한다. **이 커리큘럼은 3장(기초교안)의 실습 폴더 구조와 동일하게 프로젝트 폴더명 ****`python-security-lab`****, 가상환경명 ****`.venv`****를 그대로 따른다.**
 ```bash
 mkdir python-security-lab && cd python-security-lab
-python3 -m venv .venv        # Windows: py -m venv .venv
+python3 --version                  # 3.10 이상인지 먼저 확인
+python3 -m venv .venv              # Windows: py -3.12 -m venv .venv
+# macOS에서 python3가 시스템 3.9라면: python3.12 -m venv .venv
 source .venv/bin/activate          # macOS/Linux
 .venv\Scripts\activate             # Windows (cmd)
 .venv\Scripts\Activate.ps1         # Windows (PowerShell)
 deactivate # 가상환경 비활성화 시
 ```
+가상환경을 만든 인터프리터가 3.10 미만이면 03-4의 `zip(strict=True)`를 실행할 수 없다. 활성화 후 `python --version`으로 다시 확인한다.
 > ✅ **\[심화과정에서는\]** 이 venv 안에 이 과정 전체에 필요한 패키지가 다 들어간다. 랩을 새로 구성할 때마다 이 상자만 새로 만들면 시스템 Python은 항상 깨끗하게 유지된다.
 {% endhint %}
 
@@ -68,7 +71,7 @@ source ~/.bashrc
 # Windows: Miniconda3-latest-Windows-x86_64.exe GUI 설치
 ```
 ```bash
-conda create -n python-security-lab python=3.11 -y
+conda create -n python-security-lab python=3.12 -y
 conda activate python-security-lab
 conda install requests beautifulsoup4 -y
 pip install pwntools pycryptodome   # conda에 없는 패키지는 pip로
@@ -91,7 +94,7 @@ conda env remove -n python-security-lab
 (venv) python -m pip install requests beautifulsoup4 lxml pwntools pycryptodome scapy jupyter ipykernel
 ```
 > 💡 **pwntools와 Windows**: Linux/macOS 공식 지원. Windows는 WSL2(`wsl --install -d Ubuntu`) 안에서 위 Linux 항목을 그대로 따르는 것을 권장한다.
-> 📦 **더 읽어보기**: [Python 패키징 도구 비교 — pip vs uv vs Poetry](https://app.notion.com/p/3b3436c34cbd8199a9a4f46946dc6ef8) — 잠금 파일이 왜 필요한지, 새 프로젝xd8b8에서 uv를 쓸지 여부를 실측 및 실제 명령어로 다루는 보충 아티클.
+> 📦 **더 읽어보기**: [Python 패키징 도구 비교 — pip vs uv vs Poetry](https://app.notion.com/p/3b3436c34cbd8199a9a4f46946dc6ef8) — 잠금 파일이 왜 필요한지, 새 프로젝트에서 uv를 쓸지 여부를 실측 및 실제 명령어로 다루는 보충 아티클.
 ```bash
 (venv) python -m ipykernel install --user --name python-security-lab --display-name "Python (python-security-lab)"
 (venv) jupyter notebook   # 또는 jupyter lab
@@ -102,7 +105,7 @@ conda env remove -n python-security-lab
 > 📝 **연습**: 아래 검증 스크립트를 본인 환경에 저장해 실행하고, 누락된 패키지가 있다면 `pip install`로 설치해 전부 `[OK]`가 뜨게 만들어라.
 ```python
 import sys
-assert sys.version_info >= (3, 9), "Python 3.9 이상 필요"
+assert sys.version_info >= (3, 10), "Python 3.10 이상 필요"
 for mod in ["requests", "bs4", "Crypto", "pwn"]:
     try:
         __import__(mod); print(f"[OK] {mod}")

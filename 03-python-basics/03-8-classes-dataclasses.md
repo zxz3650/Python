@@ -18,12 +18,20 @@
 - 딕셔너리, 데이터클래스, 일반 클래스 중 필요한 표현을 선택한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 클래스·인스턴스, `__init__`, `self`, 인스턴스 메서드·변수 |
+| 권장 | 상태 전이, 데이터클래스, `default_factory`, `__post_init__`, 합성 |
+| 심화 | 클래스·정적 메서드, property·특수 메서드, `frozen=True`, 상속 |
+
 ## 선행 지식과 학습 연결
 
 - 객체 별칭과 변경 가능성은 [03-2](03-2-strings-collections.md)에서 학습했다.
 - 함수 계약과 스코프는 [03-5](03-5-functions.md)에서 학습했다.
-- 잘못된 상태를 예외로 표현하는 방법은 [03-6](03-6-files-data.md)에서 학습했다.
-- 모듈과 패키지 구조는 [03-7](03-7-errors-modules.md)에서 학습했다.
+- 잘못된 상태를 예외로 표현하는 방법은 [03-6](03-6-exceptions.md)에서 학습했다.
+- 모듈과 패키지 구조는 [03-7](03-7-modules-packages.md)에서 학습했다.
 - 이 절에서는 03-7의 이벤트 딕셔너리를 객체로 표현한다.
 - 다음 [03-9](03-9-practical-syntax.md)에서 자료구조·함수·예외·모듈·클래스를 종합한다.
 
@@ -923,7 +931,21 @@ assert [event.endpoint() for event in batch.find_by_action("allow")] == [
 - 중복 이벤트 추가를 거부하거나 별도 집계하는 정책
 - 빈 배치·단일 이벤트·중복 이벤트 테스트
 
+### 20.12 전이 연습 — 작업 보드 객체
+
+`Task` 데이터클래스와 여러 작업을 관리하는 `TaskBoard` 일반 클래스를 작성한다.
+
+- `Task`: `title`, `priority`, `completed` 필드
+- 제목은 비어 있을 수 없고 priority는 `LOW`, `MEDIUM`, `HIGH`만 허용
+- `complete()`는 미완료 작업만 완료 상태로 변경
+- `TaskBoard.add()`는 중복 작업을 거부
+- `TaskBoard.find_by_priority()`는 내부 리스트가 아닌 튜플을 반환
+- 두 `TaskBoard` 인스턴스가 작업 목록을 공유하지 않는지 검증
+
 ## 21. 정답과 해설
+
+<details>
+<summary>정답과 해설 펼치기</summary>
 
 ### 21.1 클래스와 인스턴스
 
@@ -1074,28 +1096,74 @@ def count_by_port(self):
 
 이 메서드는 `EventBatch` 클래스 안에 정의한다. 중복 정책은 값이 같은 이벤트를 허용하는지 요구사항으로 먼저 정한 뒤 구현한다.
 
+### 21.12 전이 연습 예시 답안
+
+```python
+from dataclasses import dataclass, field
+
+
+@dataclass
+class Task:
+    title: str
+    priority: str
+    completed: bool = False
+
+    def __post_init__(self):
+        self.title = self.title.strip()
+        self.priority = self.priority.strip().upper()
+        if not self.title:
+            raise ValueError("title은 비어 있을 수 없습니다")
+        if self.priority not in {"LOW", "MEDIUM", "HIGH"}:
+            raise ValueError("지원하지 않는 priority입니다")
+
+    def complete(self):
+        if self.completed:
+            raise ValueError("이미 완료한 작업입니다")
+        self.completed = True
+
+
+@dataclass
+class TaskBoard:
+    _tasks: list[Task] = field(default_factory=list)
+
+    def add(self, task):
+        if task in self._tasks:
+            raise ValueError("동일한 작업이 이미 있습니다")
+        self._tasks.append(task)
+
+    def find_by_priority(self, priority):
+        normalized = priority.strip().upper()
+        return tuple(
+            task for task in self._tasks
+            if task.priority == normalized
+        )
+```
+
+</details>
+
 ## 22. 완료 기준
 
-다음 항목을 코드와 말로 설명할 수 있으면 목표를 달성한 것이다.
+다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
 
-- 클래스, 인스턴스, 객체, 이름의 관계를 구분한다.
-- `is`, `==`, `isinstance`, `type`의 차이를 설명한다.
-- `__init__`과 `self`의 역할을 설명한다.
-- 결합된 인스턴스 메서드의 호출 방식을 설명한다.
-- 인스턴스 변수와 클래스 변수를 구분한다.
-- 변경 가능한 클래스 변수 공유 문제를 재현하고 수정한다.
-- 상태 변경 메서드로 객체 규칙을 지킨다.
-- 인스턴스·클래스·정적 메서드를 목적에 맞게 선택한다.
-- 밑줄 관례와 property의 사용 목적을 설명한다.
-- `__repr__`, `__str__`, `__eq__`의 차이를 설명한다.
-- 데이터클래스가 생성하는 대표 메서드를 설명한다.
-- 변경 가능한 기본값에 `default_factory`를 사용한다.
-- `__post_init__`에서 타입·값 규칙을 검증한다.
-- `frozen=True`가 깊은 불변성을 보장하지 않음을 설명한다.
-- 단순한 상속과 메서드 재정의, `super()`를 사용할 수 있다.
-- is-a 관계는 상속, has-a 관계는 합성을 우선 검토한다.
-- 타입 힌트와 실행 중 검증을 구분한다.
-- 딕셔너리를 데이터클래스 객체로 변환하고 객체 목록을 집계한다.
+- [ ] 클래스, 인스턴스, 객체, 이름의 관계를 구분한다.
+- [ ] `is`, `==`, `isinstance`, `type`의 차이를 설명한다.
+- [ ] `__init__`과 `self`의 역할을 설명한다.
+- [ ] 결합된 인스턴스 메서드의 호출 방식을 설명한다.
+- [ ] 인스턴스 변수와 클래스 변수를 구분한다.
+- [ ] 변경 가능한 클래스 변수 공유 문제를 재현하고 수정한다.
+- [ ] 상태 변경 메서드로 객체 규칙을 지킨다.
+- [ ] 인스턴스·클래스·정적 메서드를 목적에 맞게 선택한다.
+- [ ] 밑줄 관례와 property의 사용 목적을 설명한다.
+- [ ] `__repr__`, `__str__`, `__eq__`의 차이를 설명한다.
+- [ ] 데이터클래스가 생성하는 대표 메서드를 설명한다.
+- [ ] 변경 가능한 기본값에 `default_factory`를 사용한다.
+- [ ] `__post_init__`에서 타입·값 규칙을 검증한다.
+- [ ] `frozen=True`가 깊은 불변성을 보장하지 않음을 설명한다.
+- [ ] 단순한 상속과 메서드 재정의, `super()`를 사용할 수 있다.
+- [ ] is-a 관계는 상속, has-a 관계는 합성을 우선 검토한다.
+- [ ] 타입 힌트와 실행 중 검증을 구분한다.
+- [ ] 딕셔너리를 데이터클래스 객체로 변환하고 객체 목록을 집계한다.
+- [ ] 작업 보드 전이 연습에서 값 객체와 저장소 객체를 분리한다.
 
 ## 핵심 정리
 

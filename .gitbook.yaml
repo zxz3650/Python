@@ -1,0 +1,10 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+redirects:
+  03-python-basics/03-6-files-data: 03-python-basics/03-6-exceptions.md
+  03-python-basics/03-7-errors-modules: 03-python-basics/03-7-modules-packages.md
+  03-python-basics/03-8-log-project: 03-python-basics/03-8-classes-dataclasses.md
