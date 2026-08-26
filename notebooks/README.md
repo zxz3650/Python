@@ -7,6 +7,7 @@
 - [`03-3-conditions-logic.ipynb`](03-3-conditions-logic.ipynb): 비교·논리 연산자, 우선순위, 단락 평가, truthy/falsey, 결정표 기반 단일 이벤트 분류를 연습합니다.
 - [`03-4-loops.ipynb`](03-4-loops.ipynb): `for`·`while`, 반복 종료, 카운트·누적·필터·검색·집계 패턴, 안전한 컬렉션 순회, 이벤트 목록 분석을 연습합니다.
 - [`03-5-functions-scope.ipynb`](03-5-functions-scope.ipynb): 함수 계약, 인자 전달, 반환값, 변경 가능한 기본값, 객체 변경, 스코프, 콜백, 이벤트 분석 함수 분리를 연습합니다.
+- [`03-6-exceptions.ipynb`](03-6-exceptions.ipynb): traceback, 예외 전파, `try` 흐름, 예외 연결, 입력 검증, 배치 처리 정책을 연습합니다.
 
 처음 Python 문법을 학습한다면 번호 순서대로 실행하세요. 각 셀은 결과를 먼저 예측하고, 실행 결과를 설명한 뒤 값을 변경하는 순서로 구성되어 있습니다.
 
