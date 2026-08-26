@@ -4,6 +4,7 @@
 
 - [`03-1-data-types.ipynb`](03-1-data-types.ipynb): 변수, 기본 자료형, 명시적 형변환, 형식과 범위 검증의 차이를 외부 모듈 없이 연습합니다.
 - [`03-2-strings-collections.ipynb`](03-2-strings-collections.ipynb): 문자열 처리, 자료구조 선택, 중첩 구조, 별칭과 복사를 조건문·반복문 없이 연습합니다.
+- [`03-3-conditions-logic.ipynb`](03-3-conditions-logic.ipynb): 비교·논리 연산자, 우선순위, 단락 평가, truthy/falsey, 결정표 기반 단일 이벤트 분류를 연습합니다.
 
 처음 Python 문법을 학습한다면 번호 순서대로 실행하세요. 각 셀은 결과를 먼저 예측하고, 실행 결과를 설명한 뒤 값을 변경하는 순서로 구성되어 있습니다.
 
