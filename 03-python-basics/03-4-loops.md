@@ -17,6 +17,16 @@
 - 중첩 반복과 컴프리헨션을 실행 비용과 가독성 관점에서 판단한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | `for`·`while`, `range()`, 종료 조건, `break`·`continue` |
+| 권장 | `enumerate()`·`zip()`, 카운트·누적·필터·검색·집계 패턴 |
+| 심화 | iterable·iterator 내부 모델, 반복문 `else`, 중첩 비용, 컴프리헨션 |
+
+처음 학습한다면 2절의 `for`부터 실습한 뒤 1절의 iterable·iterator 설명으로 돌아와도 된다.
+
 ## 학습 범위와 연결
 
 - 리스트·튜플·딕셔너리·집합의 특성은 [03-2](03-2-strings-collections.md)에서 학습했다.
@@ -863,7 +873,24 @@ for line in lines:
 3. 중요 이벤트가 없다면 반복문의 `else`에서 안내 문구를 출력한다.
 4. 결과를 예상한 뒤 `assert`로 검증한다.
 
+### 17.9 전이 연습 — 재고 목록 집계
+
+다음 재고 목록에서 유효한 항목만 처리한다.
+
+```python
+stocks = [12, 0, -1, 7, 0, 15]
+```
+
+1. 음수는 잘못된 값이므로 별도 `invalid_stocks`에 모은다.
+2. 0인 항목 수를 센다.
+3. 양수 재고의 합계와 평균을 구한다.
+4. 첫 번째 품절 위치를 찾고, 없으면 반복문의 `else`에서 `None`을 유지한다.
+5. 원본 리스트를 변경하지 않는다.
+
 ## 18. 연습문제 정답과 해설
+
+<details>
+<summary>정답과 해설 펼치기</summary>
 
 ### 18.1 출력 예측
 
@@ -988,18 +1015,57 @@ assert count_by_port == {443: 2, 22: 1, 3389: 1}
 assert first_critical_event == events[1]
 ```
 
+### 18.9 전이 연습 예시 답안
+
+```python
+stocks = [12, 0, -1, 7, 0, 15]
+valid_positive_stocks = []
+invalid_stocks = []
+out_of_stock_count = 0
+
+for stock in stocks:
+    if stock < 0:
+        invalid_stocks.append(stock)
+        continue
+    if stock == 0:
+        out_of_stock_count += 1
+        continue
+    valid_positive_stocks.append(stock)
+
+total_stock = sum(valid_positive_stocks)
+average_stock = total_stock / len(valid_positive_stocks)
+
+first_out_of_stock = None
+for index, stock in enumerate(stocks):
+    if stock == 0:
+        first_out_of_stock = index
+        break
+else:
+    first_out_of_stock = None
+
+assert invalid_stocks == [-1]
+assert out_of_stock_count == 2
+assert total_stock == 34
+assert average_stock == 34 / 3
+assert first_out_of_stock == 1
+assert stocks == [12, 0, -1, 7, 0, 15]
+```
+
+</details>
+
 ## 19. 완료 기준
 
-다음 항목을 코드와 말로 설명할 수 있으면 이 절의 목표를 달성한 것이다.
+다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
 
-- 값을 직접 순회할 때와 `range()`가 필요할 때를 구분한다.
-- 위치가 필요하면 `enumerate()`, 대응 값이 필요하면 `zip()`을 사용한다.
-- `while`의 초기 상태·계속 조건·상태 갱신을 찾을 수 있다.
-- 카운트·누적·필터·변환·검색·집계를 직접 작성한다.
-- `continue`, `break`, 반복문의 `else` 실행 시점을 예측한다.
-- 반복 중 자료구조의 크기를 바꾸는 코드의 위험을 설명한다.
-- 중첩 반복의 실행 횟수와 컴프리헨션의 가독성을 판단한다.
-- 작은 입력과 `assert`로 경계와 누적 결과를 검증한다.
+- [ ] 값을 직접 순회할 때와 `range()`가 필요할 때를 구분한다.
+- [ ] 위치가 필요하면 `enumerate()`, 대응 값이 필요하면 `zip()`을 사용한다.
+- [ ] `while`의 초기 상태·계속 조건·상태 갱신을 찾을 수 있다.
+- [ ] 카운트·누적·필터·변환·검색·집계를 직접 작성한다.
+- [ ] `continue`, `break`, 반복문의 `else` 실행 시점을 예측한다.
+- [ ] 반복 중 자료구조의 크기를 바꾸는 코드의 위험을 설명한다.
+- [ ] 중첩 반복의 실행 횟수와 컴프리헨션의 가독성을 판단한다.
+- [ ] 작은 입력과 `assert`로 경계와 누적 결과를 검증한다.
+- [ ] 재고 전이 연습을 원본 변경 없이 완성한다.
 
 ## 핵심 정리
 

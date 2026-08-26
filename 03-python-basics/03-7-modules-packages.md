@@ -17,13 +17,21 @@
 - 순환 import, 이름 충돌, import 부수 효과 같은 안티패턴을 피한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 모듈·일반 패키지, import 문, 사용자 모듈, `main()`과 실행 가드 |
+| 권장 | 상대 import, `python -m`, import 오류 진단, 가상환경과 의존성 재현 |
+| 심화 | namespace package, 모듈 캐시·검색 경로, 순환 import, 공급망 안전 |
+
 ## 선행 지식과 학습 연결
 
 - 함수 계약과 스코프는 [03-5](03-5-functions.md)에서 학습했다.
-- 예외 전파와 이벤트 행 파서는 [03-6](03-6-files-data.md)에서 학습했다.
+- 예외 전파와 이벤트 행 파서는 [03-6](03-6-exceptions.md)에서 학습했다.
 - 가상환경 생성과 패키지 설치는 [02장](../02-python-setup.md)에서 학습했다.
 - 이 절에서는 03-6의 이벤트 파서를 여러 모듈로 분리한다.
-- 다음 [03-8](03-8-log-project.md)에서는 데이터와 동작을 클래스로 묶는다.
+- 다음 [03-8](03-8-classes-dataclasses.md)에서는 데이터와 동작을 클래스로 묶는다.
 
 전용 실습은 [`notebooks/03-7-modules-packages.ipynb`](../notebooks/03-7-modules-packages.ipynb)에서 진행한다.
 
@@ -996,7 +1004,22 @@ assert summary == {
 - `__main__.py`에서 문자열 결과를 출력한다.
 - import해 호출할 때는 프로그램이 자동 실행되지 않음을 확인한다.
 
+### 17.9 전이 연습 — 도서 대출 패키지
+
+보안 이벤트 대신 다음 책임을 가진 `library_tools` 패키지를 설계한다.
+
+- `models.py`: 도서 딕셔너리 생성
+- `loans.py`: 대출 가능 여부와 대출 처리
+- `report.py`: 도서·대출 요약 문자열 생성
+- `__init__.py`: 외부에 공개할 이름 선택
+- `__main__.py`: 예제 데이터를 사용한 실행 진입점
+
+프로젝트 루트에서 `python -m library_tools`로 실행하고, `import library_tools`만 했을 때는 예제 출력이 발생하지 않아야 한다.
+
 ## 18. 정답과 해설
+
+<details>
+<summary>정답과 해설 펼치기</summary>
 
 ### 18.1 import 이름
 
@@ -1070,26 +1093,61 @@ def format_summary(summary):
 
 공개 함수로 제공한다면 `__init__.py`의 명시적 import와 `__all__`에도 추가한다.
 
+### 18.9 전이 연습 예시 구조
+
+```text
+library_tools/
+├── __init__.py
+├── __main__.py
+├── loans.py
+├── models.py
+└── report.py
+```
+
+```python
+# library_tools/models.py
+def make_book(title):
+    return {"title": title, "available": True}
+
+
+# library_tools/loans.py
+def loan(book):
+    if not book["available"]:
+        raise ValueError("이미 대출 중입니다")
+    book["available"] = False
+
+
+# library_tools/report.py
+def format_book(book):
+    status = "대출 가능" if book["available"] else "대출 중"
+    return f"{book['title']}: {status}"
+```
+
+`__main__.py`는 위 함수를 조합해 출력하고, `__init__.py`는 학습자가 외부에 공개할 최소 API만 import한다.
+
+</details>
+
 ## 19. 완료 기준
 
-다음 항목을 코드와 말로 설명할 수 있으면 목표를 달성한 것이다.
+다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
 
-- 모듈, 일반 패키지, 배포 패키지를 구분한다.
-- 이후 과정에서 사용할 파일·데이터·네트워크·HTTP·테스트 도구의 역할을 설명한다.
-- 외부 패키지의 설치 이름과 import 이름이 다를 수 있음을 예로 설명한다.
-- 각 import 문이 현재 이름 공간에 만드는 이름을 예측한다.
-- 모듈 최상위 코드의 실행 시점과 캐시를 설명한다.
-- `__name__`, `__file__`, `dir()`, `sys.modules`로 모듈을 확인한다.
-- `sys.path`와 실행 위치로 import 실패를 진단한다.
-- 표준 모듈을 가리는 로컬 파일명을 찾을 수 있다.
-- 일반 패키지를 만들고 `__init__.py` 역할을 설명한다.
-- 절대 import와 상대 import를 구분한다.
-- 직접 실행, import, `python -m` 실행의 차이를 설명한다.
-- `main()`과 `__main__.py`로 import 가능한 실행 프로그램을 만든다.
-- `ModuleNotFoundError`, `ImportError`, `AttributeError`를 구분한다.
-- 순환 import를 책임 재배치로 해결한다.
-- 현재 Python과 pip가 같은 가상환경을 가리키는지 확인한다.
-- import 부수 효과와 검증되지 않은 패키지 설치를 피한다.
+- [ ] 모듈, 일반 패키지, 배포 패키지를 구분한다.
+- [ ] 이후 과정에서 사용할 파일·데이터·네트워크·HTTP·테스트 도구의 역할을 설명한다.
+- [ ] 외부 패키지의 설치 이름과 import 이름이 다를 수 있음을 예로 설명한다.
+- [ ] 각 import 문이 현재 이름 공간에 만드는 이름을 예측한다.
+- [ ] 모듈 최상위 코드의 실행 시점과 캐시를 설명한다.
+- [ ] `__name__`, `__file__`, `dir()`, `sys.modules`로 모듈을 확인한다.
+- [ ] `sys.path`와 실행 위치로 import 실패를 진단한다.
+- [ ] 표준 모듈을 가리는 로컬 파일명을 찾을 수 있다.
+- [ ] 일반 패키지를 만들고 `__init__.py` 역할을 설명한다.
+- [ ] 절대 import와 상대 import를 구분한다.
+- [ ] 직접 실행, import, `python -m` 실행의 차이를 설명한다.
+- [ ] `main()`과 `__main__.py`로 import 가능한 실행 프로그램을 만든다.
+- [ ] `ModuleNotFoundError`, `ImportError`, `AttributeError`를 구분한다.
+- [ ] 순환 import를 책임 재배치로 해결한다.
+- [ ] 현재 Python과 pip가 같은 가상환경을 가리키는지 확인한다.
+- [ ] import 부수 효과와 검증되지 않은 패키지 설치를 피한다.
+- [ ] 도서 대출 전이 연습을 import 부수 효과 없는 패키지로 설계한다.
 
 ## 핵심 정리
 
@@ -1108,4 +1166,4 @@ def format_summary(summary):
 
 ---
 
-다음 절: [03-8. 클래스 기초](03-8-log-project.md)
+다음 절: [03-8. 클래스 기초](03-8-classes-dataclasses.md)

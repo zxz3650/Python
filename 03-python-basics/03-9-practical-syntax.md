@@ -19,6 +19,14 @@
 - 요구사항, 실행 방법, 완료 기준을 다른 사람이 재현할 수 있게 기록한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 인수 조건, 값 객체·저장소·명령 파서, 오류 복구 세션, 패키지 실행 |
+| 권장 | 테스트 매트릭스, 입출력 주입, 코드 품질 점검, 평가 루브릭 |
+| 심화 | 명령 확장, 저장소 정책 변경, 다른 도메인으로 구조 전이 |
+
 ## 선행 지식
 
 03-1부터 03-8까지 완료해야 한다.
@@ -159,6 +167,77 @@ __main__ → app → commands
 ```
 
 아래 계층이 위 계층의 터미널 입출력을 import하지 않게 한다.
+
+### 3.4 학습자용 TODO 골격
+
+4절 이후의 완성 코드를 보기 전에 아래 계약만 복사해 먼저 구현한다. 각 `NotImplementedError`를 하나씩 제거하고, 해당 단계 검증을 통과한 뒤 다음 책임으로 이동한다.
+
+```python
+# models.py
+def parse_port(value):
+    raise NotImplementedError
+
+
+class SecurityEvent:
+    # TODO: dataclass, 정규화, 검증, endpoint()
+    pass
+
+
+# store.py
+class EventStore:
+    def add(self, event):
+        raise NotImplementedError
+
+    def list_all(self):
+        raise NotImplementedError
+
+    def find_by_action(self, action):
+        raise NotImplementedError
+
+    def remove(self, number):
+        raise NotImplementedError
+
+    def summary(self):
+        raise NotImplementedError
+
+
+# commands.py
+class Command:
+    # TODO: 변경 불가능한 데이터클래스
+    pass
+
+
+def parse_command(text):
+    raise NotImplementedError
+
+
+# app.py
+def execute_command(store, command):
+    raise NotImplementedError
+
+
+def process_input(store, text):
+    raise NotImplementedError
+
+
+def run_session(commands, store=None):
+    raise NotImplementedError
+
+
+def main(input_fn=input, output_fn=print):
+    raise NotImplementedError
+```
+
+구현 순서:
+
+1. 값 한 건의 정규화와 경계값
+2. 여러 값의 상태와 중복 정책
+3. 문자열 명령의 구조화
+4. 명령과 상태 변경 연결
+5. 오류 한 건 뒤 계속 실행
+6. 터미널 입출력 주입
+
+완성 코드를 그대로 옮기기 전에 현재 실패가 어느 계약에서 발생했는지 한 문장으로 기록한다.
 
 ## 4. 1단계: 이벤트 값 객체
 
@@ -762,7 +841,7 @@ expect_exception(ValueError, parse_command, "unsupported")
 
 현재 절에서 이후 장 기능을 미리 구현하지 않는다. 확장 지점을 설명할 수 있으면 충분하다.
 
-## 17. 다른 주제로 바꾸기
+## 17. 전이 실습: 다른 주제로 바꾸기
 
 같은 구조를 유지하면서 도메인만 바꿀 수 있다.
 
@@ -779,6 +858,14 @@ expect_exception(ValueError, parse_command, "unsupported")
 ```text
 원문 입력 → 파싱·검증 → 값 객체 → 저장소 → 검색·집계 → 출력
 ```
+
+다음 중 하나를 선택해 이벤트 검토 큐의 코드를 복사하지 않고 같은 설계 원칙으로 다시 작성한다.
+
+1. 값 객체의 필드와 유효성 규칙을 정의한다.
+2. 지원 명령 6개와 각 인자 개수를 정한다.
+3. 정상·오류·경계·상태 입력을 각각 한 개 이상 만든다.
+4. 기존 100점 루브릭에서 도메인 이름만 바꾸고 같은 기준으로 평가한다.
+5. 이벤트 검토 구현과 동일한 점, 달라진 점을 각각 두 가지 설명한다.
 
 ## 18. 최종 제출물
 
@@ -806,6 +893,7 @@ expect_exception(ValueError, parse_command, "unsupported")
 - [ ] 프로젝트 루트에서 `python -m event_review`로 실행된다.
 - [ ] 전체 시나리오를 수동 입력 없이 다시 실행할 수 있다.
 - [ ] 구현하지 않은 파일·네트워크 기능이 다음 장 범위임을 설명한다.
+- [ ] 같은 구조를 연락처·도서·작업·재고 중 하나에 전이해 설명한다.
 
 ## 핵심 정리
 

@@ -12,6 +12,14 @@
 - 형변환 실패와 업무 범위 오류가 서로 다른 문제임을 설명한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 변수와 대입, 기본 자료형, `=`와 `==`, 명시적 형변환 |
+| 권장 | `None`과 falsey 값 구분, `type()`·`isinstance()`, 형식·범위 검증 |
+| 심화 | 값·객체·이름의 관계, `bytes`, 불변 객체와 재대입 |
+
 ## 학습 방법
 
 각 예제는 다음 순서로 학습한다.
@@ -569,6 +577,25 @@ b'MZ' <class 'bytes'>
 - `raw_action`이 `"ALLOW"` 또는 `"DENY"`인지 확인한다.
 - 정상 입력, 형식 오류, 경계값 `1`과 `65535`, 범위 밖 값을 모두 시험한다.
 
+### 연습 6. 전이 연습 — 센서 측정값
+
+보안 이벤트 대신 다음 온도 센서 입력을 처리한다.
+
+```python
+raw_sensor_id = "room-a-01"
+raw_temperature = "23.5"
+raw_battery = "87"
+raw_online = "False"
+raw_last_error = ""
+```
+
+1. 원본 변수는 변경하지 않는다.
+2. 온도는 `float`, 배터리는 `int`로 변환한다.
+3. 배터리가 0~100 범위인지 별도 bool로 저장한다.
+4. `raw_online`을 문자열 내용에 따라 bool로 변환한다.
+5. 오류 문자열이 비어 있으면 `last_error`에 `None`을 저장한다.
+6. 변환 결과의 값과 자료형을 `assert`로 확인한다.
+
 ## 15. 정답과 해설
 
 <details>
@@ -663,6 +690,33 @@ print(file_signature, type(file_signature))
 
 </details>
 
+<details>
+<summary>연습 6 전이 연습 예시 답안</summary>
+
+```python
+raw_sensor_id = "room-a-01"
+raw_temperature = "23.5"
+raw_battery = "87"
+raw_online = "False"
+raw_last_error = ""
+
+temperature = float(raw_temperature)
+battery = int(raw_battery)
+is_valid_battery = 0 <= battery <= 100
+is_online = raw_online == "True"
+last_error = None
+
+assert temperature == 23.5
+assert type(temperature) is float
+assert battery == 87
+assert type(battery) is int
+assert is_valid_battery is True
+assert is_online is False
+assert last_error is None
+```
+
+</details>
+
 ## 완료 기준
 
 - [ ] `=`와 `==`의 차이를 예제로 설명할 수 있다.
@@ -674,6 +728,7 @@ print(file_signature, type(file_signature))
 - [ ] `bool("False")`가 `True`인 이유를 설명할 수 있다.
 - [ ] 형변환 실패와 업무 범위 오류를 구분할 수 있다.
 - [ ] 미니 실습의 모든 `assert`를 통과했다.
+- [ ] 센서 측정값 전이 연습에서 원본과 변환값을 분리했다.
 
 ## 핵심 정리
 

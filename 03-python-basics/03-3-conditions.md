@@ -17,6 +17,14 @@
 - 경계값과 결정표를 이용해 조건 로직을 검증한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | `if`·`elif`·`else`, 비교·멤버십 연산자, `and`·`or`·`not` |
+| 권장 | 연쇄 비교, 단락 평가, truthy/falsey, 경계값 검증 |
+| 심화 | 피연산자를 반환하는 논리 연산, 드모르간 법칙, `any()`·`all()`, 결정표 |
+
 ## 학습 범위와 연결
 
 - `bool`, `None`, 숫자·문자열 구분은 [03-1](03-1-data-types.md)에서 학습했다.
@@ -976,6 +984,17 @@ print("모든 자기점검을 통과했습니다.")
 - 03-5를 학습한 뒤 분류 로직을 `classify_event(event)` 함수로 만든다.
 - 예상 결과와 실제 결과가 다를 때 어떤 bool 조건에서 달라졌는지 출력한다.
 
+### 연습 8. 전이 연습 — 주문 배송 결정
+
+다음 규칙을 결정표로 먼저 작성하고 조건문으로 구현한다.
+
+- 수량이 1보다 작거나 재고보다 많으면 `INVALID`
+- 결제하지 않았으면 `PAYMENT_REQUIRED`
+- 결제했고 총액이 50,000 이상이면 `FREE_SHIPPING`
+- 그 외에는 `STANDARD_SHIPPING`
+
+`quantity`, `stock`, `is_paid`, `total_price`를 입력으로 사용한다. 수량 경계 `0`, `1`, `stock`, `stock + 1`과 총액 경계 `49_999`, `50_000`을 확인한다.
+
 ## 23. 정답과 해설
 
 <details>
@@ -1115,6 +1134,33 @@ print(level)
 
 </details>
 
+<details>
+<summary>연습 8 전이 연습 예시 답안</summary>
+
+```python
+quantity = 2
+stock = 5
+is_paid = True
+total_price = 50_000
+
+is_valid_quantity = 1 <= quantity <= stock
+
+if not is_valid_quantity:
+    shipping_status = "INVALID"
+elif not is_paid:
+    shipping_status = "PAYMENT_REQUIRED"
+elif total_price >= 50_000:
+    shipping_status = "FREE_SHIPPING"
+else:
+    shipping_status = "STANDARD_SHIPPING"
+
+assert shipping_status == "FREE_SHIPPING"
+```
+
+분기 순서는 유효성, 결제 상태, 무료 배송 기준 순서다. 총액부터 검사하면 결제하지 않은 주문을 무료 배송으로 잘못 분류할 수 있다.
+
+</details>
+
 ## 완료 기준
 
 - [ ] `if`, `elif`, `else`의 실행 순서를 설명할 수 있다.
@@ -1128,6 +1174,7 @@ print(level)
 - [ ] 드모르간 법칙과 `any()`, `all()`을 사용할 수 있다.
 - [ ] 경계값과 결정표로 분기 로직을 검증할 수 있다.
 - [ ] 미니 실습의 모든 `assert`를 통과했다.
+- [ ] 주문 배송 전이 연습의 분기 순서와 경계값을 검증했다.
 
 ## 핵심 정리
 

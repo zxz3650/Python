@@ -18,6 +18,14 @@
 - docstring·타입 힌트·`assert`로 함수의 계약과 경계값을 검증한다.
 {% endhint %}
 
+## 학습 우선순위
+
+| 구분 | 내용 |
+| --- | --- |
+| 필수 | 함수 정의·호출, 매개변수·인자, `return`, 조기 반환 |
+| 권장 | 기본값, 변경 가능한 기본값, 객체 전달, 스코프, 단일 책임 |
+| 심화 | 키워드 전용·가변 인자, `nonlocal`, 콜백·lambda, 재귀 |
+
 ## 학습 범위와 연결
 
 - 자료형과 `None`은 [03-1](03-1-data-types.md)에서 학습했다.
@@ -25,7 +33,7 @@
 - 조건식과 조기 분기에는 [03-3](03-3-conditions.md)의 논리를 사용한다.
 - 목록 처리와 집계에는 [03-4](03-4-loops.md)의 반복 패턴을 사용한다.
 - 이 절에서는 메모리 안의 데이터를 함수로 나누고 반환값을 검증한다.
-- `raise`, `try`, `except`를 이용한 실패 전달은 [03-6 예외 처리](03-6-files-data.md)에서 다룬다.
+- `raise`, `try`, `except`를 이용한 실패 전달은 [03-6 예외 처리](03-6-exceptions.md)에서 다룬다.
 - 함수를 파일로 분리하고 import하는 방법은 03-7에서 다룬다.
 
 전용 실습은 [`notebooks/03-5-functions-scope.ipynb`](../notebooks/03-5-functions-scope.ipynb)에서 진행할 수 있다.
@@ -870,7 +878,21 @@ second = build_message("READY")
 3. 빈 목록, 잘못된 이벤트만 있는 목록, 정상 목록을 검증한다.
 4. 함수마다 입력·반환·변경 여부를 docstring으로 기록한다.
 
+### 22.9 전이 연습 — 장바구니 합계 함수
+
+`calculate_cart_total(items, *, discount_rate=0.0)`를 작성한다.
+
+- 각 항목은 `price`와 `quantity`를 가진 딕셔너리다.
+- 입력 목록과 항목 딕셔너리를 변경하지 않는다.
+- 빈 목록은 `0.0`을 반환한다.
+- 할인율은 0.0~1.0 범위다.
+- 계산과 출력은 분리한다.
+- 정상값, 빈 목록, 할인율 경계값을 `assert`로 검증한다.
+
 ## 23. 연습문제 정답과 해설
+
+<details>
+<summary>정답과 해설 펼치기</summary>
 
 ### 23.1 출력과 반환값
 
@@ -998,20 +1020,49 @@ assert count_events_by_port(events) == {
 }
 ```
 
+### 23.9 전이 연습 예시 답안
+
+```python
+def calculate_cart_total(items, *, discount_rate=0.0):
+    """원본을 변경하지 않고 할인 적용 합계를 반환한다."""
+    if not 0.0 <= discount_rate <= 1.0:
+        return None
+
+    subtotal = 0.0
+    for item in items:
+        subtotal += item["price"] * item["quantity"]
+    return subtotal * (1.0 - discount_rate)
+
+
+cart = [
+    {"price": 10_000, "quantity": 2},
+    {"price": 5_000, "quantity": 1},
+]
+
+assert calculate_cart_total([]) == 0.0
+assert calculate_cart_total(cart) == 25_000.0
+assert calculate_cart_total(cart, discount_rate=0.2) == 20_000.0
+assert calculate_cart_total(cart, discount_rate=1.1) is None
+assert cart[0] == {"price": 10_000, "quantity": 2}
+```
+
+</details>
+
 ## 24. 완료 기준
 
-다음 항목을 코드와 말로 설명할 수 있으면 이 절의 목표를 달성한 것이다.
+다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
 
-- 함수의 입력·처리·출력·부수 효과를 설명한다.
-- 정의와 호출, 매개변수와 인자를 구분한다.
-- `return`, 조기 반환, 여러 값 반환의 실행 흐름을 예측한다.
-- 위치·키워드·기본값·키워드 전용·가변 인자를 구분한다.
-- 변경 가능한 기본값이 호출 사이에 공유되는 이유를 설명한다.
-- 함수 안의 재할당과 변경 가능한 객체의 내부 변경을 구분한다.
-- LEGB 순서와 `global`, `nonlocal`의 영향을 설명한다.
-- 계산과 출력·상태 변경을 분리한다.
-- 함수 객체를 인자로 전달하고 짧은 `lambda`의 적정 범위를 판단한다.
-- 정상·경계·잘못된 입력과 빈 컬렉션을 `assert`로 검증한다.
+- [ ] 함수의 입력·처리·출력·부수 효과를 설명한다.
+- [ ] 정의와 호출, 매개변수와 인자를 구분한다.
+- [ ] `return`, 조기 반환, 여러 값 반환의 실행 흐름을 예측한다.
+- [ ] 위치·키워드·기본값·키워드 전용·가변 인자를 구분한다.
+- [ ] 변경 가능한 기본값이 호출 사이에 공유되는 이유를 설명한다.
+- [ ] 함수 안의 재할당과 변경 가능한 객체의 내부 변경을 구분한다.
+- [ ] LEGB 순서와 `global`, `nonlocal`의 영향을 설명한다.
+- [ ] 계산과 출력·상태 변경을 분리한다.
+- [ ] 함수 객체를 인자로 전달하고 짧은 `lambda`의 적정 범위를 판단한다.
+- [ ] 정상·경계·잘못된 입력과 빈 컬렉션을 `assert`로 검증한다.
+- [ ] 장바구니 전이 연습을 입력 변경 없는 함수로 완성한다.
 
 ## 핵심 정리
 
