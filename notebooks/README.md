@@ -10,6 +10,7 @@
 - [`03-6-exceptions.ipynb`](03-6-exceptions.ipynb): traceback, 예외 전파, `try` 흐름, 예외 연결, 입력 검증, 배치 처리 정책을 연습합니다.
 - [`03-7-modules-packages.ipynb`](03-7-modules-packages.ipynb): 과정별 모듈 지도, import 이름, 모듈 캐시·검색 경로, 일반 패키지, 상대 import, `python -m`, import 오류 진단을 연습합니다.
 - [`03-8-classes-dataclasses.ipynb`](03-8-classes-dataclasses.ipynb): 클래스·인스턴스, 메서드 바인딩, 클래스 변수, 상태 전이, property, dataclass, 상속·합성, 이벤트 객체 모델을 연습합니다.
+- [`03-9-syntax-project.ipynb`](03-9-syntax-project.ipynb): 03-1~03-8의 문법을 이벤트 검토 큐에 통합하고 값 객체, 저장소, 명령 파서, 오류 복구 세션, 입출력 주입 테스트를 단계별로 완성합니다.
 
 처음 Python 문법을 학습한다면 번호 순서대로 실행하세요. 각 셀은 결과를 먼저 예측하고, 실행 결과를 설명한 뒤 값을 변경하는 순서로 구성되어 있습니다.
 
