@@ -1,6 +1,6 @@
-# 04-7. 간단한 파일 분석기
+# 04-9. 파일 분석기 종합 실습
 
-04장에서 학습한 경로, 텍스트·바이너리, 인코딩, CSV·JSON, 스트리밍, 예외 처리를 하나의 프로그램으로 연결합니다. 완성한 분석기는 입력 파일을 변경하지 않고 기본 정보와 형식별 통계를 JSON 보고서로 저장합니다.
+04장에서 학습한 경로 검증, 파일 조작, 텍스트·바이너리, 인코딩, CSV·JSON, 스트리밍, 오류 복구, 원자적 저장을 하나의 프로그램으로 연결합니다. 완성한 분석기는 입력 파일을 변경하지 않고 기본 정보와 형식별 통계를 JSON 보고서로 저장합니다.
 
 {% hint style="info" %}
 ## 🧭 학습 목표
@@ -15,7 +15,7 @@
 
 ## 선행 지식
 
-04-1부터 04-6까지 완료해야 합니다.
+04-1부터 04-8까지 완료해야 합니다.
 
 ## 완성 프로그램
 
@@ -34,7 +34,7 @@
 | 텍스트 | 전체 행·빈 행·최대 행 길이 | 스트리밍 반복문 |
 | CSV | 헤더·행·열·결측 행 | `csv.reader` |
 | JSON | 문법·최상위 구조·항목 수 | `json.load` |
-| 결과 | 분석 보고서 안전 저장 | 임시 파일과 `replace()` |
+| 결과 | 분석 보고서 안전 저장 | `tempfile`, `fsync()`, `os.replace()` |
 
 {% hint style="warning" %}
 확장자는 파일의 성격을 암시할 뿐 실제 내용을 보장하지 않습니다. 먼저 내용을 분류한 뒤 확장자에 맞는 형식 분석을 적용합니다.
@@ -226,14 +226,30 @@ except json.JSONDecodeError as exc:
 ## 11. 결과를 안전하게 저장
 
 ```python
-temporary_path.write_text(
-    json.dumps(report, ensure_ascii=False, indent=2),
+import os
+from tempfile import NamedTemporaryFile
+
+
+with NamedTemporaryFile(
+    mode="w",
     encoding="utf-8",
-)
-temporary_path.replace(output_path)
+    dir=output_path.parent,
+    delete=False,
+) as temporary:
+    json.dump(
+        report,
+        temporary,
+        ensure_ascii=False,
+        indent=2,
+        allow_nan=False,
+    )
+    temporary.flush()
+    os.fsync(temporary.fileno())
+
+os.replace(temporary.name, output_path)
 ```
 
-완성된 JSON을 임시 파일에 먼저 작성한 뒤 최종 경로로 교체합니다.
+완성된 JSON을 출력과 같은 디렉터리의 고유한 임시 파일에 먼저 작성한 뒤 최종 경로로 교체합니다. 실제 구현은 실패한 임시 파일도 `finally`에서 정리합니다. 자세한 저장 계약은 [04-8. 임시 파일과 원자적 저장](04-8-safe-output.md)을 참고합니다.
 
 ## 12. 실행
 

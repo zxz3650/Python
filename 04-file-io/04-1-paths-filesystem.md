@@ -1,4 +1,4 @@
-# 04-1. 경로와 파일시스템
+# 04-1. 경로·작업 디렉터리·안전한 경로 검증
 
 파일을 읽기 전에 프로그램이 **어느 위치를 기준으로 어떤 파일을 가리키는지** 이해해야 합니다. 문자열을 직접 이어 붙이기보다 `pathlib.Path`를 사용하면 운영체제별 경로 차이를 줄일 수 있습니다.
 
@@ -9,6 +9,7 @@
 - `Path`로 경로를 만들고 결합합니다.
 - 파일·디렉터리의 존재와 종류를 확인합니다.
 - 디렉터리를 탐색하고 파일 정보를 조회합니다.
+- 사용자 입력 경로를 허용된 기준 디렉터리 안으로 제한합니다.
 {% endhint %}
 
 ## 선행 지식
@@ -90,6 +91,13 @@ for json_path in data_dir.rglob("*.json"):
 
 `glob()`은 현재 디렉터리, `rglob()`은 하위 디렉터리까지 탐색합니다.
 
+파일시스템의 탐색 순서는 환경마다 다를 수 있습니다. 결과 순서가 중요한 실습과 보고서에서는 `sorted()`를 적용합니다.
+
+```python
+for csv_path in sorted(data_dir.glob("*.csv")):
+    print(csv_path)
+```
+
 ## 6. 파일 정보 확인
 
 ```python
@@ -110,7 +118,35 @@ path = Path("data/users.txt")
 print(path.resolve())
 ```
 
-`resolve()`는 경로를 절대 경로로 정리합니다. 사용자가 입력한 경로를 다룰 때는 허용된 기준 디렉터리 안에 있는지도 확인해야 합니다.
+`resolve()`는 `..`과 심볼릭 링크를 반영해 경로를 절대 경로로 정리합니다. 절대 경로로 바꾸는 것만으로 안전해지는 것은 아닙니다.
+
+## 8. 허용된 기준 디렉터리 확인
+
+사용자 입력을 파일 경로로 받을 때는 정리된 결과가 허용된 기준 디렉터리 안에 있는지 확인합니다.
+
+```python
+def resolve_under(base, user_value):
+    base = base.resolve()
+    candidate = (base / user_value).resolve()
+
+    if not candidate.is_relative_to(base):
+        raise ValueError("허용된 디렉터리 밖의 경로입니다")
+
+    return candidate
+
+
+lab_root = Path("file-lab").resolve()
+safe_path = resolve_under(lab_root, "input/users.txt")
+```
+
+```python
+try:
+    resolve_under(lab_root, "../../outside.txt")
+except ValueError as exc:
+    print("경로 거부:", exc)
+```
+
+이 검사는 실습 작업 범위를 제한하는 기본 방어입니다. 경로 확인 뒤 파일이 교체되는 경쟁 조건과 운영체제별 권한 정책은 더 높은 단계에서 다룹니다.
 
 ## 흔한 실수
 
@@ -119,6 +155,8 @@ print(path.resolve())
 - 파일과 디렉터리를 구분하지 않고 처리함
 - `rglob("*")`으로 필요 없는 파일까지 모두 읽음
 - 경로 존재 확인만 믿고 실제 예외를 처리하지 않음
+- `resolve()`만 호출하면 경로가 안전하다고 생각함
+- 심볼릭 링크가 작업 영역 밖을 가리킬 수 있다는 점을 놓침
 
 {% hint style="success" %}
 ## 🧪 종합 실습
@@ -127,6 +165,7 @@ print(path.resolve())
 2. 현재 작업 디렉터리와 각 디렉터리의 절대 경로를 출력합니다.
 3. `data/input` 아래의 `.txt` 파일만 찾습니다.
 4. 파일명, 확장자, 크기를 딕셔너리로 정리합니다.
+5. `../../outside.txt`처럼 기준 디렉터리를 벗어나는 입력을 거부합니다.
 {% endhint %}
 
 ## 완료 기준
@@ -134,7 +173,8 @@ print(path.resolve())
 - [ ] 상대 경로의 기준을 설명할 수 있습니다.
 - [ ] `Path`로 경로를 결합할 수 있습니다.
 - [ ] 파일 탐색 결과에서 파일과 디렉터리를 구분할 수 있습니다.
+- [ ] 정리된 경로가 허용된 기준 디렉터리 안에 있는지 확인할 수 있습니다.
 
 ---
 
-다음 절: [04-2. 텍스트 파일과 with](04-2-text-files.md)
+다음 절: [04-2. 파일·디렉터리 조작과 작업 범위](04-2-filesystem-operations.md)

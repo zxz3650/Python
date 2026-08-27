@@ -291,7 +291,7 @@ print(encoded)        # b'MZ'
 print(decoded)        # MZ
 ```
 
-모든 바이트가 UTF-8 문자열인 것은 아니다. 잘못된 방식으로 디코딩하면 `UnicodeDecodeError`가 발생할 수 있다. 인코딩은 [04-3. 인코딩, str, bytes](../04-file-io/04-3-encoding-bytes.md)에서 자세히 다룬다.
+모든 바이트가 UTF-8 문자열인 것은 아니다. 잘못된 방식으로 디코딩하면 `UnicodeDecodeError`가 발생할 수 있다. 인코딩은 [04-4. 인코딩·bytes와 바이너리 구조](../04-file-io/04-4-encoding-binary.md)에서 자세히 다룬다.
 
 ## 9. 명시적 형변환
 
