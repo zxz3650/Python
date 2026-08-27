@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 import csv
 import hashlib
 import json
+import os
 
 
 SAMPLE_BYTES = 8192
@@ -209,12 +211,36 @@ def analyze_file(path: Path) -> dict:
 
 
 def save_report(report: dict, output_path: Path) -> None:
-    temporary_path = output_path.with_suffix(output_path.suffix + ".tmp")
-    temporary_path.write_text(
-        json.dumps(report, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    temporary_path.replace(output_path)
+    output_path = output_path.resolve()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = None
+
+    try:
+        with NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=output_path.parent,
+            prefix=f".{output_path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            json.dump(
+                report,
+                temporary,
+                ensure_ascii=False,
+                indent=2,
+                allow_nan=False,
+            )
+            temporary.write("\n")
+            temporary.flush()
+            os.fsync(temporary.fileno())
+
+        os.replace(temporary_path, output_path)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 def main() -> int:
@@ -232,7 +258,12 @@ def main() -> int:
         return 1
 
     output_path = input_path.with_name(input_path.name + ".analysis.json")
-    save_report(report, output_path)
+    try:
+        save_report(report, output_path)
+    except (OSError, TypeError, ValueError) as exc:
+        print(f"보고서 저장 실패: {exc}")
+        return 1
+
     print(f"분석 완료: {output_path}")
     return 0
 
