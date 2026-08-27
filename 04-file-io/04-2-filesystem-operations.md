@@ -35,25 +35,18 @@ output_dir.mkdir(parents=True, exist_ok=True)
 
 ## 2. 허용된 경로인지 확인하기
 
-사용자가 입력한 경로를 그대로 연결하면 `../` 또는 절대 경로로 작업 영역 밖을 가리킬 수 있습니다.
+사용자가 입력한 경로를 그대로 연결하면 `../` 또는 절대 경로로 작업 영역 밖을 가리킬 수 있습니다. 이 절에서는 04-1에서 작성한 `resolve_under()`를 그대로 재사용합니다.
 
 ```python
-def resolve_under(base, user_value):
-    base = base.resolve()
-    candidate = (base / user_value).resolve()
-
-    if not candidate.is_relative_to(base):
-        raise ValueError("허용된 작업 디렉터리 밖의 경로입니다")
-
-    return candidate
-```
-
-```python
-safe_path = resolve_under(lab_root, "input/sample.txt")
+safe_path = resolve_under(
+    lab_root,
+    "input/sample.txt",
+    must_exist=False,
+)
 print(safe_path)
 ```
 
-`resolve()`는 `..`과 심볼릭 링크를 정리합니다. 하지만 확인 뒤 실제 작업 전에 파일이 바뀌는 경쟁 조건까지 해결하는 것은 아니므로, 운영 환경의 강한 격리는 별도의 심화 주제입니다.
+빈 입력, 절대 경로, `..` 이탈, 외부를 가리키는 심볼릭 링크를 다시 구현하지 않고 하나의 경로 계약으로 관리합니다. 검사 뒤 실제 작업 전에 파일이 바뀌는 경쟁 조건까지 해결하는 것은 아니므로, 실제 복사·이동·삭제에서 발생하는 예외도 처리합니다.
 
 ## 3. 새 파일 만들기
 
