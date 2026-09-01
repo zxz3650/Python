@@ -38,6 +38,8 @@
 
 경로 문자열을 받자마자 파일을 열지 않고 위 질문을 순서대로 확인한다.
 
+전용 실습은 [`notebooks/04-1-paths-filesystem.ipynb`](../notebooks/04-1-paths-filesystem.ipynb)에서 진행할 수 있다.
+
 ## 1. Path 객체와 실제 파일은 다르다
 
 `Path` 객체를 만드는 동작은 경로를 표현할 뿐 파일이나 디렉터리를 생성하지 않는다.
@@ -121,12 +123,12 @@ Jupyter Notebook과 일부 대화형 환경에는 `__file__`이 없다. 이 환�
 경로는 파일이나 디렉터리의 위치를 나타내는 표현이다. 경로가 **어디에서 시작되는지**에 따라 상대 경로와 절대 경로로 구분한다.
 
 - **상대 경로(relative path)**는 현재 작업 디렉터리처럼 정해진 **기준 위치에서 출발해** 대상까지의 위치를 나타낸다. 기준 위치가 바뀌면 같은 문자열이 다른 대상을 가리킬 수 있다.
-- **절대 경로(absolute path)**는 루트 디렉터리나 드라이브처럼 파일시스템의 **시작 위치부터** 대상까지의 전체 위치를 나타낸다. 현재 작업 디렉터리가 바뀌어도 같은 대상을 가리킨다.
+- **절대 경로(absolute path)**는 루트 디렉터리나 드라이브처럼 파일 시스템의 **시작 위치부터** 대상까지의 전체 위치를 나타낸다. 현재 작업 디렉터리가 바뀌어도 같은 대상을 가리킨다.
 
 | 구분 | 출발점 | 예 | 기준 위치가 바뀔 때 |
 | --- | --- | --- | --- |
 | 상대 경로 | 현재 작업 디렉터리 또는 프로그램이 명시한 기준 경로 | `data/users.txt`, `../shared/users.txt` | 가리키는 대상이 달라질 수 있음 |
-| 절대 경로 | 파일시스템 루트 또는 드라이브 | POSIX의 `/home/student/data/users.txt`, Windows의 `C:\Users\student\data\users.txt` | 가리키는 대상이 달라지지 않음 |
+| 절대 경로 | 파일 시스템 루트 또는 드라이브 | POSIX의 `/home/student/data/users.txt`, Windows의 `C:\Users\student\data\users.txt` | 가리키는 대상이 달라지지 않음 |
 
 상대 경로에서 `.`은 현재 위치, `..`은 상위 위치를 뜻한다. 상대 경로라고 해서 반드시 프로젝트 내부를 가리키는 것은 아니다. `../outside.txt`처럼 기준 위치 밖으로 이동할 수도 있다.
 
@@ -239,23 +241,19 @@ lab_root = Path("file-lab")
 input_dir = lab_root / "input"
 output_dir = lab_root / "output"
 
-input_dir.mkdir(parents=True, exist_ok=True)
-output_dir.mkdir(parents=True, exist_ok=True)
-```
-
-- `parents=True`: 필요한 상위 디렉터리도 함께 생성
-- `exist_ok=True`: 같은 디렉터리가 이미 있으면 계속 진행
-
-`exist_ok=True`여도 같은 경로에 일반 파일이 있거나 권한이 부족하면 예외가 발생한다.
-
-```python
 try:
+    input_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 except FileExistsError:
     print("같은 경로에 디렉터리가 아닌 대상이 있습니다")
 except PermissionError:
     print("디렉터리를 만들 권한이 없습니다")
 ```
+
+- `parents=True`: 필요한 상위 디렉터리도 함께 생성
+- `exist_ok=True`: 같은 디렉터리가 이미 있으면 계속 진행
+
+`exist_ok=True`여도 같은 경로에 일반 파일이 있거나 권한이 부족하면 예외가 발생한다. `exist_ok`는 모든 오류를 무시하는 옵션이 아니다.
 
 ## 9. 디렉터리 탐색
 
@@ -273,7 +271,7 @@ except NotADirectoryError:
     print("디렉터리가 아닌 경로입니다:", data_dir)
 ```
 
-파일시스템의 기본 탐색 순서는 환경마다 다를 수 있다. 보고서와 테스트에서 순서가 중요하면 `sorted()`를 적용한다.
+파일 시스템의 기본 탐색 순서는 환경마다 다를 수 있다. 보고서와 테스트에서 순서가 중요하면 `sorted()`를 적용한다.
 
 ### glob과 rglob
 
@@ -290,7 +288,7 @@ for json_path in sorted(data_dir.rglob("*.json")):
 - `glob("*.csv")`: 현재 디렉터리의 패턴과 일치하는 항목
 - `rglob("*.json")`: 모든 하위 디렉터리까지 재귀 탐색
 
-glob 패턴은 정규표현식이 아니다. 대소문자 구분 방식도 파일시스템에 따라 다를 수 있으므로 결과를 다시 검증한다. 범위가 넓은 `rglob("*")`은 불필요한 파일과 많은 디렉터리를 탐색할 수 있다.
+`glob` 패턴은 정규표현식이 아니다. 대소문자 구분 방식도 파일 시스템에 따라 다를 수 있으므로 결과를 다시 검증한다. 범위가 넓은 `rglob("*")`은 불필요한 파일과 많은 디렉터리를 탐색할 수 있다.
 
 ## 10. 파일 메타데이터 확인
 
@@ -410,7 +408,7 @@ if str(candidate).startswith(str(resolved_base)):
 
 ### 문제 1
 
-`Path("data/users.txt")`를 만들면 파일도 생성될까요?
+`Path("data/users.txt")`를 만들면 파일도 생성되는가?
 
 <details>
 <summary>정답 보기</summary>
@@ -421,7 +419,7 @@ if str(candidate).startswith(str(resolved_base)):
 
 ### 문제 2
 
-다음 프로그램을 서로 다른 디렉터리에서 실행하면 `path`가 항상 같은 파일을 가리킬까요?
+다음 프로그램을 서로 다른 디렉터리에서 실행하면 `path`가 항상 같은 파일을 가리키는가?
 
 ```python
 path = Path("data/users.txt")
@@ -430,13 +428,13 @@ path = Path("data/users.txt")
 <details>
 <summary>정답 보기</summary>
 
-아니다. `Path("data/users.txt")`는 파일시스템의 시작 위치부터 표현하지 않았으므로 상대 경로다. 기본 기준 위치인 현재 작업 디렉터리가 바뀌면 가리키는 대상도 달라질 수 있다.
+아니다. `Path("data/users.txt")`는 파일 시스템의 시작 위치부터 표현하지 않았으므로 상대 경로다. 기본 기준 위치인 현재 작업 디렉터리가 바뀌면 가리키는 대상도 달라질 수 있다.
 
 </details>
 
 ### 문제 3
 
-`resolve()`를 호출했으므로 사용자 경로가 안전하다고 말할 수 있을까요?
+`resolve()`를 호출했으므로 사용자 경로가 안전하다고 말할 수 있는가?
 
 <details>
 <summary>정답 보기</summary>
@@ -447,7 +445,7 @@ path = Path("data/users.txt")
 
 ### 문제 4
 
-`path.is_file()`이 `False`이면 반드시 디렉터리일까요?
+`path.is_file()`이 `False`이면 반드시 디렉터리인가?
 
 <details>
 <summary>정답 보기</summary>
@@ -458,12 +456,12 @@ path = Path("data/users.txt")
 
 ### 문제 5
 
-`path.is_absolute()`가 `True`이면 그 경로는 반드시 존재하고 안전하게 사용할 수 있을까?
+`path.is_absolute()`가 `True`이면 그 경로는 반드시 존재하고 안전하게 사용할 수 있는가?
 
 <details>
 <summary>정답 보기</summary>
 
-아니다. `is_absolute()`는 경로가 파일시스템의 시작 위치부터 표현되었는지만 판별한다. 존재 여부는 `exists()`, 대상 종류는 `is_file()`·`is_dir()`, 허용 범위는 별도의 경로 검증으로 확인해야 한다.
+아니다. `is_absolute()`는 경로가 파일 시스템의 시작 위치부터 표현되었는지만 판별한다. 존재 여부는 `exists()`, 대상 종류는 `is_file()`·`is_dir()`, 허용 범위는 별도의 경로 검증으로 확인해야 한다.
 
 </details>
 
@@ -562,7 +560,7 @@ assert records == sorted(
 
 | 흔한 실수 | 문제 | 수정 방향 |
 | --- | --- | --- |
-| Python 파일 위치와 CWD를 같다고 생각함 | 실행 위치에 따라 파일을 못 찾음 | `Path.cwd()`와 실행 명령 확인 |
+| Python 파일 위치와 현재 작업 디렉터리를 같다고 생각함 | 실행 위치에 따라 파일을 못 찾음 | `Path.cwd()`와 실행 명령 확인 |
 | 경로를 문자열 `+`로 결합 | 구분자·슬래시 오류 | `Path / "child"` 사용 |
 | 절대 경로 입력을 기준 경로와 바로 결합 | 기준 경로가 무시될 수 있음 | 결합 전 `is_absolute()` 검사 |
 | `resolve()`만 호출 | 기준 디렉터리 이탈을 놓침 | `is_relative_to()` 추가 |
