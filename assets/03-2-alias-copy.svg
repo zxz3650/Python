@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="700" viewBox="0 0 1700 700" role="img" aria-labelledby="title8 desc8">
+<title id="title8">별칭, 얕은 복사, 깊은 복사의 차이</title>
+<desc id="desc8">original = {"action": "DENY", "tags": ["auth"]} 를 별칭, 얕은 복사, 깊은 복사로 다룰 때 바깥 딕셔너리와 내부 리스트가 공유되는지 분리되는지 비교한는 다이어그램</desc>
+<defs>
+  <filter id="shadow8"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1700" height="700" rx="32" fill="#071a2b"/>
+<text x="50" y="56" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">original = {"action": "DENY", "tags": ["auth"]}</text>
+<text x="50" y="84" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="16">바깥 딕셔너리와 내부 리스트가 공유되는지 분리되는지가 다르다</text>
+
+<line x1="565" y1="100" x2="565" y2="660" stroke="#1e3a52" stroke-width="2" stroke-dasharray="6 8"/>
+<line x1="1110" y1="100" x2="1110" y2="660" stroke="#1e3a52" stroke-width="2" stroke-dasharray="6 8"/>
+
+<!-- ============ PANEL 1: ALIAS ============ -->
+<rect x="30" y="110" width="270" height="44" rx="10" fill="#0f2437" stroke="#334155"/>
+<text x="165" y="138" text-anchor="middle" fill="#a7f3d0" font-family="monospace" font-size="18">alias = original</text>
+
+<path d="M20 220 h100 l24 26 l-24 26 h-100 z" fill="#f59e0b"/>
+<text x="70" y="252" text-anchor="middle" fill="#241018" font-family="monospace" font-size="16" font-weight="700">original</text>
+<path d="M20 320 h100 l24 26 l-24 26 h-100 z" fill="#fbbf24"/>
+<text x="70" y="352" text-anchor="middle" fill="#241018" font-family="monospace" font-size="16" font-weight="700">alias</text>
+
+<path d="M150 246 L272 260" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+<path d="M150 346 L272 280" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+
+<g filter="url(#shadow8)">
+<rect x="280" y="215" width="240" height="90" rx="16" fill="#0d2a3d" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="300" y="245" fill="#7dd3fc" font-family="monospace" font-size="14" font-weight="700">dict (하나뿐인 객체)</text>
+<text x="300" y="270" fill="#e6f6ff" font-family="monospace" font-size="14">action: "DENY"</text>
+<text x="300" y="292" fill="#e6f6ff" font-family="monospace" font-size="14">tags: →</text>
+
+<path d="M400 305 V345" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+<path d="M384 330 L400 352 L416 330" fill="none" stroke="#38bdf8" stroke-width="6"/>
+
+<g filter="url(#shadow8)">
+<rect x="290" y="356" width="220" height="56" rx="12" fill="#0d2a3d" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="400" y="390" text-anchor="middle" fill="#bae6fd" font-family="monospace" font-size="15" font-weight="700">["auth", "critical"]</text>
+
+<text x="30" y="460" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">original과 alias는 완전히 같은</text>
+<text x="30" y="486" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">객체를 가리키는 두 이름이다.</text>
+<text x="30" y="518" fill="#fca5a5" font-family="Arial, sans-serif" font-size="14" font-weight="700">어느 이름으로 바꿔도 둘 다 바뀐다.</text>
+
+<!-- ============ PANEL 2: SHALLOW COPY ============ -->
+<rect x="595" y="110" width="340" height="44" rx="10" fill="#0f2437" stroke="#334155"/>
+<text x="765" y="138" text-anchor="middle" fill="#a7f3d0" font-family="monospace" font-size="17">shallow = original.copy()</text>
+
+<path d="M600 180 h90 l22 24 l-22 24 h-90 z" fill="#f59e0b"/>
+<text x="645" y="210" text-anchor="middle" fill="#241018" font-family="monospace" font-size="14" font-weight="700">original</text>
+<path d="M880 180 h90 l22 24 l-22 24 h-90 z" fill="#fbbf24"/>
+<text x="925" y="210" text-anchor="middle" fill="#241018" font-family="monospace" font-size="14" font-weight="700">shallow</text>
+
+<path d="M645 228 V254" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+<path d="M925 228 V254" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+
+<g filter="url(#shadow8)">
+<rect x="600" y="260" width="200" height="80" rx="14" fill="#0d2a3d" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="618" y="288" fill="#7dd3fc" font-family="monospace" font-size="13" font-weight="700">dict A (original)</text>
+<text x="618" y="312" fill="#e6f6ff" font-family="monospace" font-size="13">action: "DENY"</text>
+
+<g filter="url(#shadow8)">
+<rect x="880" y="260" width="200" height="80" rx="14" fill="#2a1d0d" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="898" y="288" fill="#fcd34d" font-family="monospace" font-size="13" font-weight="700">dict B (shallow)</text>
+<text x="898" y="312" fill="#fef3c7" font-family="monospace" font-size="13">action: "REVIEW"</text>
+
+<path d="M700 340 L790 410" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+<path d="M980 340 L900 410" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+
+<g filter="url(#shadow8)">
+<rect x="740" y="416" width="200" height="66" rx="12" fill="#1e293b" stroke="#94a3b8" stroke-width="3"/>
+</g>
+<text x="840" y="440" text-anchor="middle" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="12" font-weight="700">공유되는 하나의 리스트</text>
+<text x="840" y="464" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14" font-weight="700">["auth", "critical"]</text>
+
+<text x="595" y="540" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">바깥 dict는 분리됐지만</text>
+<text x="595" y="566" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">내부 tags 리스트는 여전히 공유한다.</text>
+
+<!-- ============ PANEL 3: DEEP COPY ============ -->
+<rect x="1140" y="110" width="340" height="44" rx="10" fill="#0f2437" stroke="#334155"/>
+<text x="1310" y="138" text-anchor="middle" fill="#a7f3d0" font-family="monospace" font-size="16">copied = deepcopy(original)</text>
+
+<path d="M1130 190 h100 l24 26 l-24 26 h-100 z" fill="#f59e0b"/>
+<text x="1180" y="222" text-anchor="middle" fill="#241018" font-family="monospace" font-size="15" font-weight="700">original</text>
+<path d="M1400 190 h90 l24 26 l-24 26 h-90 z" fill="#fbbf24"/>
+<text x="1445" y="222" text-anchor="middle" fill="#241018" font-family="monospace" font-size="15" font-weight="700">copied</text>
+
+<path d="M1180 242 V270" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+<path d="M1440 242 V270" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+
+<g filter="url(#shadow8)">
+<rect x="1080" y="276" width="200" height="70" rx="14" fill="#0d2a3d" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="1100" y="302" fill="#7dd3fc" font-family="monospace" font-size="13" font-weight="700">dict A (original)</text>
+<text x="1100" y="324" fill="#e6f6ff" font-family="monospace" font-size="13">action: "DENY"</text>
+
+<g filter="url(#shadow8)">
+<rect x="1350" y="276" width="200" height="70" rx="14" fill="#2a1d0d" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="1370" y="302" fill="#fcd34d" font-family="monospace" font-size="13" font-weight="700">dict B (copied)</text>
+<text x="1370" y="324" fill="#fef3c7" font-family="monospace" font-size="13">action: "REVIEW"</text>
+
+<path d="M1180 346 V376" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+<path d="M1450 346 V376" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+
+<g filter="url(#shadow8)">
+<rect x="1075" y="382" width="210" height="56" rx="12" fill="#0d2a3d" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="1180" y="416" text-anchor="middle" fill="#bae6fd" font-family="monospace" font-size="13" font-weight="700">["auth"]</text>
+
+<g filter="url(#shadow8)">
+<rect x="1345" y="382" width="210" height="56" rx="12" fill="#2a1d0d" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="1450" y="416" text-anchor="middle" fill="#fde68a" font-family="monospace" font-size="13" font-weight="700">["auth", "critical"]</text>
+
+<text x="1140" y="490" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">바깥 dict와 내부 리스트</text>
+<text x="1140" y="516" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">모두 완전히 분리된다.</text>
+<text x="1140" y="548" fill="#86efac" font-family="Arial, sans-serif" font-size="14" font-weight="700">중첩 구조를 완전히 나눠야 할 때 사용한다.</text>
+</svg>

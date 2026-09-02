@@ -276,7 +276,7 @@ def write_web_log_fixtures() -> None:
     # 민감 경로에 대한 2xx 1건은 높은 우선순위 신호로 남긴다.
     lines.append(combined_line("203.0.113.50", start + timedelta(minutes=1), "/.env?token=do-not-store", 200))
 
-    # 승인된 스캐너도 신호는 보존하고 context만 표시한다.
+    # 승인된 스캐너도 신호는 보존하고 허용된 문맥만 표시한다.
     for index in range(9):
         lines.append(
             combined_line(
@@ -292,7 +292,7 @@ def write_web_log_fixtures() -> None:
     lines.append(combined_line("2001:db8::10", start + timedelta(minutes=6), "/docs/../login", 200))
     lines.append(combined_line("2001:db8::10", start + timedelta(minutes=6, seconds=10), "/A//B/%2e%2e/C", 404))
 
-    # 형식·의미 검증 오류. 인코딩 오류는 별도 바이너리 fixture에 둔다.
+    # 형식·의미 검증 오류다. 인코딩 오류는 별도 바이너리 테스트 데이터에 둔다.
     lines.append('999.1.1.1 - - [14/Aug/2026:01:07:00 +0000] "GET / HTTP/1.1" 200 10 "-" "TrainingBrowser/1.0"')
     lines.append('192.0.2.30 - - [14/Aug/2026:01:07:10 +0000] "GET / HTTP/1.1" 999 10 "-" "TrainingBrowser/1.0"')
     lines.append('192.0.2.30 - - [32/Aug/2026:01:07:20 +0000] "GET / HTTP/1.1" 200 10 "-" "TrainingBrowser/1.0"')
@@ -333,7 +333,7 @@ TODO_DONE = False
 
 
 def normalize_value(kind: str, raw: str) -> dict:
-    # TODO: raw를 보존하고 normalized 값을 생성한다.
+    # 실습 과제: raw를 보존하고 normalized 값을 생성한다.
     raise NotImplementedError
 ''',
             r'''
@@ -385,7 +385,7 @@ TODO_DONE = False
 
 
 def parse_event(line: str) -> dict:
-    # TODO: date, level, message, raw를 반환한다.
+    # 실습 과제: date, level, message, raw를 반환한다.
     raise NotImplementedError
 ''',
             r'''
@@ -559,7 +559,7 @@ TODO_DONE = False
 
 
 def validate_record(record: dict) -> tuple[dict, list[dict]]:
-    # TODO: 원본 record를 변경하지 않는다.
+    # 실습 과제: 원본 record를 변경하지 않는다.
     raise NotImplementedError
 ''',
             r'''
@@ -711,8 +711,8 @@ not_found_rate = None
 candidate = None
 reason = None
 
-# TODO 1: np.isfinite()과 배열 비교를 사용한다.
-# TODO 2: 아래 축소 특징에 대해 05-9 규칙을 벡터 연산으로 계산한다.
+# 실습 과제 1: np.isfinite()과 배열 비교를 사용한다.
+# 실습 과제 2: 아래 축소 특징에 대해 05-9 규칙을 벡터 연산으로 계산한다.
 total_requests = np.array([10, 40, 5, 0], dtype=np.int64)
 not_found_404 = np.array([9, 9, 0, 0], dtype=np.int64)
 unique_404_paths = np.array([9, 1, 0, 0], dtype=np.int64)
@@ -769,9 +769,9 @@ TODO_DONE = False
 valid_rows = None
 error_rows = None
 summary = None
-# TODO 1: pd.to_numeric(errors="coerce")로 변환 오류를 표시한다.
-# TODO 2: np.isfinite(), 음수, 소수 수량을 검증하고 오류 이유를 보존한다.
-# TODO 3: 유효 행만 카테고리별로 집계한다.
+# 실습 과제 1: pd.to_numeric(errors="coerce")로 변환 오류를 표시한다.
+# 실습 과제 2: np.isfinite(), 음수, 소수 수량을 검증하고 오류 이유를 보존한다.
+# 실습 과제 3: 유효 행만 카테고리별로 집계한다.
 ''',
             r'''
 if not TODO_DONE:
@@ -1919,32 +1919,32 @@ MAX_LINE_BYTES = 16_384
 
 
 def remove_record_separator(raw_line: bytes) -> bytes:
-    # TODO: b"\\n" 문자 집합이 아니라 실제 CRLF/LF 접미사만 제거한다.
+    # 실습 과제: b"\\n" 문자 집합이 아니라 실제 CRLF/LF 접미사만 제거한다.
     raise NotImplementedError
 
 
 def parse_combined_log(text: str) -> dict:
-    # TODO: 형식 파싱과 의미 검증을 나눈다.
+    # 실습 과제: 형식 파싱과 의미 검증을 나눈다.
     raise NotImplementedError
 
 
 def analyze_files(paths: list[Path]) -> tuple[list[dict], dict]:
-    # TODO: 제한 readline, UTF-8 strict, 오류 유형별 건수로 fixture 전체를 처리한다.
+    # 실습 과제: 제한 readline, UTF-8 strict, 오류 유형별 건수로 fixture 전체를 처리한다.
     raise NotImplementedError
 
 
 def build_features(records: list[dict]) -> pd.DataFrame:
-    # TODO: 5분·IP별 특징을 반환한다.
+    # 실습 과제: 5분·IP별 특징을 반환한다.
     raise NotImplementedError
 
 
 def classify_candidates(features: pd.DataFrame) -> pd.DataFrame:
-    # TODO: np.divide, bool 마스크, np.select를 사용한다.
+    # 실습 과제: np.divide, bool 마스크, np.select를 사용한다.
     raise NotImplementedError
 
 
 def mask_features(features: pd.DataFrame, masking_key: bytes) -> pd.DataFrame:
-    # TODO: HMAC 별칭을 만들고 원문 IP·경로·쿼리를 결과에서 제외한다.
+    # 실습 과제: HMAC 별칭을 만들고 원문 IP·경로·쿼리를 결과에서 제외한다.
     raise NotImplementedError
 
 
@@ -1954,7 +1954,7 @@ def publish_run(
     output_root: Path,
     run_id: str,
 ) -> Path:
-    # TODO: 숨김 staging 디렉터리에 완성한 뒤 run 디렉터리로 한 번에 게시한다.
+    # 실습 과제: 숨김 staging 디렉터리에 완성한 뒤 run 디렉터리로 한 번에 게시한다.
     raise NotImplementedError
 '''
         ),

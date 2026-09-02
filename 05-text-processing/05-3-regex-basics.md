@@ -261,7 +261,7 @@ print(multiline_start.findall("INFO one\nERROR two"))
 4. 빈 문자열, 최종 개행, 한 문자 부족·초과, 유니코드 숫자를 경계 입력에 포함한다.
 5. 기대값과 실제 결과가 다르면 케이스 ID가 포함된 메시지로 실패한다.
 
-### TODO 골격
+### 실습 과제 골격
 
 ```python
 import re

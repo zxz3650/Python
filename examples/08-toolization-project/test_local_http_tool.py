@@ -1,4 +1,4 @@
-"""Executable acceptance tests for the chapter 08 toolization project."""
+"""08장 도구화 프로젝트에서 실행할 수 있는 인수 테스트다."""
 
 from __future__ import annotations
 
@@ -33,11 +33,11 @@ class TrainingHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def do_GET(self) -> None:  # noqa: N802 - HTTP handler API name
+    def do_GET(self) -> None:  # noqa: N802 - HTTP 처리기 API 이름
         if self.path == "/health":
             self.send_json(200, {"status": "ok"})
         elif self.path == "/headers":
-            # The missing headers intentionally produce one warning.
+            # 헤더 누락 경고가 한 건 발생하도록 의도적으로 구성한다.
             self.send_json(200, {"purpose": "header exercise"})
         elif self.path == "/redirect":
             self.send_json(302, {"status": "redirect"}, location="/health")

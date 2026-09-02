@@ -1,4 +1,4 @@
-"""Validate a local-only training HTTP service and write a JSON report."""
+"""로컬 전용 학습용 HTTP 서비스를 검증하고 JSON 보고서를 작성한다."""
 
 from __future__ import annotations
 

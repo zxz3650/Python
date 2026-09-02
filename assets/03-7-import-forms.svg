@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title1 desc1">
+<title id="title1">import 형태에 따라 현재 이름 공간에 생기는 이름이 다르다</title>
+<desc id="desc1">import math는 math라는 이름 하나만 만들고 sqrt는 math.sqrt로 접근해야 하며, from math import sqrt, floor는 sqrt와 floor를 직접 만들지만 math라는 이름은 생기지 않고, import statistics as stats는 stats라는 별칭만 생김을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowX1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">import는 검색이자 이름 공간에 이름을 만드는 일이다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">형태에 따라 현재 코드에서 어떤 이름을 바로 쓸 수 있는지가 달라진다</text>
+
+<!-- Column A -->
+<rect x="60" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#38bdf8" stroke-width="3"/>
+<text x="90" y="155" fill="#93c5fd" font-family="monospace" font-size="16" font-weight="700">import math</text>
+
+<rect x="90" y="180" width="380" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="210" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">현재 이름 공간에 생기는 것</text>
+<text x="110" y="238" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">math</text>
+<text x="110" y="258" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">모듈 객체 하나만 추가됨</text>
+
+<rect x="90" y="290" width="380" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="110" y="320" fill="#dcfce7" font-family="monospace" font-size="14">math.sqrt(16)  →  4.0</text>
+<text x="110" y="342" fill="#86efac" font-family="Arial, sans-serif" font-size="12">항상 math. 을 붙여 접근</text>
+
+<rect x="90" y="380" width="380" height="70" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="110" y="410" fill="#fecaca" font-family="monospace" font-size="14">sqrt(16)</text>
+<text x="110" y="432" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">NameError: sqrt는 직접 생기지 않음</text>
+
+<!-- Column B -->
+<rect x="530" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/>
+<text x="560" y="155" fill="#86efac" font-family="monospace" font-size="15" font-weight="700">from math import sqrt, floor</text>
+
+<rect x="560" y="180" width="380" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="580" y="210" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">현재 이름 공간에 생기는 것</text>
+<text x="580" y="238" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">sqrt, floor</text>
+<text x="580" y="258" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">두 함수가 직접 이름으로 들어옴</text>
+
+<rect x="560" y="290" width="380" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="580" y="320" fill="#dcfce7" font-family="monospace" font-size="14">sqrt(16)  →  4.0</text>
+<text x="580" y="342" fill="#86efac" font-family="Arial, sans-serif" font-size="12">바로 이름으로 호출 가능</text>
+
+<rect x="560" y="380" width="380" height="70" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="580" y="410" fill="#fecaca" font-family="monospace" font-size="14">math.sqrt(16)</text>
+<text x="580" y="432" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">NameError: math라는 이름이 없음</text>
+
+<!-- Column C -->
+<rect x="1000" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#a855f7" stroke-width="3"/>
+<text x="1030" y="155" fill="#d8b4fe" font-family="monospace" font-size="14" font-weight="700">import statistics as stats</text>
+
+<rect x="1030" y="180" width="380" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="1050" y="210" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">현재 이름 공간에 생기는 것</text>
+<text x="1050" y="238" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">stats</text>
+<text x="1050" y="258" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">별칭만 생기고 원래 이름은 없음</text>
+
+<rect x="1030" y="290" width="380" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="1050" y="320" fill="#dcfce7" font-family="monospace" font-size="14">stats.mean([10, 20, 30])  →  20</text>
+<text x="1050" y="342" fill="#86efac" font-family="Arial, sans-serif" font-size="12">별칭으로만 접근</text>
+
+<rect x="1030" y="380" width="380" height="70" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="1050" y="410" fill="#fecaca" font-family="monospace" font-size="14">statistics.mean(...)</text>
+<text x="1050" y="432" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">NameError: statistics라는 이름이 없음</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="680" viewBox="0 0 1500 680" role="img" aria-labelledby="title5 desc5">
+<title id="title5">명령 한 건의 데이터 흐름과 패키지 의존 방향</title>
+<desc id="desc5">원문 명령 문자열이 parse_command로 Command 객체가 되고 execute_command가 SecurityEvent와 EventStore 상태를 바꾼 뒤 출력 문자열 목록이 되는 파이프라인과, __main__이 app에 의존하고 app이 commands와 store에 의존하며 store가 models에 의존하는 패키지 방향을 함께 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowFF1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowFF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+</defs>
+<rect width="1500" height="680" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">명령 한 건이 지나가는 길, 그리고 그 아래 패키지 의존 방향</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">두 그림은 같은 프로젝트를 서로 다른 각도로 본 것이다</text>
+
+<!-- Section 1: pipeline -->
+<text x="60" y="118" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16" font-weight="700">1) 데이터 흐름: 문자열 한 줄이 출력 문자열이 되기까지</text>
+
+<rect x="60" y="135" width="240" height="100" rx="14" fill="#0d1f30" stroke="#64748b" stroke-width="2.5"/>
+<text x="80" y="168" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">원문 명령</text>
+<text x="80" y="200" fill="#94a3b8" font-family="monospace" font-size="12">"add ALLOW</text>
+<text x="80" y="218" fill="#94a3b8" font-family="monospace" font-size="12">192.0.2.10 443"</text>
+
+<text x="370" y="178" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="11">parse_command()</text>
+<line x1="300" y1="185" x2="440" y2="185" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="440" y="135" width="240" height="100" rx="14" fill="#1f1a2e" stroke="#a855f7" stroke-width="2.5"/>
+<text x="460" y="168" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="13" font-weight="700">Command 객체</text>
+<text x="460" y="200" fill="#e6f6ff" font-family="monospace" font-size="12">name="add"</text>
+<text x="460" y="218" fill="#e6f6ff" font-family="monospace" font-size="12">arguments=(...)</text>
+
+<text x="750" y="178" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="11">execute_command()</text>
+<line x1="680" y1="185" x2="820" y2="185" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="820" y="135" width="240" height="100" rx="14" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+<text x="840" y="168" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700">상태 변경</text>
+<text x="840" y="200" fill="#dcfce7" font-family="monospace" font-size="12">SecurityEvent 생성</text>
+<text x="840" y="218" fill="#dcfce7" font-family="monospace" font-size="12">EventStore.add()</text>
+
+<text x="1130" y="178" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="11">format_out()</text>
+<line x1="1060" y1="185" x2="1200" y2="185" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="1200" y="135" width="240" height="100" rx="14" fill="#0d1f30" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="1220" y="168" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13" font-weight="700">출력 문자열 목록</text>
+<text x="1220" y="200" fill="#e6f6ff" font-family="monospace" font-size="12">["1. ALLOW ...", ...]</text>
+
+<!-- Section 2: package graph -->
+<text x="60" y="295" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16" font-weight="700">2) 패키지 의존 방향: 화살표 방향으로만 import 한다</text>
+
+<rect x="60" y="375" width="260" height="70" rx="14" fill="#0d1f30" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="80" y="416" fill="#93c5fd" font-family="monospace" font-size="15" font-weight="700">__main__.py</text>
+
+<line x1="320" y1="410" x2="433" y2="410" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="433" y="375" width="260" height="70" rx="14" fill="#0d1f30" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="453" y="416" fill="#93c5fd" font-family="monospace" font-size="15" font-weight="700">app.py</text>
+
+<line x1="693" y1="400" x2="806" y2="355" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+<line x1="693" y1="420" x2="806" y2="465" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="806" y="320" width="260" height="70" rx="14" fill="#1f1a2e" stroke="#a855f7" stroke-width="2.5"/>
+<text x="826" y="361" fill="#d8b4fe" font-family="monospace" font-size="15" font-weight="700">commands.py</text>
+
+<rect x="806" y="430" width="260" height="70" rx="14" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+<text x="826" y="471" fill="#86efac" font-family="monospace" font-size="15" font-weight="700">store.py</text>
+
+<line x1="1066" y1="465" x2="1179" y2="465" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowFF1)"/>
+
+<rect x="1179" y="430" width="260" height="70" rx="14" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+<text x="1199" y="471" fill="#86efac" font-family="monospace" font-size="15" font-weight="700">models.py</text>
+
+<g filter="url(#shadowFF1)">
+<rect x="60" y="530" width="1380" height="110" rx="14" fill="#0d1f30" stroke="#f59e0b" stroke-width="2.5"/>
+</g>
+<text x="90" y="563" fill="#fcd34d" font-family="Arial, sans-serif" font-size="15" font-weight="700">경계 규칙: 아래 계층은 위 계층의 터미널 입출력을 모른다</text>
+<text x="90" y="592" fill="#fef3c7" font-family="Arial, sans-serif" font-size="13">models.py와 store.py는 input()/print()를 import하지 않는다 — 순수한 데이터·로직만 담는다</text>
+<text x="90" y="616" fill="#fef3c7" font-family="Arial, sans-serif" font-size="13">터미널 연결은 오직 app.py의 main() 한 곳에서만 이뤄진다</text>
+</svg>

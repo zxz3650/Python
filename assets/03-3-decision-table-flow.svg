@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="820" viewBox="0 0 1500 820" role="img" aria-labelledby="title4 desc4">
+<title id="title4">결정표를 우선순위 순서의 if·elif·else로 옮기기</title>
+<desc id="desc4">유효성, CRITICAL, REVIEW, NORMAL 조건을 위에서부터 순서대로 검사하는 흐름도이며 action=DENY, port=443, path=/admin, failed_count=4인 예시가 CRITICAL로 도달하는 경로를 강조함</desc>
+<defs>
+  <filter id="shadowE1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowGreenE1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/>
+  </marker>
+  <marker id="arrowGrayE1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+  </marker>
+</defs>
+<rect width="1500" height="820" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">결정표는 우선순위 순서의 사슬로 코드가 된다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">예시: action="DENY", port=443, path="/admin", failed_count=4 → 굵은 초록 경로를 따라간다</text>
+
+<!-- diamond 1 -->
+<polygon points="650,140 850,140 950,215 850,290 650,290 550,215" fill="#102338" stroke="#4ade80" stroke-width="3"/>
+<text x="750" y="205" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">유효한 입력인가?</text>
+<text x="750" y="228" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="12">is_known_action and is_valid_port</text>
+<text x="750" y="248" text-anchor="middle" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">✓ 예 (DENY / 443)</text>
+
+<line x1="950" y1="215" x2="1130" y2="215" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrowGrayE1)"/>
+<text x="1005" y="200" fill="#64748b" font-family="Arial, sans-serif" font-size="13">아니요</text>
+<rect x="1140" y="180" width="200" height="70" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+<text x="1240" y="222" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="16" font-weight="700" opacity="0.9">INVALID</text>
+
+<line x1="750" y1="290" x2="750" y2="330" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrowGreenE1)"/>
+<text x="775" y="315" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">예</text>
+
+<!-- diamond 2 -->
+<polygon points="620,335 880,335 1000,415 880,495 620,495 500,415" fill="#102338" stroke="#4ade80" stroke-width="3"/>
+<text x="750" y="395" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">DENY 이고 민감 경로이며</text>
+<text x="750" y="416" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">실패 3회 이상인가?</text>
+<text x="750" y="440" text-anchor="middle" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">✓ 예 (DENY, /admin, 4회)</text>
+
+<line x1="1000" y1="415" x2="1130" y2="415" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrowGreenE1)"/>
+<text x="1050" y="400" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">예</text>
+
+<g filter="url(#shadowE1)">
+<rect x="1140" y="378" width="220" height="76" rx="14" fill="#7c2d12" stroke="#f97316" stroke-width="3"/>
+</g>
+<text x="1250" y="412" text-anchor="middle" fill="#fed7aa" font-family="monospace" font-size="20" font-weight="700">CRITICAL</text>
+<text x="1250" y="436" text-anchor="middle" fill="#fdba74" font-family="Arial, sans-serif" font-size="13">← 이 예시의 결과</text>
+
+<line x1="750" y1="495" x2="750" y2="535" stroke="#64748b" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrowGrayE1)"/>
+<text x="775" y="520" fill="#64748b" font-family="Arial, sans-serif" font-size="13">아니요였다면</text>
+
+<!-- diamond 3 (dimmed, not reached) -->
+<polygon points="630,540 870,540 980,610 870,680 630,680 520,610" fill="#0d1826" stroke="#475569" stroke-width="2" opacity="0.5"/>
+<text x="750" y="600" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="14" opacity="0.85">DENY 이거나</text>
+<text x="750" y="620" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="14" opacity="0.85">민감 경로인가?</text>
+<text x="750" y="645" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12" opacity="0.7">도달하지 못함 (이미 CRITICAL로 확정)</text>
+
+<line x1="980" y1="610" x2="1130" y2="610" stroke="#475569" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+<rect x="1140" y="575" width="200" height="70" rx="12" fill="#0d1826" stroke="#475569" stroke-width="1.5" opacity="0.5"/>
+<text x="1240" y="616" text-anchor="middle" fill="#64748b" font-family="monospace" font-size="15" opacity="0.85">REVIEW</text>
+
+<line x1="750" y1="680" x2="750" y2="715" stroke="#475569" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+<rect x="630" y="715" width="240" height="60" rx="12" fill="#0d1826" stroke="#475569" stroke-width="1.5" opacity="0.5"/>
+<text x="750" y="752" text-anchor="middle" fill="#64748b" font-family="monospace" font-size="15" opacity="0.85">NORMAL</text>
+
+<!-- legend -->
+<rect x="1080" y="670" width="360" height="110" rx="12" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="1105" y="700" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">코드 순서 = 결정표 우선순위</text>
+<text x="1105" y="725" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">if not valid → INVALID</text>
+<text x="1105" y="746" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">elif 세 조건 모두 → CRITICAL</text>
+<text x="1105" y="767" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">elif 둘 중 하나 → REVIEW · else → NORMAL</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600" role="img" aria-labelledby="title3 desc3">
+<title id="title3">raise ... from exc는 원인을 잇고, 맨몸 raise는 같은 예외를 그대로 전달한다</title>
+<desc id="desc3">raise ValueError(...) from exc는 새 예외를 만들면서 원래 예외를 원인으로 연결해 두 예외 정보를 모두 보존하고, 맨몸 raise는 새 예외를 만들지 않고 현재 예외를 원래 traceback 그대로 다시 전달함을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowV1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowV1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+</defs>
+<rect width="1500" height="600" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">from exc는 원인을 잇고, 맨몸 raise는 같은 예외를 그대로 전달한다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">둘 다 예외를 다시 발생시키지만 traceback에 남는 정보가 다르다</text>
+
+<!-- LEFT: raise from -->
+<rect x="60" y="115" width="670" height="440" rx="20" fill="#0d1f30" stroke="#38bdf8" stroke-width="3"/>
+<text x="90" y="150" fill="#93c5fd" font-family="Arial, sans-serif" font-size="18" font-weight="700">raise ValueError(...) from exc</text>
+<text x="90" y="175" fill="#7fb2cc" font-family="monospace" font-size="12">except (TypeError, ValueError) as exc: raise ValueError(...) from exc</text>
+
+<g filter="url(#shadowV1)">
+<rect x="90" y="200" width="590" height="80" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+</g>
+<text x="115" y="230" fill="#fecaca" font-family="monospace" font-size="14" font-weight="700">ValueError: invalid literal for int() with base 10: 'x'</text>
+<text x="115" y="255" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">원래 예외 (int(value)에서 발생) — 계속 보존됨</text>
+
+<line x1="385" y1="280" x2="385" y2="320" stroke="#facc15" stroke-width="2.5" marker-end="url(#arrowV1)"/>
+<text x="405" y="308" fill="#facc15" font-family="Arial, sans-serif" font-size="12" font-weight="700">직접적인 원인 (direct cause)</text>
+
+<g filter="url(#shadowV1)">
+<rect x="90" y="325" width="590" height="90" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="115" y="357" fill="#dcfce7" font-family="monospace" font-size="14" font-weight="700">ValueError: 포트 형식이 올바르지 않습니다: 'x'</text>
+<text x="115" y="382" fill="#86efac" font-family="Arial, sans-serif" font-size="12">새로 만든 예외 — 업무 문맥이 담긴 메시지</text>
+<text x="115" y="402" fill="#86efac" font-family="Arial, sans-serif" font-size="12">exc.__cause__로 원래 예외 접근 가능</text>
+
+<rect x="90" y="435" width="590" height="100" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="465" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">traceback에 두 예외가 모두 출력됨:</text>
+<text x="110" y="488" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">"The above exception was the direct cause</text>
+<text x="110" y="508" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">of the following exception" 로 연결 표시</text>
+
+<!-- RIGHT: bare raise -->
+<rect x="770" y="115" width="670" height="440" rx="20" fill="#0d1f30" stroke="#a855f7" stroke-width="3"/>
+<text x="800" y="150" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="18" font-weight="700">맨몸 raise (새 예외를 만들지 않음)</text>
+<text x="800" y="175" fill="#7fb2cc" font-family="monospace" font-size="12">except ValueError: print("변환 단계에서 실패"); raise</text>
+
+<g filter="url(#shadowV1)">
+<rect x="800" y="200" width="590" height="80" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+</g>
+<text x="825" y="230" fill="#fecaca" font-family="monospace" font-size="14" font-weight="700">ValueError: invalid literal for int() with base 10: 'x'</text>
+<text x="825" y="255" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">같은 예외 객체, 같은 원래 traceback</text>
+
+<line x1="1095" y1="280" x2="1095" y2="320" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arrowV1)"/>
+<text x="1115" y="308" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12" font-weight="700">새 예외 없음 — 그대로 다시 던짐</text>
+
+<g filter="url(#shadowV1)">
+<rect x="800" y="325" width="590" height="90" rx="12" fill="#1f1a2e" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6,4"/>
+</g>
+<text x="825" y="357" fill="#e9d5ff" font-family="monospace" font-size="14" font-weight="700">(같은 ValueError가 계속 전파됨)</text>
+<text x="825" y="382" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="12">부수 효과(print/로깅)만 추가하고</text>
+<text x="825" y="402" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="12">예외 내용·traceback은 그대로 유지</text>
+
+<rect x="800" y="435" width="590" height="100" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="465" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">사용 시점: 현재 위치에서 기록·부분 정리만</text>
+<text x="820" y="488" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">하고 예외의 정체성과 문맥을 바꿀 필요가</text>
+<text x="820" y="508" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">없을 때 → raise exc보다 원본 보존에 유리</text>
+</svg>

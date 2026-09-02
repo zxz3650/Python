@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title4 desc4">
+<title id="title4">파일 경로 실행은 패키지 문맥을 모르고, python -m은 문맥을 유지한다</title>
+<desc id="desc4">python event_tools/parser.py처럼 파일 경로로 직접 실행하면 인터프리터가 어느 패키지에 속하는지 알지 못해 내부의 상대 import가 ImportError를 일으키지만, python -m event_tools.parser처럼 모듈 이름으로 실행하면 패키지 문맥이 유지되어 상대 import가 정상 동작함을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowAA1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">파일 경로로 실행하면 패키지 문맥을 잃어 상대 import가 깨진다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">event_tools/parser.py 안에는 from .validators import ... 가 있다</text>
+
+<!-- LEFT: direct file -->
+<rect x="60" y="120" width="670" height="410" rx="20" fill="#0d1f30" stroke="#ef4444" stroke-width="3"/>
+<text x="90" y="155" fill="#fca5a5" font-family="monospace" font-size="16" font-weight="700">python event_tools/parser.py</text>
+<text x="90" y="178" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">파일 경로로 직접 실행</text>
+
+<rect x="90" y="195" width="600" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="230" fill="#e6f6ff" font-family="monospace" font-size="14">__name__ == "__main__"</text>
+
+<rect x="90" y="270" width="600" height="70" rx="10" fill="#3f1d1d" stroke="#f59e0b" stroke-width="2.5"/>
+<text x="110" y="300" fill="#fed7aa" font-family="Arial, sans-serif" font-size="13" font-weight="700">패키지 문맥을 모름</text>
+<text x="110" y="322" fill="#fecaca" font-family="Arial, sans-serif" font-size="12">"이 파일이 event_tools 패키지 소속"이라는 정보가 없음</text>
+
+<g filter="url(#shadowAA1)">
+<rect x="90" y="355" width="600" height="90" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="110" y="385" fill="#fecaca" font-family="monospace" font-size="14" font-weight="700">from .validators import normalize_action</text>
+<text x="110" y="410" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13" font-weight="700">ImportError: attempted relative import</text>
+<text x="110" y="430" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13" font-weight="700">with no known parent package</text>
+
+<rect x="90" y="460" width="600" height="55" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="493" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">"."이 가리킬 패키지가 없어 상대 import가 실패한다</text>
+
+<!-- RIGHT: python -m -->
+<rect x="770" y="120" width="670" height="410" rx="20" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/>
+<text x="800" y="155" fill="#86efac" font-family="monospace" font-size="16" font-weight="700">python -m event_tools.parser</text>
+<text x="800" y="178" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">import 가능한 모듈 이름으로 실행</text>
+
+<rect x="800" y="195" width="600" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="230" fill="#e6f6ff" font-family="monospace" font-size="14">__name__ == "__main__"  (동일)</text>
+
+<rect x="800" y="270" width="600" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+<text x="820" y="300" fill="#dcfce7" font-family="Arial, sans-serif" font-size="13" font-weight="700">패키지 문맥이 유지됨</text>
+<text x="820" y="322" fill="#86efac" font-family="Arial, sans-serif" font-size="12">"event_tools.parser로서 실행됨"을 Python이 앎</text>
+
+<g filter="url(#shadowAA1)">
+<rect x="800" y="355" width="600" height="90" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="820" y="385" fill="#dcfce7" font-family="monospace" font-size="14" font-weight="700">from .validators import normalize_action</text>
+<text x="820" y="412" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700">정상 동작 — event_tools.validators를 찾음</text>
+
+<rect x="800" y="460" width="600" height="55" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="493" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">"."이 event_tools 패키지를 가리켜 정상 해석된다</text>
+</svg>

@@ -1,4 +1,4 @@
-"""Local-only HTTP training server for chapter 07."""
+"""07장에서 사용하는 로컬 전용 HTTP 학습 서버다."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ class TrainingHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def do_GET(self) -> None:  # noqa: N802 - HTTP handler API name
+    def do_GET(self) -> None:  # noqa: N802 - HTTP 처리기 API 이름
         parts = urlsplit(self.path)
 
         if parts.path == "/health":
@@ -52,7 +52,7 @@ class TrainingHandler(BaseHTTPRequestHandler):
             return
 
         if parts.path == "/headers":
-            # Intentionally omits the chapter's expected security headers.
+            # 학습자가 누락을 탐지하도록 교안에서 요구한 보안 헤더를 의도적으로 제외한다.
             self._send_json(
                 200,
                 {"purpose": "header validation exercise"},
@@ -70,7 +70,7 @@ class TrainingHandler(BaseHTTPRequestHandler):
 
         self._send_json(404, {"error": "not found"})
 
-    def do_POST(self) -> None:  # noqa: N802 - HTTP handler API name
+    def do_POST(self) -> None:  # noqa: N802 - HTTP 처리기 API 이름
         self._send_json(
             405,
             {"error": "method not allowed"},
@@ -78,7 +78,7 @@ class TrainingHandler(BaseHTTPRequestHandler):
         )
 
     def log_message(self, format: str, *args: object) -> None:
-        # Avoid reflecting request-controlled text in this small training lab.
+        # 요청자가 제어하는 문자열이 응답이나 로그에 그대로 반영되지 않게 한다.
         print(f"{self.client_address[0]} - {self.command} request completed")
 
 

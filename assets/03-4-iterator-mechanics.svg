@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title1 desc1">
+<title id="title1">for가 내부에서 하는 일: iter()와 next()</title>
+<desc id="desc1">events 리스트에서 iter()로 iterator를 만들고 next()를 반복 호출할 때마다 위치가 한 칸씩 이동하며 값이 모두 소진되면 StopIteration이 발생하는 과정을 세 단계로 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowA1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">iterator는 위치를 기억하는 상태를 가진 객체다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">events = ["ALLOW", "DENY"] — next()를 부를 때마다 한 칸씩 전진하고, 소진되면 StopIteration</text>
+
+<!-- shared list reference row template repeated 3 times -->
+<!-- STEP 0 -->
+<text x="90" y="150" fill="#38bdf8" font-family="Arial, sans-serif" font-size="17" font-weight="700">event_iterator = iter(events)</text>
+<rect x="90" y="165" width="150" height="60" rx="10" fill="#102338" stroke="#7fb2cc" stroke-width="2"/>
+<text x="165" y="202" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="16">"ALLOW"</text>
+<rect x="250" y="165" width="150" height="60" rx="10" fill="#102338" stroke="#7fb2cc" stroke-width="2"/>
+<text x="325" y="202" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="16">"DENY"</text>
+<path d="M 90 240 l 0 15 l -15 -15 z" fill="#facc15"/>
+<text x="90" y="270" fill="#facc15" font-family="Arial, sans-serif" font-size="13" font-weight="700">시작 위치</text>
+
+<!-- STEP 1 -->
+<g filter="url(#shadowA1)">
+<rect x="60" y="320" width="440" height="150" rx="16" fill="#0d1f30" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="90" y="352" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">next(event_iterator)</text>
+<text x="90" y="380" fill="#dcfce7" font-family="Arial, sans-serif" font-size="15">→ "ALLOW" 반환</text>
+<text x="90" y="405" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">위치가 "DENY" 앞으로 이동</text>
+<text x="90" y="440" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13" font-weight="700">1단계</text>
+
+<!-- STEP 2 -->
+<g filter="url(#shadowA1)">
+<rect x="530" y="320" width="440" height="150" rx="16" fill="#0d1f30" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="560" y="352" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">next(event_iterator)</text>
+<text x="560" y="380" fill="#dcfce7" font-family="Arial, sans-serif" font-size="15">→ "DENY" 반환</text>
+<text x="560" y="405" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">위치가 리스트 끝을 지남</text>
+<text x="560" y="440" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13" font-weight="700">2단계</text>
+
+<!-- STEP 3 -->
+<g filter="url(#shadowA1)">
+<rect x="1000" y="320" width="440" height="150" rx="16" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+</g>
+<text x="1030" y="352" fill="#f87171" font-family="monospace" font-size="16" font-weight="700">next(event_iterator)</text>
+<text x="1030" y="380" fill="#fecaca" font-family="Arial, sans-serif" font-size="15">→ StopIteration 발생</text>
+<text x="1030" y="405" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">더 이상 꺼낼 값이 없음</text>
+<text x="1030" y="440" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13" font-weight="700">3단계 (값 소진)</text>
+
+<rect x="60" y="500" width="1380" height="45" rx="10" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="90" y="528" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="14">for는 이 next() 호출과 StopIteration 처리를 자동으로 반복하므로 직접 다룰 필요가 없다</text>
+</svg>

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="840" viewBox="0 0 1500 840" role="img" aria-labelledby="title5 desc5">
+<title id="title5">문자열 인덱싱과 슬라이싱</title>
+<desc id="desc5">타임스탬프 문자열의 각 문자에 인덱스를 붙이고 네 가지 슬라이스 결과를 시각화한 다이어그램</desc>
+<defs><filter id="shadow5"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-opacity=".3"/></filter></defs>
+<rect width="1500" height="840" rx="32" fill="#071a2b"/>
+<text x="60" y="60" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="30" font-weight="700">문자열은 인덱스가 붙은 문자의 나열이다</text>
+<text x="60" y="92" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="18">timestamp = "2026-08-26T13:45:10Z"</text>
+<text x="101" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">0</text>
+<text x="143" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">1</text>
+<text x="185" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">2</text>
+<text x="227" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">3</text>
+<text x="269" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">4</text>
+<text x="311" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">5</text>
+<text x="353" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">6</text>
+<text x="395" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">7</text>
+<text x="437" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">8</text>
+<text x="479" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">9</text>
+<text x="521" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">10</text>
+<text x="563" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">11</text>
+<text x="605" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">12</text>
+<text x="647" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">13</text>
+<text x="689" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">14</text>
+<text x="731" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">15</text>
+<text x="773" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">16</text>
+<text x="815" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">17</text>
+<text x="857" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">18</text>
+<text x="899" y="110" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="15">19</text>
+<rect x="80" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="99" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">2</text>
+<rect x="122" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="141" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">0</text>
+<rect x="164" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="183" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">2</text>
+<rect x="206" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="225" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">6</text>
+<rect x="248" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="267" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">-</text>
+<rect x="290" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="309" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">0</text>
+<rect x="332" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="351" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">8</text>
+<rect x="374" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="393" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">-</text>
+<rect x="416" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="435" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">2</text>
+<rect x="458" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="477" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">6</text>
+<rect x="500" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="519" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">T</text>
+<rect x="542" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="561" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">1</text>
+<rect x="584" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="603" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">3</text>
+<rect x="626" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="645" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">:</text>
+<rect x="668" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="687" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">4</text>
+<rect x="710" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="729" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">5</text>
+<rect x="752" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="771" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">:</text>
+<rect x="794" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="813" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">1</text>
+<rect x="836" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="855" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">0</text>
+<rect x="878" y="130" width="38" height="56" rx="8" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="897" y="165" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">Z</text>
+<text x="897" y="210" text-anchor="middle" fill="#f59e0b" font-family="monospace" font-size="15">-1</text>
+<g filter="url(#shadow5)"><rect x="80" y="300" width="680" height="150" rx="18" fill="#0d1f30" stroke="#3b82f6" stroke-width="3"/></g>
+<text x="110" y="342" fill="#3b82f6" font-family="monospace" font-size="22" font-weight="700">timestamp[0:4]</text>
+<rect x="110" y="362" width="30" height="46" rx="6" fill="#3b82f6" opacity="0.18" stroke="#3b82f6" stroke-width="2"/>
+<text x="125" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">2</text>
+<rect x="144" y="362" width="30" height="46" rx="6" fill="#3b82f6" opacity="0.18" stroke="#3b82f6" stroke-width="2"/>
+<text x="159" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">0</text>
+<rect x="178" y="362" width="30" height="46" rx="6" fill="#3b82f6" opacity="0.18" stroke="#3b82f6" stroke-width="2"/>
+<text x="193" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">2</text>
+<rect x="212" y="362" width="30" height="46" rx="6" fill="#3b82f6" opacity="0.18" stroke="#3b82f6" stroke-width="2"/>
+<text x="227" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">6</text>
+<text x="730" y="342" text-anchor="end" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="15">→ 결과</text>
+<text x="110" y="434" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="14">끝 인덱스 4는 포함하지 않는다</text>
+<g filter="url(#shadow5)"><rect x="800" y="300" width="680" height="150" rx="18" fill="#0d1f30" stroke="#06b6d4" stroke-width="3"/></g>
+<text x="830" y="342" fill="#06b6d4" font-family="monospace" font-size="22" font-weight="700">timestamp[5:7]</text>
+<rect x="830" y="362" width="30" height="46" rx="6" fill="#06b6d4" opacity="0.18" stroke="#06b6d4" stroke-width="2"/>
+<text x="845" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">0</text>
+<rect x="864" y="362" width="30" height="46" rx="6" fill="#06b6d4" opacity="0.18" stroke="#06b6d4" stroke-width="2"/>
+<text x="879" y="393" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">8</text>
+<text x="1450" y="342" text-anchor="end" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="15">→ 결과</text>
+<text x="830" y="434" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="14">끝 인덱스 7는 포함하지 않는다</text>
+<g filter="url(#shadow5)"><rect x="80" y="480" width="680" height="150" rx="18" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/></g>
+<text x="110" y="522" fill="#22c55e" font-family="monospace" font-size="22" font-weight="700">timestamp[:10]</text>
+<rect x="110" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="125" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">2</text>
+<rect x="144" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="159" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">0</text>
+<rect x="178" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="193" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">2</text>
+<rect x="212" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="227" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">6</text>
+<rect x="246" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="261" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">-</text>
+<rect x="280" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="295" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">0</text>
+<rect x="314" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="329" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">8</text>
+<rect x="348" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="363" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">-</text>
+<rect x="382" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="397" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">2</text>
+<rect x="416" y="542" width="30" height="46" rx="6" fill="#22c55e" opacity="0.18" stroke="#22c55e" stroke-width="2"/>
+<text x="431" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">6</text>
+<text x="730" y="522" text-anchor="end" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="15">→ 결과</text>
+<text x="110" y="614" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="14">끝 인덱스 10는 포함하지 않는다</text>
+<g filter="url(#shadow5)"><rect x="800" y="480" width="680" height="150" rx="18" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/></g>
+<text x="830" y="522" fill="#f59e0b" font-family="monospace" font-size="22" font-weight="700">timestamp[11:19]</text>
+<rect x="830" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="845" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">1</text>
+<rect x="864" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="879" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">3</text>
+<rect x="898" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="913" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">:</text>
+<rect x="932" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="947" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">4</text>
+<rect x="966" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="981" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">5</text>
+<rect x="1000" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="1015" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">:</text>
+<rect x="1034" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="1049" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">1</text>
+<rect x="1068" y="542" width="30" height="46" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
+<text x="1083" y="573" text-anchor="middle" fill="#f1f9ff" font-family="monospace" font-size="19" font-weight="700">0</text>
+<text x="1450" y="522" text-anchor="end" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="15">→ 결과</text>
+<text x="830" y="614" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="14">끝 인덱스 19는 포함하지 않는다</text>
+<text x="80" y="660" fill="#fcd34d" font-family="monospace" font-size="20" font-weight="700">timestamp[-1] → "Z"</text>
+<text x="80" y="690" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="15">음수 인덱스는 뒤에서부터 센다. -1은 마지막 문자다.</text>
+<text x="60" y="740" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">슬라이스는 [시작:끝] 형태이며 끝 인덱스에 해당하는 문자는 결과에 포함되지 않는다.</text>
+</svg>

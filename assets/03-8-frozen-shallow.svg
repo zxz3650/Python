@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title4 desc4">
+<title id="title4">frozen=True는 필드 재대입만 막을 뿐 내부 객체까지 얼리지 않는다</title>
+<desc id="desc4">frozen=True인 데이터클래스는 point.x = 99처럼 필드 자체를 다른 값으로 재대입하는 것은 FrozenInstanceError로 막지만, 필드가 가리키는 리스트의 내부를 append로 변경하는 것은 재대입이 아니므로 그대로 허용됨을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowEE1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">frozen=True는 "필드 재대입 금지"이지 "완전한 불변"이 아니다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">@dataclass(frozen=True) class FrozenReport: title: str; rows: list[str] = field(default_factory=list)</text>
+
+<!-- LEFT: field reassignment blocked -->
+<rect x="60" y="120" width="670" height="400" rx="20" fill="#0d1f30" stroke="#ef4444" stroke-width="3"/>
+<text x="90" y="155" fill="#fca5a5" font-family="Arial, sans-serif" font-size="18" font-weight="700">✗ 필드 재대입 — 막힘</text>
+
+<rect x="90" y="180" width="600" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="215" fill="#e6f6ff" font-family="monospace" font-size="15">point = Coordinate(10, 20)</text>
+
+<g filter="url(#shadowEE1)">
+<rect x="90" y="260" width="600" height="100" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="110" y="295" fill="#fecaca" font-family="monospace" font-size="16" font-weight="700">point.x = 99</text>
+<text x="110" y="325" fill="#fca5a5" font-family="Arial, sans-serif" font-size="14" font-weight="700">FrozenInstanceError</text>
+<text x="110" y="347" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">x라는 필드 자체를 다른 값으로 바꾸려는 시도라서 차단됨</text>
+
+<rect x="90" y="380" width="600" height="110" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="412" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">frozen=True가 실제로 막는 것</text>
+<text x="110" y="438" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">"이 이름이 가리키는 객체를 바꿔치기"만 차단한다</text>
+<text x="110" y="462" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">(= 필드 슬롯에 새 값을 재대입하는 것)</text>
+
+<!-- RIGHT: internal mutation allowed -->
+<rect x="770" y="120" width="670" height="400" rx="20" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/>
+<text x="800" y="155" fill="#fcd34d" font-family="Arial, sans-serif" font-size="18" font-weight="700">⚠ 내부 객체 변경 — 허용됨</text>
+
+<rect x="800" y="180" width="600" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="215" fill="#e6f6ff" font-family="monospace" font-size="15">report = FrozenReport("daily")</text>
+
+<g filter="url(#shadowEE1)">
+<rect x="800" y="260" width="600" height="100" rx="12" fill="#1f1a12" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="820" y="295" fill="#fef3c7" font-family="monospace" font-size="16" font-weight="700">report.rows.append("row-1")</text>
+<text x="820" y="325" fill="#fcd34d" font-family="Arial, sans-serif" font-size="14" font-weight="700">정상 실행됨 (예외 없음)</text>
+<text x="820" y="347" fill="#fef3c7" font-family="Arial, sans-serif" font-size="12">→ report.rows == ["row-1"]</text>
+
+<rect x="800" y="380" width="600" height="110" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="412" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">왜 막히지 않는가</text>
+<text x="820" y="438" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13">report.rows라는 필드 슬롯은 그대로 — 재대입이 아님</text>
+<text x="820" y="462" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13">그 슬롯이 가리키는 리스트 "내용"만 바뀐 것</text>
+
+<rect x="60" y="535" width="1380" height="1" fill="none"/>
+</svg>

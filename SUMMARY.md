@@ -60,3 +60,12 @@
 - [10. 프로그램 구조화](10-program-architecture.md)
 - [11. 동시성과 비동기 처리](11-concurrency.md)
 - [12. Python 활용 종합 프로젝트](12-capstone.md)
+- 기타 챕터
+  - [13. Python Automate 실무 자동화](13-python-automate.md)
+    - [13-1. 자동화 과제 선정과 안전 설계](13-python-automate/13-1-automation-design.md)
+    - [13-2. 파일과 폴더 일괄 처리](13-python-automate/13-2-file-batch.md)
+    - [13-3. 웹 정보 수집](13-python-automate/13-3-web-collection.md)
+    - [13-4. 스프레드시트와 문서 자동화](13-python-automate/13-4-spreadsheet-documents.md)
+    - [13-5. 예약·알림·이미지·GUI 자동화](13-python-automate/13-5-scheduling-gui.md)
+    - [13-6. 프로젝트 A - 안전한 파일 정리기](13-python-automate/13-6-safe-file-organizer-project.md)
+    - [13-7. 프로젝트 B - Excel 요약 보고서](13-python-automate/13-7-spreadsheet-report-project.md)

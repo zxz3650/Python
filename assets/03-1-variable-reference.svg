@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="640" viewBox="0 0 1400 640" role="img" aria-labelledby="title desc">
+<title id="title">변수는 상자가 아니라 이름표다</title>
+<desc id="desc">잘못된 상자 모델과 올바른 이름표(참조) 모델을 비교하는 다이어그램</desc>
+<defs>
+  <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a2b"/><stop offset="1" stop-color="#103a52"/></linearGradient>
+  <linearGradient id="objBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
+  <filter id="shadow1"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity=".28"/></filter>
+</defs>
+
+<rect width="1400" height="640" rx="32" fill="url(#bg1)"/>
+<text x="70" y="70" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="34" font-weight="700">변수는 상자가 아니라 이름표다</text>
+<text x="70" y="102" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="20">port = 443 이 실행될 때 파이썬 내부에서 일어나는 일</text>
+
+<!-- LEFT: wrong box model -->
+<g filter="url(#shadow1)">
+  <rect x="60" y="150" width="600" height="430" rx="24" fill="#241018" stroke="#ef4444" stroke-width="3" stroke-dasharray="10 8"/>
+</g>
+<text x="90" y="200" fill="#fca5a5" font-family="Arial, sans-serif" font-size="26" font-weight="700">✗ 틀린 그림: 상자 모델</text>
+<text x="90" y="232" fill="#f3b9b9" font-family="Arial, sans-serif" font-size="18">"변수라는 상자 안에 값 443이 들어있다"</text>
+
+<rect x="140" y="270" width="420" height="220" rx="16" fill="#3a1420" stroke="#ef4444" stroke-width="3"/>
+<rect x="140" y="270" width="140" height="46" rx="10" fill="#ef4444"/>
+<text x="210" y="301" text-anchor="middle" fill="#241018" font-family="monospace" font-size="22" font-weight="700">port</text>
+<text x="350" y="400" text-anchor="middle" fill="#ffe4e4" font-family="monospace" font-size="64" font-weight="700">443</text>
+<line x1="175" y1="330" x2="525" y2="470" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+<line x1="525" y1="330" x2="175" y2="470" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+
+<text x="140" y="545" fill="#f3b9b9" font-family="Arial, sans-serif" font-size="18">이 모델로는 b = a 이후 a를 바꿔도</text>
+<text x="140" y="572" fill="#f3b9b9" font-family="Arial, sans-serif" font-size="18">b가 그대로인 이유를 설명할 수 없다.</text>
+
+<!-- RIGHT: correct name-tag model -->
+<g filter="url(#shadow1)">
+  <rect x="740" y="150" width="600" height="430" rx="24" fill="#102f46" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="770" y="200" fill="#bef2c9" font-family="Arial, sans-serif" font-size="26" font-weight="700">✓ 올바른 그림: 이름표 모델</text>
+<text x="770" y="232" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">"port는 정수 객체 443을 가리키는 이름이다"</text>
+
+<!-- name tag shape -->
+<path d="M790 320 h150 l30 34 l-30 34 h-150 z" fill="#f59e0b" stroke="#fcd34d" stroke-width="2"/>
+<text x="855" y="365" text-anchor="middle" fill="#241018" font-family="monospace" font-size="24" font-weight="700">port</text>
+
+<!-- arrow -->
+<path d="M1000 354 H1120" stroke="url(#objBlue)" stroke-width="8" stroke-linecap="round"/>
+<path d="M1100 332 L1132 354 L1100 376" fill="none" stroke="#06b6d4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1010" y="330" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="16">가리킴</text>
+
+<!-- object circle -->
+<circle cx="1220" cy="354" r="78" fill="url(#objBlue)" stroke="#e6f6ff" stroke-width="3"/>
+<text x="1220" y="366" text-anchor="middle" fill="white" font-family="monospace" font-size="34" font-weight="700">443</text>
+
+<!-- type badge -->
+<rect x="1160" y="460" width="150" height="46" rx="12" fill="#059669"/>
+<text x="1235" y="490" text-anchor="middle" fill="white" font-family="monospace" font-size="20" font-weight="700">type: int</text>
+<path d="M1220 432 V456" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+
+<text x="770" y="545" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">b = a 는 같은 객체를 가리키는</text>
+<text x="770" y="572" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">이름표를 하나 더 붙이는 것과 같다.</text>
+</svg>

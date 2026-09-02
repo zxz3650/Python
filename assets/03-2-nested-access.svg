@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="720" viewBox="0 0 1500 720" role="img" aria-labelledby="title7 desc7">
+<title id="title7">events[1]["ip"] — list[dict]에서 값을 찾아가는 두 단계</title>
+<desc id="desc7">리스트에서 인덱스 1의 딕셔너리를 선택한 뒤 그 딕셔너리에서 ip 키를 선택해 값을 얻는 과정을 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadow7"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <linearGradient id="okGrad7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22c55e"/><stop offset="1" stop-color="#059669"/></linearGradient>
+</defs>
+<rect width="1500" height="720" rx="32" fill="#071a2b"/>
+<text x="60" y="58" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">중첩 접근은 왼쪽부터 한 단계씩 읽는다</text>
+<text x="60" y="90" fill="#9cc8dc" font-family="monospace" font-size="20">events[1]["ip"]</text>
+
+<!-- step 1 label -->
+<text x="60" y="130" fill="#fcd34d" font-family="Arial, sans-serif" font-size="16" font-weight="700">① events 리스트에서 인덱스 1을 선택한다</text>
+
+<text x="60" y="170" fill="#7fb2cc" font-family="monospace" font-size="18" font-weight="700">[</text>
+<!-- events[0] -->
+<g filter="url(#shadow7)">
+<rect x="100" y="150" width="360" height="90" rx="14" fill="#102338" stroke="#334155" stroke-width="2"/>
+</g>
+<text x="120" y="176" fill="#7fb2cc" font-family="monospace" font-size="14">events[0]</text>
+<text x="120" y="202" fill="#e6f6ff" font-family="monospace" font-size="14">action: "ALLOW", ip: "10.0.0.5"</text>
+<text x="120" y="224" fill="#e6f6ff" font-family="monospace" font-size="14">port: 80</text>
+
+<!-- events[1] highlighted -->
+<g filter="url(#shadow7)">
+<rect x="490" y="142" width="380" height="106" rx="16" fill="#0d2a3d" stroke="#38bdf8" stroke-width="4"/>
+</g>
+<text x="510" y="168" fill="#7dd3fc" font-family="monospace" font-size="15" font-weight="700">events[1]  ← 선택됨</text>
+<text x="510" y="196" fill="#f1f9ff" font-family="monospace" font-size="15">action: "DENY"</text>
+<text x="510" y="218" fill="#f1f9ff" font-family="monospace" font-size="15">ip: "198.51.100.9"</text>
+<text x="510" y="240" fill="#f1f9ff" font-family="monospace" font-size="15">port: 443</text>
+
+<!-- events[2] -->
+<g filter="url(#shadow7)">
+<rect x="900" y="150" width="360" height="90" rx="14" fill="#102338" stroke="#334155" stroke-width="2"/>
+</g>
+<text x="920" y="176" fill="#7fb2cc" font-family="monospace" font-size="14">events[2]</text>
+<text x="920" y="202" fill="#e6f6ff" font-family="monospace" font-size="14">action: "DENY", ip: "198.51.100.9"</text>
+<text x="920" y="224" fill="#e6f6ff" font-family="monospace" font-size="14">port: 443</text>
+
+<text x="1280" y="170" fill="#7fb2cc" font-family="monospace" font-size="18" font-weight="700">]</text>
+
+<!-- arrow down from events[1] to zoom box -->
+<path d="M680 248 V320" stroke="#38bdf8" stroke-width="7" stroke-linecap="round"/>
+<path d="M660 300 L680 328 L700 300" fill="none" stroke="#38bdf8" stroke-width="7"/>
+
+<!-- step 2 label -->
+<text x="60" y="390" fill="#fcd34d" font-family="Arial, sans-serif" font-size="16" font-weight="700">② 그 딕셔너리에서 "ip" 키를 선택한다</text>
+
+<!-- zoom box: dict rows -->
+<g filter="url(#shadow7)">
+<rect x="420" y="410" width="520" height="200" rx="18" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<rect x="450" y="432" width="460" height="46" rx="8" fill="#102338" stroke="#334155" stroke-width="1.5"/>
+<text x="470" y="461" fill="#9cc8dc" font-family="monospace" font-size="17">"action": "DENY"</text>
+
+<rect x="450" y="486" width="460" height="52" rx="8" fill="#1c3a2a" stroke="#22c55e" stroke-width="3"/>
+<text x="470" y="519" fill="#bbf7d0" font-family="monospace" font-size="19" font-weight="700">"ip": "198.51.100.9"  ← 선택됨</text>
+
+<rect x="450" y="546" width="460" height="46" rx="8" fill="#102338" stroke="#334155" stroke-width="1.5"/>
+<text x="470" y="575" fill="#9cc8dc" font-family="monospace" font-size="17">"port": 443</text>
+
+<!-- arrow to result -->
+<path d="M940 512 H1010" stroke="url(#okGrad7)" stroke-width="7" stroke-linecap="round"/>
+<path d="M990 494 L1018 512 L990 530" fill="none" stroke="#22c55e" stroke-width="7"/>
+
+<g filter="url(#shadow7)">
+<rect x="1030" y="470" width="330" height="84" rx="16" fill="#0d2a1c" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="1195" y="510" text-anchor="middle" fill="#bbf7d0" font-family="Arial, sans-serif" font-size="16" font-weight="700">결과</text>
+<text x="1195" y="538" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="19" font-weight="700">"198.51.100.9"</text>
+
+<text x="60" y="670" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">대괄호는 리스트의 위치, 두 번째 대괄호는 딕셔너리의 키를 가리킨다 — 왼쪽에서 오른쪽으로 한 단계씩 좁혀간다.</text>
+</svg>
