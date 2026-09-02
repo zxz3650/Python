@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="620" viewBox="0 0 1500 620" role="img" aria-labelledby="title2 desc2">
+<title id="title2">클래스 변수는 대입하면 가려지고, 변경하면 공유된다</title>
+<desc id="desc2">인스턴스에 클래스 변수와 같은 이름으로 값을 대입하면 그 인스턴스만의 새 속성이 생겨 클래스 변수를 가릴 뿐 다른 인스턴스에 영향이 없지만, 클래스 변수가 리스트처럼 변경 가능한 객체일 때 append로 내부를 변경하면 그 객체를 공유하는 모든 인스턴스에 영향이 감을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowCC1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="620" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">대입은 가리고, 변경은 공유된 객체를 함께 바꾼다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">클래스 변수는 모든 인스턴스가 처음엔 같은 값을 참조한다 — 그다음이 다르다</text>
+
+<!-- LEFT: reassignment shadows (safe) -->
+<text x="60" y="125" fill="#4ade80" font-family="Arial, sans-serif" font-size="18" font-weight="700">✓ 일반 값 대입 → 가려짐 (인스턴스만 영향)</text>
+<text x="60" y="148" fill="#7fb2cc" font-family="monospace" font-size="13">class Task: category = "learning"    first.category = "review"</text>
+
+<rect x="60" y="165" width="640" height="60" rx="10" fill="#102338" stroke="#a855f7" stroke-width="2.5"/>
+<text x="80" y="200" fill="#e6f6ff" font-family="monospace" font-size="14">Task.category = "learning"  (클래스 변수, 공유 시작점)</text>
+
+<g filter="url(#shadowCC1)">
+<rect x="60" y="245" width="300" height="90" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="80" y="275" fill="#dcfce7" font-family="monospace" font-size="14" font-weight="700">first.category = "review"</text>
+<text x="80" y="300" fill="#86efac" font-family="Arial, sans-serif" font-size="12">first만의 새 인스턴스 속성 생성</text>
+<text x="80" y="320" fill="#86efac" font-family="Arial, sans-serif" font-size="12">→ first.category == "review"</text>
+
+<rect x="400" y="245" width="300" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="420" y="275" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">second.category</text>
+<text x="420" y="300" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">영향 없음, 여전히 클래스 변수 참조</text>
+<text x="420" y="320" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">→ "learning" 그대로</text>
+
+<rect x="60" y="355" width="640" height="45" rx="10" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="80" y="383" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">Task.category도 "learning" 그대로 — 클래스 자체는 바뀌지 않음</text>
+
+<!-- RIGHT: mutation shares (dangerous) -->
+<text x="800" y="125" fill="#f87171" font-family="Arial, sans-serif" font-size="18" font-weight="700">✗ 가변 객체 변경 → 모든 인스턴스가 공유</text>
+<text x="800" y="148" fill="#7fb2cc" font-family="monospace" font-size="13">class BadTask: tags = []    first.tags.append("important")</text>
+
+<rect x="800" y="165" width="640" height="60" rx="10" fill="#102338" stroke="#a855f7" stroke-width="2.5"/>
+<text x="820" y="200" fill="#e6f6ff" font-family="monospace" font-size="14">BadTask.tags = []  (리스트 객체 하나, 클래스에 고정)</text>
+
+<g filter="url(#shadowCC1)">
+<rect x="800" y="245" width="300" height="90" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+</g>
+<text x="820" y="275" fill="#fecaca" font-family="monospace" font-size="14" font-weight="700">first.tags.append("important")</text>
+<text x="820" y="300" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">재할당이 아니라 그 리스트 자체를 수정</text>
+
+<rect x="1140" y="245" width="300" height="90" rx="12" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+<text x="1160" y="275" fill="#fecaca" font-family="monospace" font-size="14" font-weight="700">second.tags</text>
+<text x="1160" y="300" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">같은 리스트 객체를 참조하므로</text>
+<text x="1160" y="320" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12" font-weight="700">→ ["important"] (예상 밖 공유)</text>
+
+<rect x="800" y="355" width="640" height="45" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="820" y="383" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13" font-weight="700">assert first.tags is second.tags → True (같은 객체)</text>
+
+<!-- fix note -->
+<rect x="60" y="425" width="1380" height="150" rx="14" fill="#0d1f30" stroke="#22c55e" stroke-width="2.5"/>
+<text x="90" y="458" fill="#86efac" font-family="Arial, sans-serif" font-size="15" font-weight="700">해결: 인스턴스마다 독립된 목록이 필요하면 __init__에서 만든다</text>
+<text x="90" y="490" fill="#e6f6ff" font-family="monospace" font-size="15">class Task:</text>
+<text x="120" y="515" fill="#e6f6ff" font-family="monospace" font-size="15">def __init__(self, title):</text>
+<text x="150" y="540" fill="#e6f6ff" font-family="monospace" font-size="15">self.title = title;  self.tags = []   # 인스턴스별 새 리스트</text>
+<text x="90" y="565" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">→ 03-5의 "변경 가능한 기본값" 함정과 원인이 같다: 리스트가 정의 시점에 딱 한 번만 만들어진다</text>
+</svg>

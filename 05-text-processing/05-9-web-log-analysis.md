@@ -870,17 +870,17 @@ def publish_run(
 
 ```python
 def strip_line_ending(line: str) -> str:
-    # TODO: LF와 CRLF만 제거한다.
+    # 실습 과제: LF와 CRLF만 제거한다.
     ...
 
 
 def validate_fields(fields: dict[str, str]) -> dict:
-    # TODO: IP, timestamp, status, bytes를 검증한다.
+    # 실습 과제: IP, timestamp, status, bytes를 검증한다.
     ...
 
 
 def normalize_url_path(target: str) -> tuple[str, bool]:
-    # TODO: 쿼리 제거, strict percent decoding, dot-segment 처리를 수행한다.
+    # 실습 과제: 쿼리 제거, strict percent decoding, dot-segment 처리를 수행한다.
     ...
 ```
 

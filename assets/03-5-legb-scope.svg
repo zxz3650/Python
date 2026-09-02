@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="780" viewBox="0 0 1500 780" role="img" aria-labelledby="title4 desc4">
+<title id="title4">LEGB: Local부터 Built-in까지 바깥으로 확장하며 이름을 찾는다</title>
+<desc id="desc4">Python이 이름을 찾을 때 Local, Enclosing, Global, Built-in 순서로 안쪽부터 바깥쪽으로 검색하며, make_counter의 count처럼 nonlocal로 감싼 함수의 이름을 재할당할 수도 있음을 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowS1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowS1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#facc15"/>
+  </marker>
+</defs>
+<rect width="1500" height="780" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">이름을 찾을 때 안쪽에서 바깥쪽으로 확장한다: L → E → G → B</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">지역에 없으면 감싼 함수, 없으면 모듈 전역, 없으면 내장 이름까지 확인한다</text>
+
+<!-- Built-in layer -->
+<rect x="60" y="120" width="1380" height="620" rx="24" fill="#0d1f30" stroke="#64748b" stroke-width="2.5"/>
+<text x="90" y="155" fill="#94a3b8" font-family="Arial, sans-serif" font-size="16" font-weight="700">4. Built-in — len, print, sum, range ...</text>
+
+<!-- Global layer -->
+<rect x="140" y="185" width="1220" height="510" rx="22" fill="#102338" stroke="#a855f7" stroke-width="2.5"/>
+<text x="170" y="218" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="16" font-weight="700">3. Global — 모듈 최상위</text>
+<text x="170" y="242" fill="#c4b5fd" font-family="monospace" font-size="13">threshold = 3   status = "GLOBAL"   processed_count = 0</text>
+
+<!-- Enclosing layer -->
+<rect x="220" y="270" width="880" height="360" rx="20" fill="#14203a" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="250" y="303" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16" font-weight="700">2. Enclosing — make_counter() 안</text>
+<text x="250" y="327" fill="#bfdbfe" font-family="monospace" font-size="13">count = 0   (increment를 감싼 바깥 함수의 지역 변수)</text>
+
+<!-- Local layer -->
+<rect x="300" y="360" width="500" height="200" rx="18" fill="#183049" stroke="#4ade80" stroke-width="3"/>
+<text x="330" y="393" fill="#86efac" font-family="Arial, sans-serif" font-size="16" font-weight="700">1. Local — increment() 안</text>
+<text x="330" y="420" fill="#dcfce7" font-family="monospace" font-size="13">nonlocal count</text>
+<text x="330" y="443" fill="#dcfce7" font-family="monospace" font-size="13">count += 1</text>
+<text x="330" y="466" fill="#dcfce7" font-family="monospace" font-size="13">return count</text>
+<text x="330" y="500" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">count라는 이름을 여기서 먼저 찾는다</text>
+<text x="330" y="520" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">없으면 Enclosing으로 확장</text>
+
+<!-- search arrow spiraling outward -->
+<path d="M 560 460 C 700 460, 760 400, 660 300 C 600 240, 500 220, 400 220" fill="none" stroke="#facc15" stroke-width="3" stroke-dasharray="2,6" marker-end="url(#arrowS1)"/>
+<text x="700" y="230" fill="#facc15" font-family="Arial, sans-serif" font-size="13" font-weight="700">못 찾으면 바깥으로 확장 탐색</text>
+
+<!-- side note -->
+<rect x="1080" y="270" width="330" height="180" rx="14" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="1105" y="303" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">is_suspicious(count) 예시</text>
+<text x="1105" y="330" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">count, result → Local</text>
+<text x="1105" y="352" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="12">threshold → 여기 없어 Global까지 확장</text>
+<text x="1105" y="382" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12" font-weight="700">함수 안에서 대입하면</text>
+<text x="1105" y="404" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12" font-weight="700">기본적으로 새 Local 이름이 생긴다</text>
+<text x="1105" y="428" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">(전역을 바꾸려면 global, 감싼 함수 값을</text>
+<text x="1105" y="446" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">바꾸려면 nonlocal이 필요)</text>
+
+<rect x="90" y="655" width="1320" height="65" rx="12" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="115" y="685" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">함수 밖에서 지역 이름을 읽으려 하면 NameError — 탐색은 안에서 바깥으로만 진행되고 반대 방향은 없다</text>
+<text x="115" y="708" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">print(result)  # NameError: 'result'는 is_suspicious() 함수 밖에서 보이지 않음</text>
+</svg>

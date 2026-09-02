@@ -496,9 +496,9 @@ from pathlib import Path
 
 
 def resolve_under(base, user_value, *, must_exist=False):
-    # TODO: 입력 자료형·빈 값·절대 경로 검사
-    # TODO: 기준 경로와 후보 경로 resolve
-    # TODO: is_relative_to로 범위 검사
+    # 실습 과제: 입력 자료형·빈 값·절대 경로 검사
+    # 실습 과제: 기준 경로와 후보 경로 resolve
+    # 실습 과제: is_relative_to로 범위 검사
     raise NotImplementedError
 
 
@@ -509,10 +509,10 @@ def collect_text_files(base, user_directory):
         must_exist=True,
     )
 
-    # TODO: directory인지 확인
-    # TODO: 한 단계 아래의 .txt 일반 파일만 선택
-    # TODO: 이름·상대 경로·크기를 딕셔너리로 구성
-    # TODO: 안정된 순서로 반환
+    # 실습 과제: directory인지 확인
+    # 실습 과제: 한 단계 아래의 .txt 일반 파일만 선택
+    # 실습 과제: 이름·상대 경로·크기를 딕셔너리로 구성
+    # 실습 과제: 안정된 순서로 반환
     raise NotImplementedError
 ```
 

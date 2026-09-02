@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title3 desc3">
+<title id="title3">인스턴스, 클래스, 정적 메서드는 첫 인자로 받는 것이 다르다</title>
+<desc id="desc3">인스턴스 메서드는 self로 현재 객체를 자동으로 받아 상태를 읽고 바꾸며, 클래스 메서드는 cls로 클래스 자체를 받아 대안 생성자로 쓰이고, 정적 메서드는 self나 cls를 받지 않는 그냥 네임스페이스 안의 함수임을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowDD1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">셋 다 class 블록 안의 함수지만 첫 인자가 다르다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">자동으로 무엇을 받는지가 그 메서드의 역할을 결정한다</text>
+
+<!-- Column A: instance method -->
+<rect x="60" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#38bdf8" stroke-width="3"/>
+<text x="90" y="155" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16" font-weight="700">인스턴스 메서드</text>
+<text x="90" y="180" fill="#7fb2cc" font-family="monospace" font-size="13">def rename(self, new_title):</text>
+
+<rect x="90" y="200" width="380" height="70" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="228" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">자동으로 받는 첫 인자</text>
+<text x="110" y="252" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">self  (현재 인스턴스)</text>
+
+<rect x="90" y="285" width="380" height="55" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="110" y="317" fill="#dcfce7" font-family="monospace" font-size="14">task.rename("새 제목")</text>
+
+<rect x="90" y="355" width="380" height="130" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="385" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">쓰임</text>
+<text x="110" y="410" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">현재 객체의 상태를 읽거나</text>
+<text x="110" y="430" fill="#93c5fd" font-family="Arial, sans-serif" font-size="12">바꿔야 할 때 (가장 흔한 형태)</text>
+<text x="110" y="460" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">예: task.complete(), book.describe()</text>
+
+<!-- Column B: classmethod -->
+<rect x="530" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/>
+<text x="560" y="155" fill="#fcd34d" font-family="Arial, sans-serif" font-size="16" font-weight="700">@classmethod</text>
+<text x="560" y="180" fill="#7fb2cc" font-family="monospace" font-size="12">def from_text(cls, text):</text>
+
+<rect x="560" y="200" width="380" height="70" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="580" y="228" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">자동으로 받는 첫 인자</text>
+<text x="580" y="252" fill="#facc15" font-family="monospace" font-size="16" font-weight="700">cls  (클래스 자체)</text>
+
+<rect x="560" y="285" width="380" height="55" rx="10" fill="#1f1a12" stroke="#f59e0b" stroke-width="2"/>
+<text x="580" y="317" fill="#fef3c7" font-family="monospace" font-size="13">Endpoint.from_text("host:443")</text>
+
+<rect x="560" y="355" width="380" height="130" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="580" y="385" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">쓰임</text>
+<text x="580" y="410" fill="#fcd34d" font-family="Arial, sans-serif" font-size="12">Endpoint(...) 외의 대안 생성자</text>
+<text x="580" y="430" fill="#fcd34d" font-family="Arial, sans-serif" font-size="12">cls(...)로 반환해 하위 클래스에도 대응</text>
+<text x="580" y="460" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">return cls(host, int(port_text))</text>
+
+<!-- Column C: staticmethod -->
+<rect x="1000" y="120" width="440" height="400" rx="18" fill="#0d1f30" stroke="#a855f7" stroke-width="3"/>
+<text x="1030" y="155" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="16" font-weight="700">@staticmethod</text>
+<text x="1030" y="180" fill="#7fb2cc" font-family="monospace" font-size="12">def is_valid_port(port):</text>
+
+<rect x="1030" y="200" width="380" height="70" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="1050" y="228" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">자동으로 받는 첫 인자</text>
+<text x="1050" y="252" fill="#f87171" font-family="monospace" font-size="16" font-weight="700">없음 (self도 cls도 아님)</text>
+
+<rect x="1030" y="285" width="380" height="55" rx="10" fill="#1f1a2e" stroke="#a855f7" stroke-width="2"/>
+<text x="1050" y="317" fill="#f3e8ff" font-family="monospace" font-size="13">Endpoint.is_valid_port(443)</text>
+
+<rect x="1030" y="355" width="380" height="130" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="1050" y="385" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">쓰임</text>
+<text x="1050" y="410" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="12">클래스 개념과 관련은 있지만</text>
+<text x="1050" y="430" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="12">객체·클래스 상태가 필요 없는 도우미</text>
+<text x="1050" y="460" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">범용 함수라면 모듈 함수가 더 단순</text>
+</svg>

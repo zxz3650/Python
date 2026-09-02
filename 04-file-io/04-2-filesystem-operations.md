@@ -291,18 +291,18 @@ def copy_regular_file(base, source_value, destination_value):
     source = resolve_under(base, source_value, must_exist=True)
     destination = resolve_under(base, destination_value, must_exist=False)
 
-    # TODO: source가 일반 파일인지 확인
-    # TODO: source와 destination이 같은지 확인
-    # TODO: destination과 부모 디렉터리를 확인
-    # TODO: copy2()로 복사
-    # TODO: 복사된 목적지 Path 반환
+    # 실습 과제: source가 일반 파일인지 확인
+    # 실습 과제: source와 destination이 같은지 확인
+    # 실습 과제: destination과 부모 디렉터리를 확인
+    # 실습 과제: copy2()로 복사
+    # 실습 과제: 복사된 목적지 Path 반환
     raise NotImplementedError
 
 
 def rename_without_overwrite(base, before_value, after_value):
-    # TODO: 두 경로를 작업 영역 안으로 제한
-    # TODO: 원본 종류와 목적지 충돌 확인
-    # TODO: rename() 실행 후 새 Path 반환
+    # 실습 과제: 두 경로를 작업 영역 안으로 제한
+    # 실습 과제: 원본 종류와 목적지 충돌 확인
+    # 실습 과제: rename() 실행 후 새 Path 반환
     raise NotImplementedError
 
 
@@ -310,9 +310,9 @@ def delete_regular_file(base, target_value):
     target = resolve_under(base, target_value, must_exist=True)
     original_entry = Path(base).resolve(strict=True) / Path(target_value)
 
-    # TODO: original_entry가 심볼릭 링크인지 확인
-    # TODO: target이 일반 파일인지 확인
-    # TODO: unlink() 실행
+    # 실습 과제: original_entry가 심볼릭 링크인지 확인
+    # 실습 과제: target이 일반 파일인지 확인
+    # 실습 과제: unlink() 실행
     raise NotImplementedError
 ```
 

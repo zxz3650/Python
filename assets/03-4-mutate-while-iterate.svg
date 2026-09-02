@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760" role="img" aria-labelledby="title3 desc3">
+<title id="title3">순회 중 리스트를 삭제하면 인덱스가 밀려 값을 건너뛴다</title>
+<desc id="desc3">numbers=[1,2,2,3]를 순회하며 2를 만날 때마다 remove하면 삭제 후 뒤 요소가 앞으로 당겨져 반복 위치가 한 항목을 건너뛰어 결과에 2가 하나 남는 과정을 보여주고, 새 리스트를 만드는 안전한 대안과 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowG1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="760" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">삭제하면서 순회하면 인덱스가 밀려 항목을 건너뛴다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">numbers = [1, 2, 2, 3] — 2를 만날 때마다 numbers.remove(2)</text>
+
+<text x="60" y="125" fill="#f87171" font-family="Arial, sans-serif" font-size="18" font-weight="700">✗ 위험한 코드</text>
+
+<!-- Frame 1 -->
+<rect x="60" y="145" width="420" height="170" rx="16" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="90" y="172" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13" font-weight="700">1단계: 위치 0 검사</text>
+<g font-family="monospace" font-size="18">
+<rect x="90" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+<text x="125" y="222" text-anchor="middle" fill="#e6f6ff">1</text>
+<rect x="165" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5"/>
+<text x="200" y="222" text-anchor="middle" fill="#e6f6ff">2</text>
+<rect x="240" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5"/>
+<text x="275" y="222" text-anchor="middle" fill="#e6f6ff">2</text>
+<rect x="315" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5"/>
+<text x="350" y="222" text-anchor="middle" fill="#e6f6ff">3</text>
+</g>
+<text x="125" y="262" text-anchor="middle" fill="#facc15" font-family="Arial, sans-serif" font-size="12">↑ 위치0</text>
+<text x="90" y="295" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">값 1 ≠ 2 → 변화 없음, 다음 위치로</text>
+
+<!-- Frame 2 -->
+<rect x="540" y="145" width="420" height="170" rx="16" fill="#0d1f30" stroke="#f59e0b" stroke-width="2.5"/>
+<text x="570" y="172" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13" font-weight="700">2단계: 위치 1 검사 → 삭제 발생</text>
+<g font-family="monospace" font-size="18">
+<rect x="570" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5" opacity="0.5"/>
+<text x="605" y="222" text-anchor="middle" fill="#94a3b8" opacity="0.6">1</text>
+<rect x="645" y="190" width="70" height="50" rx="6" fill="#3f1d1d" stroke="#ef4444" stroke-width="3"/>
+<text x="680" y="222" text-anchor="middle" fill="#fecaca">2</text>
+<rect x="720" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5"/>
+<text x="755" y="222" text-anchor="middle" fill="#e6f6ff">2</text>
+<rect x="795" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5"/>
+<text x="830" y="222" text-anchor="middle" fill="#e6f6ff">3</text>
+</g>
+<text x="680" y="262" text-anchor="middle" fill="#facc15" font-family="Arial, sans-serif" font-size="12">↑ 위치1: 값 2 삭제</text>
+<text x="570" y="295" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">삭제 후 뒤 값들이 한 칸씩 앞으로 당겨짐</text>
+
+<!-- Frame 3 -->
+<rect x="1020" y="145" width="420" height="170" rx="16" fill="#0d1f30" stroke="#ef4444" stroke-width="2.5"/>
+<text x="1050" y="172" fill="#f87171" font-family="Arial, sans-serif" font-size="13" font-weight="700">3단계: 위치 2로 이동 → 건너뜀 발생</text>
+<g font-family="monospace" font-size="18">
+<rect x="1050" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#7fb2cc" stroke-width="1.5" opacity="0.4"/>
+<text x="1085" y="222" text-anchor="middle" fill="#94a3b8" opacity="0.6">1</text>
+<rect x="1125" y="190" width="70" height="50" rx="6" fill="#3f1d1d" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,3"/>
+<text x="1160" y="222" text-anchor="middle" fill="#fca5a5">2</text>
+<rect x="1200" y="190" width="70" height="50" rx="6" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+<text x="1235" y="222" text-anchor="middle" fill="#e6f6ff">3</text>
+</g>
+<text x="1160" y="255" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="11">이 2는 밀려 들어왔지만</text>
+<text x="1160" y="270" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="11">검사받지 못함</text>
+<text x="1235" y="262" text-anchor="middle" fill="#facc15" font-family="Arial, sans-serif" font-size="12">↑ 위치2</text>
+<text x="1050" y="295" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">반복이 위치2로 건너뛰어 두 번째 2를 놓침</text>
+
+<rect x="60" y="330" width="1380" height="50" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="90" y="361" fill="#fecaca" font-family="monospace" font-size="16" font-weight="700">결과: [1, 2, 3]  — 2가 하나 남는다 (의도: 모두 제거)</text>
+
+<!-- safe alternative -->
+<text x="60" y="425" fill="#4ade80" font-family="Arial, sans-serif" font-size="18" font-weight="700">✓ 안전한 방법: 새 리스트를 만든다</text>
+
+<rect x="60" y="445" width="660" height="140" rx="16" fill="#0d1f30" stroke="#22c55e" stroke-width="2.5"/>
+<text x="90" y="475" fill="#e6f6ff" font-family="monospace" font-size="14">filtered_numbers = []</text>
+<text x="90" y="500" fill="#e6f6ff" font-family="monospace" font-size="14">for number in numbers:</text>
+<text x="115" y="525" fill="#e6f6ff" font-family="monospace" font-size="14">if number != 2:</text>
+<text x="140" y="550" fill="#e6f6ff" font-family="monospace" font-size="14">filtered_numbers.append(number)</text>
+<text x="90" y="575" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700">→ 원본은 그대로, 결과는 [1, 3]</text>
+
+<rect x="760" y="445" width="680" height="140" rx="16" fill="#0d1f30" stroke="#22c55e" stroke-width="2.5"/>
+<text x="790" y="475" fill="#e6f6ff" font-family="monospace" font-size="14">for number in numbers.copy():</text>
+<text x="815" y="500" fill="#e6f6ff" font-family="monospace" font-size="14">if number == 2:</text>
+<text x="840" y="525" fill="#e6f6ff" font-family="monospace" font-size="14">numbers.remove(number)</text>
+<text x="790" y="555" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700">→ 복사본을 순회하므로 원본이 밀려도</text>
+<text x="790" y="575" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700">   반복 위치가 영향받지 않음: [1, 3]</text>
+</svg>

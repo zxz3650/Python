@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="680" viewBox="0 0 1500 680" role="img" aria-labelledby="title3 desc3">
+<title id="title3">매개변수 재할당과 내부 변경은 호출자에게 다르게 보인다</title>
+<desc id="desc3">함수 안에서 매개변수 이름을 새 객체로 재할당하면 호출자의 원본 객체는 영향받지 않지만, 전달받은 객체를 append 등으로 내부 변경하면 같은 객체를 가리키는 호출자에게도 그 변경이 보임을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowR1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowR1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+</defs>
+<rect width="1500" height="680" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">재할당은 이름표를 바꾸고, 내부 변경은 객체 자체를 바꾼다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">둘 다 매개변수를 다루지만 호출자가 보는 결과가 다르다</text>
+
+<!-- LEFT PANEL: reassignment -->
+<rect x="50" y="115" width="680" height="530" rx="20" fill="#0d1f30" stroke="#3b82f6" stroke-width="3"/>
+<text x="80" y="150" fill="#93c5fd" font-family="Arial, sans-serif" font-size="18" font-weight="700">재할당 — 호출자의 이름은 그대로</text>
+<text x="80" y="175" fill="#7fb2cc" font-family="monospace" font-size="13">def replace_events(events): events = [...]; return events</text>
+
+<text x="90" y="215" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">original</text>
+<text x="90" y="335" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">events (지역, 처음)</text>
+
+<line x1="170" y1="220" x2="270" y2="255" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowR1)"/>
+<line x1="230" y1="330" x2="270" y2="290" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrowR1)"/>
+
+<g filter="url(#shadowR1)">
+<rect x="280" y="255" width="260" height="60" rx="10" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+</g>
+<text x="410" y="291" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">[{"action": "ALLOW"}]</text>
+<text x="410" y="335" text-anchor="middle" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">객체 #1</text>
+
+<text x="90" y="385" fill="#fcd34d" font-family="monospace" font-size="14" font-weight="700">events = [...]  (재할당)</text>
+<text x="90" y="405" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">지역 이름이 새 객체를 가리키도록 바뀜</text>
+
+<text x="90" y="450" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">events (지역, 이후) / replacement</text>
+<line x1="330" y1="450" x2="380" y2="480" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowR1)"/>
+
+<g filter="url(#shadowR1)">
+<rect x="390" y="480" width="260" height="60" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="520" y="516" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="13">[{"action": "REPLACED"}]</text>
+<text x="520" y="560" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="11">객체 #2 (새로 생성됨)</text>
+
+<rect x="80" y="585" width="610" height="50" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="100" y="616" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">결과: original은 객체 #1 그대로 — [{'action': 'ALLOW'}]</text>
+
+<!-- RIGHT PANEL: mutation -->
+<rect x="770" y="115" width="680" height="530" rx="20" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/>
+<text x="800" y="150" fill="#86efac" font-family="Arial, sans-serif" font-size="18" font-weight="700">내부 변경 — 호출자에게도 보임</text>
+<text x="800" y="175" fill="#7fb2cc" font-family="monospace" font-size="13">def append_event(events, event): events.append(event)</text>
+
+<text x="810" y="215" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">records</text>
+<text x="810" y="245" fill="#e6f6ff" font-family="monospace" font-size="14" font-weight="700">events (지역, 매개변수)</text>
+
+<line x1="880" y1="220" x2="980" y2="290" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowR1)"/>
+<line x1="990" y1="248" x2="1000" y2="290" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowR1)"/>
+
+<g filter="url(#shadowR1)">
+<rect x="1000" y="290" width="260" height="60" rx="10" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+</g>
+<text x="1130" y="326" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="14">[]</text>
+<text x="1130" y="370" text-anchor="middle" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">객체 #1 (두 이름이 함께 가리킴)</text>
+
+<text x="810" y="420" fill="#fcd34d" font-family="monospace" font-size="14" font-weight="700">events.append(event)  (내부 변경)</text>
+<text x="810" y="440" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">재할당이 아니라 객체 #1 자체를 수정</text>
+
+<line x1="1130" y1="350" x2="1130" y2="470" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrowR1)"/>
+
+<g filter="url(#shadowR1)">
+<rect x="1000" y="475" width="260" height="60" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="1130" y="511" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="13">[{"action": "DENY"}]</text>
+<text x="1130" y="555" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="11">여전히 객체 #1 — 내용만 바뀜</text>
+
+<rect x="800" y="585" width="610" height="50" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="616" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">결과: records도 같은 객체라서 [{'action': 'DENY'}]로 보임</text>
+</svg>

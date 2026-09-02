@@ -12,9 +12,11 @@
 - [`03-6-exceptions.ipynb`](03-6-exceptions.ipynb): traceback, 예외 전파, `try` 흐름, 예외 연결, 입력 검증, 배치 처리 정책을 연습합니다.
 - [`03-7-modules-packages.ipynb`](03-7-modules-packages.ipynb): 과정별 모듈 지도, import 이름, 모듈 캐시·검색 경로, 일반 패키지, 상대 import, `python -m`, import 오류 진단을 연습합니다.
 - [`03-8-classes-dataclasses.ipynb`](03-8-classes-dataclasses.ipynb): 클래스·인스턴스, 메서드 바인딩, 클래스 변수, 상태 전이, property, dataclass, 상속·합성, 이벤트 객체 모델을 연습합니다.
-- [`03-9-syntax-project.ipynb`](03-9-syntax-project.ipynb): 03-1~03-8의 문법을 이벤트 검토 큐에 통합하고 값 객체, 저장소, 명령 파서, 오류 복구 세션, 입출력 주입 테스트를 단계별로 완성합니다.
+- [`03-9-syntax-project.ipynb`](03-9-syntax-project.ipynb): 03-1~03-8의 문법을 이벤트 검토 큐에 통합하고 일반 데이터클래스, 명시적 반복문, 명령 파서, 오류 복구 세션, 터미널과 분리된 자동 시나리오를 단계별로 검증합니다.
 
 처음 Python 문법을 학습한다면 번호 순서대로 실행하세요. 각 셀은 결과를 먼저 예측하고, 실행 결과를 설명한 뒤 값을 변경하는 순서로 구성되어 있습니다.
+
+`03-9-syntax-project.ipynb`는 본문의 접힌 참고 구현 중 데이터·저장소·명령·세션 로직을 한 커널에서 실행하는 풀이 검증용 노트북입니다. 패키지 분리, 상대 import, 공개 API, `python -m` 실행은 다루지 않으므로 `examples/03-9-event-review-starter`에서 별도로 완성하고 검증합니다. 학습자는 시작 코드를 먼저 구현하고 막히는 단계에서만 해당 노트북 셀을 비교합니다.
 
 ## 04장 절별 실습
 

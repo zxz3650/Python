@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="640" viewBox="0 0 1500 640" role="img" aria-labelledby="title2 desc2">
+<title id="title2">독립된 if와 if·elif·else의 실행 차이</title>
+<desc id="desc2">failed_count가 7일 때 독립된 두 if문은 둘 다 실행되지만 if elif else 사슬은 처음 참인 조건 하나만 실행하고 나머지는 평가하지 않음을 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowC1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowC1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+  <marker id="arrowGreenC1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/>
+  </marker>
+</defs>
+<rect width="1500" height="640" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">여러 if는 각각 실행되고, elif는 하나만 선택한다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">failed_count = 7 — 같은 값, 같은 조건이지만 결과가 다르다</text>
+
+<!-- LEFT PANEL: 독립된 if -->
+<rect x="50" y="115" width="670" height="495" rx="20" fill="#0d1f30" stroke="#3b82f6" stroke-width="3"/>
+<text x="80" y="150" fill="#93c5fd" font-family="Arial, sans-serif" font-size="19" font-weight="700">독립된 if — 각 조건을 따로 검사</text>
+
+<rect x="275" y="170" width="220" height="44" rx="10" fill="#102338" stroke="#7fb2cc" stroke-width="2"/>
+<text x="385" y="197" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="16">failed_count = 7</text>
+
+<line x1="340" y1="214" x2="220" y2="255" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowC1)"/>
+<line x1="430" y1="214" x2="550" y2="255" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowC1)"/>
+
+<!-- diamond A -->
+<polygon points="220,255 320,300 220,345 120,300" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="220" y="295" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">failed_count</text>
+<text x="220" y="312" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">&gt;= 3 ?</text>
+
+<!-- diamond B -->
+<polygon points="550,255 650,300 550,345 450,300" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="550" y="295" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">failed_count</text>
+<text x="550" y="312" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">&gt;= 5 ?</text>
+
+<line x1="220" y1="345" x2="220" y2="390" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenC1)"/>
+<text x="240" y="375" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">True</text>
+<line x1="550" y1="345" x2="550" y2="390" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenC1)"/>
+<text x="570" y="375" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">True</text>
+
+<g filter="url(#shadowC1)">
+<rect x="110" y="398" width="220" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="220" y="424" text-anchor="middle" fill="#dcfce7" font-family="Arial, sans-serif" font-size="14">"경고 조건 충족"</text>
+<text x="220" y="444" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="13">✓ 실행됨</text>
+
+<g filter="url(#shadowC1)">
+<rect x="440" y="398" width="220" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="550" y="424" text-anchor="middle" fill="#dcfce7" font-family="Arial, sans-serif" font-size="14">"심각 조건 충족"</text>
+<text x="550" y="444" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="13">✓ 실행됨</text>
+
+<rect x="90" y="490" width="590" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="385" y="522" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">결과: 두 print 모두 실행</text>
+<text x="385" y="550" text-anchor="middle" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">7 &gt;= 3 도 참이고, 7 &gt;= 5 도 참이므로</text>
+<text x="385" y="568" text-anchor="middle" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">각 if가 서로 독립적으로 자기 조건만 확인한다</text>
+
+<!-- RIGHT PANEL: elif -->
+<rect x="770" y="115" width="680" height="495" rx="20" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/>
+<text x="800" y="150" fill="#fcd34d" font-family="Arial, sans-serif" font-size="19" font-weight="700">if·elif·else — 처음 참인 조건 하나만</text>
+
+<rect x="995" y="170" width="220" height="44" rx="10" fill="#102338" stroke="#7fb2cc" stroke-width="2"/>
+<text x="1105" y="197" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="16">failed_count = 7</text>
+
+<line x1="1105" y1="214" x2="1105" y2="250" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowC1)"/>
+
+<!-- diamond 1: >=5 -->
+<polygon points="1105,250 1215,300 1105,350 995,300" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="1105" y="295" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">failed_count</text>
+<text x="1105" y="312" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">&gt;= 5 ?</text>
+
+<line x1="1215" y1="300" x2="1300" y2="300" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenC1)"/>
+<text x="1240" y="290" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">True</text>
+
+<g filter="url(#shadowC1)">
+<rect x="1300" y="270" width="150" height="60" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="1375" y="298" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="15" font-weight="700">CRITICAL</text>
+<text x="1375" y="318" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="12">✓ 실행됨</text>
+
+<line x1="1105" y1="350" x2="1105" y2="400" stroke="#64748b" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrowC1)"/>
+<text x="1125" y="380" fill="#64748b" font-family="Arial, sans-serif" font-size="12">False였다면</text>
+
+<polygon points="1105,400 1195,440 1105,480 1015,440" fill="#0d1826" stroke="#475569" stroke-width="2" opacity="0.55"/>
+<text x="1105" y="435" text-anchor="middle" fill="#64748b" font-family="monospace" font-size="11" opacity="0.8">failed_count</text>
+<text x="1105" y="450" text-anchor="middle" fill="#64748b" font-family="monospace" font-size="11" opacity="0.8">&gt;= 3 ?</text>
+
+<line x1="1105" y1="480" x2="1105" y2="510" stroke="#475569" stroke-width="2" stroke-dasharray="5,4" opacity="0.6"/>
+<rect x="1005" y="510" width="200" height="40" rx="8" fill="#0d1826" stroke="#475569" stroke-width="1.5" opacity="0.55"/>
+<text x="1105" y="535" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12" opacity="0.85">WARNING / NORMAL — 평가되지 않음</text>
+
+<rect x="810" y="490" width="590" height="90" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="1105" y="522" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">결과: CRITICAL만 실행</text>
+<text x="1105" y="550" text-anchor="middle" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13">첫 elif(&gt;=5)가 참이 되는 순간</text>
+<text x="1105" y="568" text-anchor="middle" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13">나머지 elif·else는 더 이상 검사하지 않는다</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="640" viewBox="0 0 1500 640" role="img" aria-labelledby="title1 desc1">
+<title id="title1">처리하지 않은 예외는 호출 스택을 따라 위로 전파된다</title>
+<desc id="desc1">parse_port에서 발생한 ValueError가 이를 처리하지 않는 make_record를 그대로 통과해 호출 스택을 타고 올라가다가 try except가 있는 호출부에서 비로소 잡히는 과정을 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowT1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowUpT1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+  </marker>
+</defs>
+<rect width="1500" height="640" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">예외는 처리하는 except를 만날 때까지 호출 스택을 타고 올라간다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">parse_port() 안에서 발생한 ValueError가 make_record()를 그대로 통과한다</text>
+
+<!-- frame 3: caller with try/except (top, catches) -->
+<g filter="url(#shadowT1)">
+<rect x="400" y="130" width="700" height="110" rx="16" fill="#14532d" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="430" y="163" fill="#dcfce7" font-family="monospace" font-size="16" font-weight="700">try:</text>
+<text x="450" y="188" fill="#dcfce7" font-family="monospace" font-size="15">record = make_record("invalid")</text>
+<text x="430" y="213" fill="#4ade80" font-family="monospace" font-size="16" font-weight="700">except ValueError as exc:  ← 여기서 잡힘</text>
+
+<line x1="750" y1="260" x2="750" y2="300" stroke="#ef4444" stroke-width="3.5" marker-end="url(#arrowUpT1)"/>
+<text x="775" y="285" fill="#f87171" font-family="Arial, sans-serif" font-size="13" font-weight="700">ValueError 전파 (처리하는 except를 찾음)</text>
+
+<!-- frame 2: make_record (no handler) -->
+<g filter="url(#shadowT1)">
+<rect x="400" y="305" width="700" height="110" rx="16" fill="#3f1d1d" stroke="#f59e0b" stroke-width="2.5"/>
+</g>
+<text x="430" y="338" fill="#fed7aa" font-family="monospace" font-size="16" font-weight="700">def make_record(port_text):</text>
+<text x="450" y="363" fill="#fecaca" font-family="monospace" font-size="15">port = parse_port(port_text)</text>
+<text x="430" y="388" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">여기에 except가 없음 → 그대로 통과시킴</text>
+
+<line x1="750" y1="435" x2="750" y2="475" stroke="#ef4444" stroke-width="3.5" marker-end="url(#arrowUpT1)"/>
+<text x="775" y="460" fill="#f87171" font-family="Arial, sans-serif" font-size="13" font-weight="700">ValueError 발생 지점에서 올라오기 시작</text>
+
+<!-- frame 1: parse_port (raises, bottom) -->
+<g filter="url(#shadowT1)">
+<rect x="400" y="480" width="700" height="110" rx="16" fill="#3f1d1d" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="430" y="513" fill="#fecaca" font-family="monospace" font-size="16" font-weight="700">def parse_port(value):</text>
+<text x="450" y="538" fill="#fecaca" font-family="monospace" font-size="15">return int(value)</text>
+<text x="430" y="563" fill="#f87171" font-family="Arial, sans-serif" font-size="13" font-weight="700">✗ int("invalid") → ValueError 발생 지점</text>
+
+<!-- side note -->
+<rect x="1130" y="130" width="330" height="460" rx="16" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="1155" y="163" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">traceback 읽는 순서</text>
+<text x="1155" y="195" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">1. 마지막 줄: 예외 유형·메시지</text>
+<text x="1155" y="222" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">2. 아래쪽 프레임: 실제 실패 지점</text>
+<text x="1155" y="249" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">3. 위쪽 프레임: 호출 경로</text>
+<line x1="1155" y1="270" x2="1430" y2="270" stroke="#334155" stroke-width="1.5"/>
+<text x="1155" y="300" fill="#fcd34d" font-family="Arial, sans-serif" font-size="14" font-weight="700">이 예시의 교훈</text>
+<text x="1155" y="328" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">parse_port와 make_record는</text>
+<text x="1155" y="350" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">복구 방법을 모르므로 잡지 않고</text>
+<text x="1155" y="372" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">전파한다</text>
+<text x="1155" y="404" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">호출 경계(caller)가 실패를</text>
+<text x="1155" y="426" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="13">사용자 메시지로 바꾼다</text>
+<text x="1155" y="458" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">→ 예외가 발생한 곳과</text>
+<text x="1155" y="478" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="12">   처리할 곳은 같지 않을 수 있다</text>
+</svg>

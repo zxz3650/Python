@@ -238,7 +238,7 @@ assert once == twice
 5. 설명은 줄바꿈을 제외한 공백을 보존한다.
 6. 빈 이름과 잘못된 필드 수는 행 번호·원문·원인과 함께 오류 목록에 보존한다.
 
-### TODO 골격
+### 실습 과제 골격
 
 ```python
 from pathlib import Path
@@ -247,9 +247,9 @@ FIXTURE_PATH = Path("fixtures/05-text-processing/normalization-cases.txt")
 
 
 def normalize_fixture_line(line: str, line_number: int) -> tuple[dict | None, dict | None]:
-    # TODO 1: 줄바꿈만 제거한 원문을 만든다.
-    # TODO 2: 필드를 분리하고 개수를 검증한다.
-    # TODO 3: 정상 레코드 또는 구조화된 오류를 반환한다.
+    # 실습 과제 1: 줄바꿈만 제거한 원문을 만든다.
+    # 실습 과제 2: 필드를 분리하고 개수를 검증한다.
+    # 실습 과제 3: 정상 레코드 또는 구조화된 오류를 반환한다.
     raise NotImplementedError
 ```
 

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600" role="img" aria-labelledby="title1 desc1">
+<title id="title1">print()은 화면에 보여주고, return은 값을 돌려준다</title>
+<desc id="desc1">show_action은 화면에 DENY를 출력하지만 반환값이 없어 None을 돌려주고, get_action은 화면에 아무것도 출력하지 않지만 DENY 문자열을 반환해 다시 계산에 사용할 수 있음을 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowP1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="600" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">print()은 사람이 보는 것, return은 코드가 쓰는 것</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">둘 다 "DENY"를 다루지만 그 값이 어디로 가는지가 다르다</text>
+
+<!-- LEFT: show_action -->
+<rect x="60" y="120" width="670" height="420" rx="20" fill="#0d1f30" stroke="#f59e0b" stroke-width="3"/>
+<text x="90" y="155" fill="#fcd34d" font-family="monospace" font-size="17" font-weight="700">def show_action():</text>
+<text x="110" y="182" fill="#fcd34d" font-family="monospace" font-size="17" font-weight="700">print("DENY")</text>
+
+<text x="90" y="225" fill="#93c5fd" font-family="monospace" font-size="16">shown = show_action()</text>
+
+<!-- screen icon -->
+<g filter="url(#shadowP1)">
+<rect x="90" y="250" width="220" height="110" rx="10" fill="#0a0f1a" stroke="#7fb2cc" stroke-width="2.5"/>
+</g>
+<rect x="105" y="265" width="190" height="16" rx="3" fill="#1e293b"/>
+<circle cx="115" cy="273" r="3" fill="#ef4444"/>
+<circle cx="127" cy="273" r="3" fill="#f59e0b"/>
+<circle cx="139" cy="273" r="3" fill="#22c55e"/>
+<text x="115" y="315" fill="#4ade80" font-family="monospace" font-size="18" font-weight="700">DENY</text>
+<text x="115" y="340" fill="#64748b" font-family="Arial, sans-serif" font-size="12">화면에 표시됨 (부수 효과)</text>
+
+<line x1="320" y1="305" x2="380" y2="305" stroke="#7fb2cc" stroke-width="2"/>
+<text x="330" y="295" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">함수의 반환값은?</text>
+
+<g filter="url(#shadowP1)">
+<rect x="390" y="255" width="260" height="100" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2.5"/>
+</g>
+<text x="520" y="295" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="20" font-weight="700">None</text>
+<text x="520" y="320" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="12">return이 없으므로 자동으로 None</text>
+
+<rect x="90" y="390" width="560" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="110" y="425" fill="#e6f6ff" font-family="monospace" font-size="15">print(shown)   # None</text>
+
+<rect x="90" y="465" width="560" height="56" rx="10" fill="#3f1d1d" stroke="#ef4444" stroke-width="2"/>
+<text x="110" y="498" fill="#fca5a5" font-family="monospace" font-size="14">shown + "!"  →  TypeError: unsupported operand</text>
+
+<!-- RIGHT: get_action -->
+<rect x="770" y="120" width="670" height="420" rx="20" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/>
+<text x="800" y="155" fill="#86efac" font-family="monospace" font-size="17" font-weight="700">def get_action():</text>
+<text x="820" y="182" fill="#86efac" font-family="monospace" font-size="17" font-weight="700">return "DENY"</text>
+
+<text x="800" y="225" fill="#93c5fd" font-family="monospace" font-size="16">returned = get_action()</text>
+
+<g filter="url(#shadowP1)">
+<rect x="800" y="250" width="220" height="110" rx="10" fill="#0a0f1a" stroke="#334155" stroke-width="2.5" opacity="0.5"/>
+</g>
+<rect x="815" y="265" width="190" height="16" rx="3" fill="#1e293b" opacity="0.5"/>
+<text x="835" y="315" fill="#64748b" font-family="monospace" font-size="16" opacity="0.7">(빈 화면)</text>
+<text x="825" y="340" fill="#64748b" font-family="Arial, sans-serif" font-size="12" opacity="0.8">화면 출력 없음</text>
+
+<line x1="1030" y1="305" x2="1090" y2="305" stroke="#7fb2cc" stroke-width="2"/>
+<text x="1040" y="295" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="11">함수의 반환값은?</text>
+
+<g filter="url(#shadowP1)">
+<rect x="1100" y="255" width="260" height="100" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="1230" y="295" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="20" font-weight="700">"DENY"</text>
+<text x="1230" y="320" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="12">호출한 곳으로 값이 전달됨</text>
+
+<rect x="800" y="390" width="560" height="60" rx="10" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="820" y="425" fill="#e6f6ff" font-family="monospace" font-size="15">print(returned)   # DENY</text>
+
+<rect x="800" y="465" width="560" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="820" y="498" fill="#86efac" font-family="monospace" font-size="14">returned + "!"  →  "DENY!"  (정상 동작)</text>
+</svg>

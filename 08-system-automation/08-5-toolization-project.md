@@ -250,18 +250,18 @@ class Settings:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    # TODO: --config, --target, --output, --timeout,
+    # 실습 과제: --config, --target, --output, --timeout,
     #       --log-level, --log-file, --verbose, --dry-run
     ...
 
 
 def resolve_settings(args, environ: Mapping[str, str]) -> Settings:
-    # TODO: defaults < JSON < environment < CLI
+    # 실습 과제: defaults < JSON < environment < CLI
     ...
 
 
 def run_validation(settings: Settings) -> dict[str, object]:
-    # TODO: 07장 점검 로직을 함수 단위로 연결
+    # 실습 과제: 07장 점검 로직을 함수 단위로 연결
     ...
 
 
@@ -270,7 +270,7 @@ def main(
     *,
     environ: Mapping[str, str] | None = None,
 ) -> int:
-    # TODO: 설정 → 범위 → dry-run → 로그 → 점검 → 저장 → 종료 코드
+    # 실습 과제: 설정 → 범위 → dry-run → 로그 → 점검 → 저장 → 종료 코드
     ...
 
 

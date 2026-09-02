@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="580" viewBox="0 0 1500 580" role="img" aria-labelledby="title4 desc4">
+<title id="title4">LBYL은 검사와 사용 사이에 틈이 있고, EAFP는 한 번에 시도한다</title>
+<desc id="desc4">LBYL은 조건을 먼저 검사한 뒤 실제로 값을 사용하기까지 시간차가 있어 그 사이 상태가 바뀌는 경쟁 조건에 취약할 수 있는 반면, EAFP는 접근을 바로 시도하고 실패하면 예외로 처리해 검사와 사용 사이의 틈이 없음을 비교하는 타임라인</desc>
+<defs>
+  <filter id="shadowW1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="580" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">LBYL은 검사와 사용 사이에 틈이 있고, EAFP는 한 번에 시도한다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">보안 관점: 그 틈은 검사-시점과 사용-시점이 달라지는 TOCTOU류 위험과 같은 모양이다</text>
+
+<!-- LBYL timeline -->
+<text x="60" y="130" fill="#f59e0b" font-family="Arial, sans-serif" font-size="18" font-weight="700">LBYL (Look Before You Leap)</text>
+
+<line x1="90" y1="200" x2="1400" y2="200" stroke="#334155" stroke-width="3"/>
+
+<g filter="url(#shadowW1)">
+<rect x="90" y="165" width="280" height="70" rx="10" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+</g>
+<text x="110" y="192" fill="#e6f6ff" font-family="monospace" font-size="13" font-weight="700">if "port" in record:</text>
+<text x="110" y="212" fill="#93c5fd" font-family="Arial, sans-serif" font-size="11">T0: 검사</text>
+
+<rect x="420" y="180" width="480" height="40" rx="8" fill="#3f1d1d" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+<text x="660" y="205" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13" font-weight="700">이 사이에 record가 바뀔 수 있는 위험 구간</text>
+
+<g filter="url(#shadowW1)">
+<rect x="950" y="165" width="330" height="70" rx="10" fill="#102338" stroke="#38bdf8" stroke-width="2.5"/>
+</g>
+<text x="970" y="192" fill="#e6f6ff" font-family="monospace" font-size="13" font-weight="700">port = record["port"]</text>
+<text x="970" y="212" fill="#fca5a5" font-family="Arial, sans-serif" font-size="11" font-weight="700">T1: 사용 — 그 사이 삭제됐다면 KeyError 그대로 발생</text>
+
+<!-- EAFP timeline -->
+<text x="60" y="320" fill="#4ade80" font-family="Arial, sans-serif" font-size="18" font-weight="700">EAFP (Easier to Ask Forgiveness than Permission)</text>
+
+<line x1="90" y1="390" x2="1400" y2="390" stroke="#334155" stroke-width="3"/>
+
+<g filter="url(#shadowW1)">
+<rect x="90" y="355" width="480" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="110" y="382" fill="#dcfce7" font-family="monospace" font-size="13" font-weight="700">try: port = record["port"]</text>
+<text x="110" y="404" fill="#86efac" font-family="Arial, sans-serif" font-size="11">검사와 사용이 한 동작 — 틈이 없음</text>
+
+<g filter="url(#shadowW1)">
+<rect x="620" y="355" width="480" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="640" y="382" fill="#dcfce7" font-family="monospace" font-size="13" font-weight="700">except KeyError: port = None</text>
+<text x="640" y="404" fill="#86efac" font-family="Arial, sans-serif" font-size="11">키가 없으면 즉시, 안전하게 처리</text>
+
+<!-- decision guide -->
+<rect x="90" y="460" width="1310" height="100" rx="14" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="115" y="493" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">선택 기준</text>
+<text x="115" y="520" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">조건 확인이 명확하고 실패가 정상적인 분기다 → LBYL이 읽기 쉬울 수 있음</text>
+<text x="115" y="543" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">검사와 실제 작업 사이 상태가 바뀔 수 있거나 작업 자체가 가장 정확한 검증이다 → EAFP</text>
+</svg>

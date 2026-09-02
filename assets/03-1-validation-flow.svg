@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760" role="img" aria-labelledby="title4 desc4">
+<title id="title4">형식 검증과 범위 검증은 서로 다른 질문이다</title>
+<desc id="desc4">raw_port 문자열이 정수 형식 검증과 1~65535 범위 검증을 거쳐 유효한 포트가 되거나 각 단계에서 오류로 분기하는 흐름도</desc>
+<defs>
+  <linearGradient id="okGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22c55e"/><stop offset="1" stop-color="#059669"/></linearGradient>
+  <filter id="shadow4"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="760" rx="32" fill="#071a2b"/>
+<text x="60" y="60" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="30" font-weight="700">형식 검증과 범위 검증은 서로 다른 질문이다</text>
+<text x="60" y="92" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="18">raw_port = "443" 이 유효한 포트가 되기까지의 두 단계</text>
+
+<!-- raw_port start -->
+<g filter="url(#shadow4)">
+<rect x="40" y="340" width="200" height="90" rx="16" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="140" y="378" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="19" font-weight="700">raw_port</text>
+<text x="140" y="404" text-anchor="middle" fill="#9cc8dc" font-family="monospace" font-size="16">"443" (str)</text>
+
+<path d="M240 385 H298" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+<path d="M282 368 L306 385 L282 402" fill="none" stroke="#38bdf8" stroke-width="6"/>
+
+<!-- diamond 1: 형식 검증 -->
+<g filter="url(#shadow4)">
+<polygon points="430,285 560,385 430,485 300,385" fill="#102338" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="430" y="373" text-anchor="middle" fill="#fde68a" font-family="Arial, sans-serif" font-size="17" font-weight="700">① 형식 검증</text>
+<text x="430" y="398" text-anchor="middle" fill="#fde68a" font-family="monospace" font-size="14">int(raw_port)</text>
+
+<!-- success path to port(int) -->
+<path d="M560 385 H605" stroke="url(#okGrad)" stroke-width="6" stroke-linecap="round"/>
+<path d="M589 368 L613 385 L589 402" fill="none" stroke="#22c55e" stroke-width="6"/>
+<text x="562" y="360" fill="#86efac" font-family="Arial, sans-serif" font-size="15" font-weight="700">성공</text>
+
+<g filter="url(#shadow4)">
+<rect x="610" y="340" width="190" height="90" rx="16" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="705" y="378" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="19" font-weight="700">port</text>
+<text x="705" y="404" text-anchor="middle" fill="#9cc8dc" font-family="monospace" font-size="16">443 (int)</text>
+
+<path d="M800 385 H858" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+<path d="M842 368 L866 385 L842 402" fill="none" stroke="#38bdf8" stroke-width="6"/>
+
+<!-- diamond 2: 범위 검증 -->
+<g filter="url(#shadow4)">
+<polygon points="1000,285 1140,385 1000,485 860,385" fill="#102338" stroke="#f59e0b" stroke-width="3"/>
+</g>
+<text x="1000" y="373" text-anchor="middle" fill="#fde68a" font-family="Arial, sans-serif" font-size="17" font-weight="700">② 범위 검증</text>
+<text x="1000" y="398" text-anchor="middle" fill="#fde68a" font-family="monospace" font-size="13">1 &lt;= port &lt;= 65535</text>
+
+<!-- success to valid -->
+<path d="M1140 385 H1178" stroke="url(#okGrad)" stroke-width="6" stroke-linecap="round"/>
+<path d="M1162 368 L1186 385 L1162 402" fill="none" stroke="#22c55e" stroke-width="6"/>
+<text x="1142" y="360" fill="#86efac" font-family="Arial, sans-serif" font-size="15" font-weight="700">참</text>
+
+<g filter="url(#shadow4)">
+<rect x="1190" y="330" width="240" height="110" rx="16" fill="#0d2a1c" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="1310" y="372" text-anchor="middle" fill="#bbf7d0" font-family="Arial, sans-serif" font-size="19" font-weight="700">유효한 포트</text>
+<text x="1310" y="400" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="15">예: 443 → 사용 가능</text>
+
+<!-- fail path 1: ValueError -->
+<path d="M430 485 V560" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+<path d="M413 544 L430 568 L447 544" fill="none" stroke="#ef4444" stroke-width="6"/>
+<text x="450" y="530" fill="#fca5a5" font-family="Arial, sans-serif" font-size="15" font-weight="700">실패</text>
+
+<g filter="url(#shadow4)">
+<rect x="310" y="570" width="240" height="110" rx="16" fill="#2a1015" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="430" y="610" text-anchor="middle" fill="#fecaca" font-family="Arial, sans-serif" font-size="18" font-weight="700">ValueError</text>
+<text x="430" y="636" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="14">예: "443a"</text>
+<text x="430" y="660" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">숫자 형식이 아님</text>
+
+<!-- fail path 2: range error -->
+<path d="M1000 485 V560" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+<path d="M983 544 L1000 568 L1017 544" fill="none" stroke="#ef4444" stroke-width="6"/>
+<text x="1020" y="530" fill="#fca5a5" font-family="Arial, sans-serif" font-size="15" font-weight="700">거짓</text>
+
+<g filter="url(#shadow4)">
+<rect x="880" y="570" width="240" height="110" rx="16" fill="#2a1015" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="1000" y="610" text-anchor="middle" fill="#fecaca" font-family="Arial, sans-serif" font-size="18" font-weight="700">범위 오류</text>
+<text x="1000" y="636" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="14">예: 0, 70000</text>
+<text x="1000" y="660" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">변환은 성공, 범위는 벗어남</text>
+
+<text x="60" y="730" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">형식 오류(ValueError)와 범위 오류는 원인이 다르므로 서로 다른 방식으로 처리해야 한다.</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="520" viewBox="0 0 1500 520" role="img" aria-labelledby="title1 desc1">
+<title id="title1">경계값: 1 &lt;= port &lt;= 65535</title>
+<desc id="desc1">포트 범위 조건에서 경계값 0, 1, 65535, 65536이 각각 True/False로 판정되는 이유를 수직선으로 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowB1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="520" rx="32" fill="#071a2b"/>
+<text x="60" y="60" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="30" font-weight="700">경계값은 정상값 하나로는 드러나지 않는다</text>
+<text x="60" y="92" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="18">조건: 1 &lt;= port &lt;= 65535 — 경계 바로 안쪽과 바로 바깥쪽을 함께 시험한다</text>
+
+<!-- number line -->
+<line x1="120" y1="270" x2="1380" y2="270" stroke="#334155" stroke-width="4"/>
+
+<!-- invalid zone left -->
+<rect x="120" y="256" width="230" height="28" rx="6" fill="#ef4444" opacity="0.18"/>
+<!-- valid zone middle -->
+<rect x="350" y="256" width="620" height="28" rx="6" fill="#22c55e" opacity="0.18"/>
+<!-- invalid zone right -->
+<rect x="970" y="256" width="290" height="28" rx="6" fill="#ef4444" opacity="0.18"/>
+
+<!-- range bracket -->
+<path d="M 380 230 L 380 250 L 940 250 L 940 230" fill="none" stroke="#22c55e" stroke-width="3"/>
+<text x="660" y="216" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="17" font-weight="700">1 &lt;= port &lt;= 65535 (포함)</text>
+
+<!-- points: -1(implied), 0, 1, ..., 65535, 65536 -->
+<g filter="url(#shadowB1)">
+  <circle cx="200" cy="270" r="14" fill="#ef4444"/>
+</g>
+<text x="200" y="330" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="20" font-weight="700">0</text>
+<text x="200" y="358" text-anchor="middle" fill="#f87171" font-family="Arial, sans-serif" font-size="15">False</text>
+<text x="200" y="380" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">최솟값 바로 아래</text>
+
+<g filter="url(#shadowB1)">
+  <circle cx="380" cy="270" r="16" fill="#22c55e" stroke="#e6f6ff" stroke-width="3"/>
+</g>
+<text x="380" y="330" text-anchor="middle" fill="#bbf7d0" font-family="monospace" font-size="20" font-weight="700">1</text>
+<text x="380" y="358" text-anchor="middle" fill="#4ade80" font-family="Arial, sans-serif" font-size="15">True</text>
+<text x="380" y="380" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">유효한 최솟값</text>
+
+<text x="660" y="277" text-anchor="middle" fill="#7fb2cc" font-family="monospace" font-size="22">. . .</text>
+
+<g filter="url(#shadowB1)">
+  <circle cx="940" cy="270" r="16" fill="#22c55e" stroke="#e6f6ff" stroke-width="3"/>
+</g>
+<text x="940" y="330" text-anchor="middle" fill="#bbf7d0" font-family="monospace" font-size="20" font-weight="700">65535</text>
+<text x="940" y="358" text-anchor="middle" fill="#4ade80" font-family="Arial, sans-serif" font-size="15">True</text>
+<text x="940" y="380" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">유효한 최댓값</text>
+
+<g filter="url(#shadowB1)">
+  <circle cx="1120" cy="270" r="14" fill="#ef4444"/>
+</g>
+<text x="1120" y="330" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="20" font-weight="700">65536</text>
+<text x="1120" y="358" text-anchor="middle" fill="#f87171" font-family="Arial, sans-serif" font-size="15">False</text>
+<text x="1120" y="380" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="13">최댓값 바로 위</text>
+
+<!-- code panel -->
+<rect x="120" y="430" width="1260" height="60" rx="12" fill="#0d1f30" stroke="#38bdf8" stroke-width="2"/>
+<text x="150" y="468" fill="#e6f6ff" font-family="monospace" font-size="18">print(1 &lt;= port &lt;= 65535)   # port=0 → False, port=1 → True, port=65535 → True, port=65536 → False</text>
+</svg>

@@ -15,6 +15,8 @@
 - `raise`, 맨몸 `raise`, `raise ... from ...`을 목적에 맞게 사용한다.
 - 조건 검증·반환값·예외 중 함수 계약에 맞는 방식을 선택한다.
 - 한 건 실패와 전체 실패를 구분해 배치 처리 전략을 설계한다.
+- 실패를 복구 가능성에 따라 분류하고 제한된 재시도와 실패 원자성을 설계한다.
+- 구조화된 오류 정보를 남기되 민감한 원문과 중복 기록을 피한다.
 - `assert`와 사용자 입력 예외의 차이를 설명한다.
 - 원인과 해결 기준은 담되 민감정보는 노출하지 않는 오류 메시지를 작성한다.
 {% endhint %}
@@ -170,6 +172,8 @@ except ValueError as exc:
     print("레코드를 만들 수 없음:", exc)
 ```
 
+![예외는 처리하는 except를 만날 때까지 호출 스택을 타고 올라간다](../assets/03-6-exception-propagation.svg)
+
 `parse_port()`와 `make_record()`는 복구 방법을 모르므로 예외를 전파하고, 호출 경계가 실패를 사용자 메시지로 바꾼다.
 
 {% hint style="info" %}
@@ -284,6 +288,8 @@ print(result)
 print(finished)
 ```
 
+![else는 성공했을 때만, finally는 항상 실행된다](../assets/03-6-try-except-else-finally.svg)
+
 `else`를 사용하면 성공 후속 코드에서 발생한 예외를 앞의 `except`가 잘못 잡는 일을 줄인다.
 
 `finally`는 `return` 또는 예외 전파가 예정되어 있어도 먼저 실행된다.
@@ -359,6 +365,8 @@ def convert_with_note(value):
         raise
 ```
 
+![from exc는 원인을 잇고, 맨몸 raise는 같은 예외를 그대로 전달한다](../assets/03-6-raise-from-vs-bare.svg)
+
 `raise exc`보다 맨몸 `raise`가 현재 예외의 traceback 문맥을 그대로 보존하는 데 적합하다.
 
 ## 10. 검증 결과와 예외 중 무엇을 선택할까
@@ -394,7 +402,7 @@ Python 코드에서는 두 접근을 모두 볼 수 있다.
 - **EAFP**(Easier to Ask Forgiveness than Permission): 정상 작업을 시도하고 예상 예외를 처리한다.
 
 ```python
-# LBYL
+# 실행 전에 조건을 확인하는 방식(LBYL)
 if "port" in record:
     port = record["port"]
 else:
@@ -402,12 +410,14 @@ else:
 ```
 
 ```python
-# EAFP
+# 먼저 실행하고 예외를 처리하는 방식(EAFP)
 try:
     port = record["port"]
 except KeyError:
     port = None
 ```
+
+![LBYL은 검사와 사용 사이에 틈이 있고, EAFP는 한 번에 시도한다](../assets/03-6-lbyl-vs-eafp.svg)
 
 선택 기준:
 
@@ -561,6 +571,155 @@ except:
 ### 같은 예외를 잡아 그대로 무의미하게 다시 발생
 
 문맥 추가나 복구가 없다면 처음부터 잡지 않는다.
+
+## 응용 인사이트 모음: 예외를 운영 가능한 실패 정책으로 확장하기
+
+### 응용 인사이트: 예외 유형보다 실패 원인과 복구 가능성을 먼저 분류한다
+
+자동화 과정의 실패는 같은 방식으로 처리할 수 없다. 입력 형식 오류를 세 번 다시 시도해도 값은 바뀌지 않지만, 일시적인 응답 지연은 다음 시도에서 회복될 수 있다. 프로그래밍 오류를 “일시적 실패”로 오인해 재시도하면 같은 버그를 반복 실행하며 원인 발견만 늦어진다.
+
+| 실패 분류 | 예 | 일반적인 대응 |
+|---|---|---|
+| 입력·계약 오류 | 포트 범위 위반, 필수 필드 누락 | 입력 수정 요청 또는 해당 항목 격리 |
+| 일시적 실패 | 제한 시간 초과, 잠시 사용할 수 없는 자원 | 횟수와 시간을 제한한 재시도 |
+| 영구적 환경 실패 | 잘못된 설정, 권한 없음 | 즉시 중단하고 설정·권한 수정 |
+| 프로그래밍 오류 | 잘못된 변수명, 예상하지 못한 자료형 처리 | 숨기지 말고 traceback으로 결함 수정 |
+
+예외 클래스만 보고 정책을 자동 결정해서는 안 된다. 예를 들어 `KeyError`는 외부 레코드의 필수 필드 누락일 수도 있고 개발자가 내부 딕셔너리 키를 잘못 쓴 버그일 수도 있다. **어떤 작업에서, 어떤 계약 아래 발생했는가**가 분류 기준이다.
+
+{% hint style="info" %}
+사고 질문: 사용자가 `"abc"`를 포트로 입력해 `ValueError`가 발생했다면 재시도가 의미 있으려면 무엇이 달라져야 하는가? 같은 입력을 그대로 다시 실행하는 것은 복구인가, 실패 반복인가?
+{% endhint %}
+
+### 응용 인사이트: 예외 경계는 기술적 실패를 정책 결정으로 바꾸는 곳이다
+
+낮은 수준의 변환 함수는 어떤 화면을 보여 줄지, 전체 처리를 중단할지 알지 못한다. 따라서 구체적인 예외를 전달하고, 여러 작업을 조정하는 바깥 함수가 fail-fast·best-effort 같은 정책을 선택한다.
+
+```python
+def parse_count(text):
+    count = int(text)
+    if count < 0:
+        raise ValueError("count는 0 이상이어야 합니다")
+    return count
+
+
+def collect_counts(values):
+    counts = []
+    errors = []
+
+    for position, value in enumerate(values):
+        try:
+            counts.append(parse_count(value))
+        except ValueError:
+            errors.append({"position": position, "code": "INVALID_COUNT"})
+
+    return {"counts": counts, "errors": errors}
+
+
+result = collect_counts(["3", "invalid", "1"])
+assert result["counts"] == [3, 1]
+assert result["errors"] == [{"position": 1, "code": "INVALID_COUNT"}]
+```
+
+여기서 `parse_count()`가 오류 목록까지 관리하면 재사용 범위가 줄고, 프로그램 최상단에서만 모든 예외를 한꺼번에 잡으면 어떤 항목을 복구할 수 있었는지 잃는다. 경계는 무조건 가장 바깥이나 가장 안쪽이 아니라 **복구 정책을 결정할 충분한 문맥이 있는 위치**다.
+
+{% hint style="warning" %}
+같은 예외를 낮은 함수와 중간 함수와 최상위 함수에서 모두 출력하면 오류 한 건이 여러 건처럼 보일 수 있다. 낮은 계층은 문맥을 추가해 전파하고, 선택한 관찰 경계에서 한 번 기록하는 방식을 우선한다.
+{% endhint %}
+
+### 응용 인사이트: 재시도는 예외를 잡는 기능이 아니라 제한된 복구 알고리즘이다
+
+재시도에는 대상 예외, 최대 횟수, 성공 조건, 최종 실패 전달 방식이 모두 필요하다. 다음 함수는 교육용으로 `TimeoutError`만 제한적으로 다시 시도한다. 실제 외부 작업의 대기 간격과 시간 제한은 사용하는 라이브러리의 정책과 함께 설계한다.
+
+[03-4](03-4-loops.md#응용-인사이트-반복문은-상태-전이와-종료-증명을-함께-설계한다)가 반복 횟수와 종료 보장을 다뤘다면, 여기서는 **어떤 실패만 다시 시도할지**와 같은 작업을 반복해도 안전한지를 추가로 판단한다.
+
+```python
+def retry_on_timeout(operation, *, max_attempts=3):
+    if max_attempts < 1:
+        raise ValueError("max_attempts는 1 이상이어야 합니다")
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return operation()
+        except TimeoutError:
+            if attempt == max_attempts:
+                raise
+
+
+outcomes = iter([TimeoutError("temporary"), "READY"])
+
+
+def simulated_operation():
+    outcome = next(outcomes)
+    if isinstance(outcome, Exception):
+        raise outcome
+    return outcome
+
+
+assert retry_on_timeout(simulated_operation, max_attempts=3) == "READY"
+```
+
+`except Exception`으로 모든 실패를 재시도하면 잘못된 인자나 코드 결함까지 반복한다. 횟수 제한이 없으면 무한 반복이 되고, 외부 상태를 변경하는 작업을 무심코 반복하면 같은 변경이 중복될 수 있다. 따라서 재시도 대상 작업은 여러 번 실행해도 안전한지 확인하고, 안전하지 않다면 중복 방지 식별자 같은 별도 설계가 필요하다.
+
+### 응용 인사이트: 로그는 복구 결과를 관찰하게 하되 원문을 복제하지 않는다
+
+best-effort 처리는 계속 실행된다는 장점이 있지만, 오류를 결과 밖에 남기지 않으면 조용한 데이터 손실이 된다. 사람이 읽는 자유 형식 문자열만 쌓기보다 위치·오류 코드·단계처럼 검색 가능한 필드를 기록한다.
+
+```python
+def make_error_record(*, position, error_code, stage):
+    return {
+        "position": position,
+        "error_code": error_code,
+        "stage": stage,
+    }
+
+
+error = make_error_record(
+    position=4,
+    error_code="INVALID_PORT",
+    stage="normalize",
+)
+assert error["error_code"] == "INVALID_PORT"
+```
+
+오류 객체의 전체 문자열이나 입력 원문을 그대로 저장하는 방식은 간단하지만 비밀번호·토큰 같은 값이 섞일 수 있다. 안전한 코드와 위치를 기본으로 남기고, 원문이 꼭 필요하면 허용 필드와 길이·마스킹 정책을 먼저 정한다. 반대로 아무 정보도 남기지 않는 `except: pass`는 처리 완료와 데이터 누락을 구분할 수 없게 만든다.
+
+{% hint style="info" %}
+사고 질문: 오류 건수만 20건인 결과와, 어느 단계에서 어떤 오류 코드가 몇 건 발생했는지 포함한 결과 중 어느 쪽이 정책 변경에 더 도움이 되는가? 행 전체를 저장하지 않고도 재현에 필요한 정보를 만들 수 있는가?
+{% endhint %}
+
+### 응용 인사이트: 실패 원자성은 결과 상태를 바꾸기 전에 검증을 끝내는 설계다
+
+목록을 변환하면서 대상 리스트에 바로 추가하면 중간 항목에서 실패했을 때 앞부분만 반영된 상태가 남는다. “모두 성공하면 교체하고 하나라도 실패하면 기존 상태를 유지한다”는 요구사항에는 임시 결과에 먼저 작업한 뒤 마지막에 반영하는 방식을 사용한다.
+
+```python
+def replace_with_valid_ports(target, values):
+    staged = []
+
+    for value in values:
+        port = int(value)
+        if not 1 <= port <= 65535:
+            raise ValueError(f"포트 범위를 벗어났습니다: {port}")
+        staged.append(port)
+
+    target[:] = staged
+
+
+ports = [80, 443]
+
+try:
+    replace_with_valid_ports(ports, ["22", "invalid", "3389"])
+except ValueError:
+    pass
+
+assert ports == [80, 443]
+```
+
+임시 목록 때문에 추가 메모리를 사용하지만, 호출자가 부분 반영 상태를 해석할 필요가 없어진다. 데이터가 매우 크거나 부분 성공 자체가 요구사항이라면 항목별 결과를 명시적으로 반환하는 best-effort가 더 적합하다. 외부 파일·데이터베이스까지 같은 보장을 확장하는 방법은 각 저장 수단의 원자적 교체나 트랜잭션을 배울 때 다시 다룬다.
+
+{% hint style="warning" %}
+`except ValueError: pass`는 일반 코드에서는 피해야 한다. 위 예에서는 실패 뒤 `ports`가 보존되는지만 검증하기 위해 의도적으로 사용했다. 실제 호출 경계에서는 실패를 기록하거나 다시 전달해야 한다.
+{% endhint %}
 
 ## 17. 미니 실습: 이벤트 행 파싱과 오류 보고
 
@@ -946,7 +1105,7 @@ fail-fast 정책이라면 첫 `ValueError`를 기록한 뒤 다시 발생시키�
 
 ## 21. 완료 기준
 
-다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
+다음은 권장·심화 내용을 포함한 장 전체의 최종 완료 기준이다. 첫 학습에서는 앞의 학습 우선순위 표에서 필수 항목을 먼저 확인하고 나머지를 단계적으로 확장한다.
 
 - [ ] 문법 오류·실행 예외·논리 오류를 구분한다.
 - [ ] traceback의 마지막 줄과 호출 프레임에서 원인 위치를 찾는다.
@@ -956,6 +1115,8 @@ fail-fast 정책이라면 첫 `ValueError`를 기록한 뒤 다시 발생시키�
 - [ ] `raise`, 맨몸 `raise`, `raise ... from ...`을 구분한다.
 - [ ] 정상 업무 상태는 반환하고 계약 실패는 예외로 표현한다.
 - [ ] fail-fast와 best-effort 처리 정책을 요구사항에 맞게 선택한다.
+- [ ] 재시도 가능한 실패와 즉시 수정해야 할 실패를 구분하고 최대 시도 횟수를 둔다.
+- [ ] 임시 결과에 먼저 작업해 실패 시 기존 상태를 보존한다.
 - [ ] 사용자 입력 검증에 `assert`를 사용하지 않는 이유를 설명한다.
 - [ ] 오류를 숨기지 않으면서 민감정보를 제외한 메시지를 작성한다.
 - [ ] 센서 배치 전이 연습에서 정상·오류·건너뜀 결과를 분리한다.
@@ -969,6 +1130,7 @@ fail-fast 정책이라면 첫 `ValueError`를 기록한 뒤 다시 발생시키�
 - 새 문맥으로 바꿀 때는 `raise ... from exc`, 같은 예외를 다시 전달할 때는 맨몸 `raise`를 사용한다.
 - bool·상태 반환과 예외를 정상 결과인지 계약 실패인지에 따라 구분한다.
 - 배치 처리에서는 실패를 건너뛰더라도 오류 건수와 위치를 관찰 가능하게 남긴다.
+- 재시도는 일시적인 실패에만 횟수를 제한해 적용하고, 부분 반영이 허용되지 않으면 임시 결과를 검증한 뒤 상태를 바꾼다.
 - `assert`는 내부 가정과 테스트용이며 사용자 입력·보안 검사를 대신하지 않는다.
 - 오류 메시지는 해결 기준을 제공하되 비밀번호·토큰·민감한 원문을 포함하지 않는다.
 

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="800" viewBox="0 0 1500 800" role="img" aria-labelledby="title2 desc2">
+<title id="title2">continue, break, 반복문 else의 실행 흐름</title>
+<desc id="desc2">continue는 다음 반복으로 건너뛰고, break는 루프를 즉시 종료하며 else를 건너뛰고, break 없이 모든 값을 소진해야만 else가 실행됨을 보여주는 흐름도</desc>
+<defs>
+  <filter id="shadowF1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+  <marker id="arrowGreenF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/>
+  </marker>
+  <marker id="arrowRedF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+  </marker>
+  <marker id="arrowAmberF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+  </marker>
+</defs>
+<rect width="1500" height="800" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">continue는 다음 반복으로, break는 루프 밖으로, else는 break가 없을 때만</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">events = ["ALLOW", "", "DENY", "STOP", "DENY"]</text>
+
+<!-- loop check -->
+<polygon points="400,120 520,175 400,230 280,175" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+<text x="400" y="171" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">다음 이벤트가</text>
+<text x="400" y="188" text-anchor="middle" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">있는가?</text>
+
+<line x1="400" y1="230" x2="400" y2="270" stroke="#7fb2cc" stroke-width="2.5" marker-end="url(#arrowF1)"/>
+<text x="420" y="255" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">있음</text>
+
+<!-- not event diamond -->
+<polygon points="400,275 520,330 400,385 280,330" fill="#102338" stroke="#f59e0b" stroke-width="2.5"/>
+<text x="400" y="326" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">not event ?</text>
+<text x="400" y="345" text-anchor="middle" fill="#93c5fd" font-family="Arial, sans-serif" font-size="11">(빈 문자열)</text>
+
+<!-- continue path: loops back to loop-check -->
+<path d="M 280 330 L 150 330 L 150 175 L 278 175" fill="none" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrowAmberF1)"/>
+<rect x="65" y="235" width="100" height="46" rx="8" fill="#1f1a12" stroke="#f59e0b" stroke-width="1.5"/>
+<text x="115" y="255" text-anchor="middle" fill="#fcd34d" font-family="monospace" font-size="12" font-weight="700">continue</text>
+<text x="115" y="272" text-anchor="middle" fill="#fcd34d" font-family="Arial, sans-serif" font-size="11">다음 반복으로</text>
+
+<line x1="400" y1="385" x2="400" y2="420" stroke="#7fb2cc" stroke-width="2.5" marker-end="url(#arrowF1)"/>
+<text x="420" y="405" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">아니요</text>
+
+<!-- STOP diamond -->
+<polygon points="400,425 520,480 400,535 280,480" fill="#102338" stroke="#ef4444" stroke-width="2.5"/>
+<text x="400" y="476" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">event ==</text>
+<text x="400" y="493" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">"STOP" ?</text>
+
+<line x1="520" y1="480" x2="640" y2="480" stroke="#ef4444" stroke-width="3" marker-end="url(#arrowRedF1)"/>
+<text x="545" y="465" fill="#f87171" font-family="Arial, sans-serif" font-size="13" font-weight="700">예</text>
+
+<g filter="url(#shadowF1)">
+<rect x="650" y="440" width="260" height="80" rx="14" fill="#3f1d1d" stroke="#ef4444" stroke-width="3"/>
+</g>
+<text x="780" y="472" text-anchor="middle" fill="#fecaca" font-family="monospace" font-size="16" font-weight="700">break</text>
+<text x="780" y="496" text-anchor="middle" fill="#fca5a5" font-family="Arial, sans-serif" font-size="13">루프를 즉시 종료</text>
+
+<line x1="780" y1="520" x2="780" y2="580" stroke="#ef4444" stroke-width="3" marker-end="url(#arrowRedF1)"/>
+
+<g filter="url(#shadowF1)">
+<rect x="650" y="590" width="260" height="80" rx="14" fill="#1f1a12" stroke="#64748b" stroke-width="2.5"/>
+</g>
+<text x="780" y="622" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14" font-weight="700">✗ else 건너뜀</text>
+<text x="780" y="646" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">"처리: DENY"까지 도달 못 함</text>
+
+<line x1="400" y1="535" x2="400" y2="570" stroke="#7fb2cc" stroke-width="2.5" marker-end="url(#arrowF1)"/>
+<text x="420" y="555" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">아니요</text>
+
+<g filter="url(#shadowF1)">
+<rect x="280" y="580" width="240" height="70" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="400" y="612" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="14">print("처리:", event)</text>
+<text x="400" y="634" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="12">ALLOW, DENY 출력됨</text>
+
+<!-- loop back from print to loop-check (right side up) -->
+<path d="M 520 615 L 600 615 L 600 175 L 522 175" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenF1)"/>
+<rect x="605" y="373" width="120" height="46" rx="8" fill="#0f2417" stroke="#4ade80" stroke-width="1.5"/>
+<text x="665" y="393" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="12" font-weight="700">처리 후</text>
+<text x="665" y="410" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="11">다음 반복으로</text>
+
+<!-- loop check "no more events" exit -->
+<line x1="280" y1="175" x2="150" y2="175" stroke="none"/>
+<path d="M 400 120 L 400 90 L 260 90 L 260 720" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrowGreenF1)"/>
+<rect x="60" y="595" width="190" height="46" rx="8" fill="#0f2417" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="5,3"/>
+<text x="155" y="615" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="12" font-weight="700">모두 소진 (break 없었음)</text>
+<text x="155" y="632" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="11">→ 정상 종료</text>
+
+<g filter="url(#shadowF1)">
+<rect x="130" y="690" width="260" height="80" rx="14" fill="#14532d" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="260" y="722" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="16" font-weight="700">else 실행</text>
+<text x="260" y="746" text-anchor="middle" fill="#86efac" font-family="Arial, sans-serif" font-size="13">break 없이 정상 종료했을 때만</text>
+
+<!-- footer summary card -->
+<rect x="1000" y="120" width="440" height="440" rx="16" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="1030" y="155" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="16" font-weight="700">이 예시의 실제 출력</text>
+<text x="1030" y="190" fill="#93c5fd" font-family="monospace" font-size="14">처리: ALLOW</text>
+<text x="1030" y="215" fill="#93c5fd" font-family="monospace" font-size="14">처리: DENY</text>
+<text x="1030" y="245" fill="#64748b" font-family="Arial, sans-serif" font-size="13">(빈 문자열 → continue로 건너뜀)</text>
+<text x="1030" y="265" fill="#64748b" font-family="Arial, sans-serif" font-size="13">("STOP" → break로 종료, 이후 DENY 도달 못 함)</text>
+<line x1="1030" y1="290" x2="1410" y2="290" stroke="#334155" stroke-width="1.5"/>
+<text x="1030" y="322" fill="#fcd34d" font-family="Arial, sans-serif" font-size="14" font-weight="700">핵심 구분</text>
+<text x="1030" y="352" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13">continue → 이번 반복만 건너뛰고 계속</text>
+<text x="1030" y="378" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13">break → 반복문 자체를 즉시 종료</text>
+<text x="1030" y="404" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13">else → break 없이 끝났을 때만 실행</text>
+<text x="1030" y="430" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13">→ "조건이 거짓"이 아니라</text>
+<text x="1030" y="452" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="13">   "중단 없이 완료"를 의미한다</text>
+</svg>

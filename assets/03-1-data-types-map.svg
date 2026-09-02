@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="820" viewBox="0 0 1500 820" role="img" aria-labelledby="title2 desc2">
+<title id="title2">여섯 가지 기본 자료형 지도</title>
+<desc id="desc2">int, float, bool, str, None, bytes 여섯 자료형을 예시 값과 용도로 정리한 카드</desc>
+<defs>
+  <filter id="shadow2"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="820" rx="32" fill="#071a2b"/>
+<text x="60" y="66" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="32" font-weight="700">값의 의미에 맞는 자료형 선택하기</text>
+<text x="60" y="98" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="19">같은 모양의 값이라도 표현하는 의미에 따라 자료형이 달라진다</text>
+
+<!-- Card template repeated with different colors/content -->
+<!-- int -->
+<g filter="url(#shadow2)">
+<rect x="60" y="150" width="440" height="300" rx="20" fill="#102338" stroke="#3b82f6" stroke-width="3"/>
+<rect x="60" y="150" width="440" height="56" rx="20" fill="#3b82f6"/>
+<rect x="60" y="182" width="440" height="24" fill="#3b82f6"/>
+<text x="86" y="187" fill="#071a2b" font-family="monospace" font-size="26" font-weight="700">int</text>
+</g>
+<text x="280" y="300" text-anchor="middle" fill="#dbeafe" font-family="monospace" font-size="42" font-weight="700">443</text>
+<text x="86" y="360" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">포트, 횟수, PID처럼</text>
+<text x="86" y="386" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">소수점 없는 정수</text>
+<text x="86" y="422" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">비교·계산 가능</text>
+
+<!-- float -->
+<g filter="url(#shadow2)">
+<rect x="530" y="150" width="440" height="300" rx="20" fill="#102338" stroke="#06b6d4" stroke-width="3"/>
+<rect x="530" y="150" width="440" height="56" rx="20" fill="#06b6d4"/>
+<rect x="530" y="182" width="440" height="24" fill="#06b6d4"/>
+<text x="556" y="187" fill="#071a2b" font-family="monospace" font-size="26" font-weight="700">float</text>
+</g>
+<text x="750" y="300" text-anchor="middle" fill="#cffafe" font-family="monospace" font-size="42" font-weight="700">0.85</text>
+<text x="556" y="360" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">비율, 점수, 측정 시간처럼</text>
+<text x="556" y="386" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">소수점이 있는 수</text>
+<text x="556" y="422" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">0.1+0.2 오차 주의</text>
+
+<!-- bool -->
+<g filter="url(#shadow2)">
+<rect x="1000" y="150" width="440" height="300" rx="20" fill="#102338" stroke="#22c55e" stroke-width="3"/>
+<rect x="1000" y="150" width="440" height="56" rx="20" fill="#22c55e"/>
+<rect x="1000" y="182" width="440" height="24" fill="#22c55e"/>
+<text x="1026" y="187" fill="#071a2b" font-family="monospace" font-size="26" font-weight="700">bool</text>
+</g>
+<text x="1220" y="300" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="36" font-weight="700">True / False</text>
+<text x="1026" y="360" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">탐지 여부, 성공 여부처럼</text>
+<text x="1026" y="386" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">두 상태 중 하나</text>
+<text x="1026" y="422" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">int의 하위 자료형</text>
+
+<!-- str -->
+<g filter="url(#shadow2)">
+<rect x="60" y="480" width="440" height="300" rx="20" fill="#102338" stroke="#f59e0b" stroke-width="3"/>
+<rect x="60" y="480" width="440" height="56" rx="20" fill="#f59e0b"/>
+<rect x="60" y="512" width="440" height="24" fill="#f59e0b"/>
+<text x="86" y="517" fill="#071a2b" font-family="monospace" font-size="26" font-weight="700">str</text>
+</g>
+<text x="280" y="630" text-anchor="middle" fill="#fef3c7" font-family="monospace" font-size="30" font-weight="700">"198.51.100.9"</text>
+<text x="86" y="690" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">사용자 입력, IP, URL, 로그</text>
+<text x="86" y="716" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">원문처럼 문자로 다룰 값</text>
+<text x="86" y="752" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">input() 결과는 항상 str</text>
+
+<!-- None -->
+<g filter="url(#shadow2)">
+<rect x="530" y="480" width="440" height="300" rx="20" fill="#102338" stroke="#64748b" stroke-width="3"/>
+<rect x="530" y="480" width="440" height="56" rx="20" fill="#64748b"/>
+<rect x="530" y="512" width="440" height="24" fill="#64748b"/>
+<text x="556" y="517" fill="#0b1220" font-family="monospace" font-size="26" font-weight="700">None</text>
+</g>
+<text x="750" y="630" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="40" font-weight="700">None</text>
+<text x="556" y="690" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">아직 없거나</text>
+<text x="556" y="716" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">확인되지 않은 값</text>
+<text x="556" y="752" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">0, "", False와는 다른 의미</text>
+
+<!-- bytes -->
+<g filter="url(#shadow2)">
+<rect x="1000" y="480" width="440" height="300" rx="20" fill="#102338" stroke="#a855f7" stroke-width="3"/>
+<rect x="1000" y="480" width="440" height="56" rx="20" fill="#a855f7"/>
+<rect x="1000" y="512" width="440" height="24" fill="#a855f7"/>
+<text x="1026" y="517" fill="#1a0b2e" font-family="monospace" font-size="26" font-weight="700">bytes</text>
+</g>
+<text x="1220" y="630" text-anchor="middle" fill="#f3e8ff" font-family="monospace" font-size="34" font-weight="700">b"MZ"</text>
+<text x="1026" y="690" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">파일 헤더, 패킷처럼</text>
+<text x="1026" y="716" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="18">바이트 단위 원시 데이터</text>
+<text x="1026" y="752" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="15">encode() / decode()로 str과 상호 변환</text>
+</svg>

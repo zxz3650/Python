@@ -350,25 +350,25 @@ from pathlib import Path
 
 
 def save_new_tasks(path, tasks):
-    # TODO: 각 항목이 str이고 줄바꿈을 포함하지 않는지 검증
-    # TODO: x 모드와 UTF-8로 새 파일 생성
-    # TODO: 한 항목과 줄바꿈을 함께 기록
+    # 실습 과제: 각 항목이 str이고 줄바꿈을 포함하지 않는지 검증
+    # 실습 과제: x 모드와 UTF-8로 새 파일 생성
+    # 실습 과제: 한 항목과 줄바꿈을 함께 기록
     raise NotImplementedError
 
 
 def load_numbered_tasks(path):
     records = []
 
-    # TODO: r 모드와 UTF-8로 열기
-    # TODO: enumerate(..., start=1)로 한 줄씩 반복
-    # TODO: 줄 끝 하나만 제거하고 (행 번호, 작업) 튜플 저장
+    # 실습 과제: r 모드와 UTF-8로 열기
+    # 실습 과제: enumerate(..., start=1)로 한 줄씩 반복
+    # 실습 과제: 줄 끝 하나만 제거하고 (행 번호, 작업) 튜플 저장
 
     return records
 
 
 def append_history(path, message):
-    # TODO: message의 자료형과 줄바꿈 포함 여부 검증
-    # TODO: a 모드로 message와 줄바꿈을 함께 기록
+    # 실습 과제: message의 자료형과 줄바꿈 포함 여부 검증
+    # 실습 과제: a 모드로 message와 줄바꿈을 함께 기록
     raise NotImplementedError
 ```
 

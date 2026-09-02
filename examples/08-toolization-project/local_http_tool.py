@@ -1,4 +1,4 @@
-"""Turn the chapter 07 loopback HTTP validator into an automation-friendly CLI."""
+"""07장의 루프백 HTTP 검증기를 자동화에 적합한 CLI 도구로 확장한다."""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ LOGGER = logging.getLogger("local_http_tool")
 
 
 class SettingsError(ValueError):
-    """Raised when configuration cannot form a safe, usable setting set."""
+    """설정값으로 안전하고 사용 가능한 구성을 만들 수 없을 때 발생한다."""
 
 
 @dataclass(frozen=True)
@@ -134,7 +134,7 @@ def load_json_config(path: Path | None) -> dict[str, object]:
 
 
 def environment_settings(environ: Mapping[str, str]) -> dict[str, object]:
-    """Read only the documented non-secret variables, never the whole environment."""
+    """전체 환경이 아닌, 문서화된 비밀정보 제외 환경 변수만 읽는다."""
     return {
         setting: environ[name]
         for setting, name in ENVIRONMENT_KEYS.items()
@@ -146,7 +146,7 @@ def resolve_settings(
     args: argparse.Namespace,
     environ: Mapping[str, str],
 ) -> Settings:
-    """Resolve values using CLI > environment > JSON > defaults."""
+    """CLI, 환경 변수, JSON, 기본값 순서의 우선순위로 설정을 결정한다."""
     values = dict(DEFAULTS)
     values.update(load_json_config(args.config))
     values.update(environment_settings(environ))
@@ -196,7 +196,7 @@ def resolve_settings(
 
 
 def validate_loopback_url(base_url: str) -> tuple[str, int, str]:
-    """Accept only HTTP URLs whose literal host or localhost resolves to loopback."""
+    """호스트 주소 또는 localhost가 루프백으로 해석되는 HTTP URL만 허용한다."""
     try:
         parts = urlsplit(base_url)
     except ValueError as error:
@@ -252,7 +252,7 @@ def validate_loopback_url(base_url: str) -> tuple[str, int, str]:
 
 
 def configure_logging(level: str, path: Path) -> None:
-    """Configure event-only logs; callers never pass headers, bodies, or environment."""
+    """이벤트 로그만 설정하며 헤더·본문·환경 변수는 기록하지 않는다."""
     path.parent.mkdir(parents=True, exist_ok=True)
     for handler in LOGGER.handlers[:]:
         LOGGER.removeHandler(handler)
@@ -393,7 +393,7 @@ def run_validation(settings: Settings) -> dict[str, Any]:
     checks = [check_tcp_connection(host, port, settings.timeout)]
 
     with requests.Session() as session:
-        # Ignore proxy and .netrc settings so the local-only boundary is explicit.
+        # 로컬 전용 통신 경계를 분명히 유지하도록 프록시와 .netrc 설정을 사용하지 않는다.
         session.trust_env = False
         session.headers.update({"User-Agent": "python-basic-local-tool/1.0"})
         checks.extend(
@@ -405,7 +405,7 @@ def run_validation(settings: Settings) -> dict[str, Any]:
         )
 
     for item in checks:
-        # Do not log evidence, headers, response bodies, or environment values.
+        # 증거 데이터·헤더·응답 본문·환경 변수 값은 로그에 기록하지 않는다.
         LOGGER.info("check_complete name=%s status=%s", item["check"], item["status"])
 
     return {

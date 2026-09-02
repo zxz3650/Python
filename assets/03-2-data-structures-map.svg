@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="840" viewBox="0 0 1500 840" role="img" aria-labelledby="title6 desc6">
+<title id="title6">list, tuple, set, dict — 작업을 기준으로 고르는 네 가지 자료구조</title>
+<desc id="desc6">순서, 중복, 변경 가능 여부와 적합한 작업을 기준으로 list, tuple, set, dict를 비교하고 list[dict] 조합을 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadow6"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+</defs>
+<rect width="1500" height="840" rx="32" fill="#071a2b"/>
+<text x="60" y="60" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="30" font-weight="700">자료구조는 모양이 아니라 작업으로 고른다</text>
+<text x="60" y="92" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="18">순서·중복·변경 가능 여부가 다르면 적합한 작업도 다르다</text>
+
+<!-- list -->
+<g filter="url(#shadow6)">
+<rect x="60" y="140" width="680" height="230" rx="20" fill="#102338" stroke="#3b82f6" stroke-width="3"/>
+<rect x="60" y="140" width="680" height="54" rx="20" fill="#3b82f6"/>
+<rect x="60" y="170" width="680" height="24" fill="#3b82f6"/>
+<text x="86" y="176" fill="#071a2b" font-family="monospace" font-size="24" font-weight="700">list</text>
+</g>
+<text x="86" y="240" fill="#e6f6ff" font-family="monospace" font-size="19">[22, 80, 443]</text>
+<text x="86" y="272" fill="#93c5fd" font-family="Arial, sans-serif" font-size="15">순서 있음 · 중복 허용 · 변경 가능</text>
+<text x="86" y="304" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">여러 값을 순서대로</text>
+<text x="86" y="330" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">저장·추가·수정</text>
+<text x="86" y="358" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="14">append · extend · sort</text>
+
+<!-- tuple -->
+<g filter="url(#shadow6)">
+<rect x="780" y="140" width="660" height="230" rx="20" fill="#102338" stroke="#a855f7" stroke-width="3"/>
+<rect x="780" y="140" width="660" height="54" rx="20" fill="#a855f7"/>
+<rect x="780" y="170" width="660" height="24" fill="#a855f7"/>
+<text x="806" y="176" fill="#1a0b2e" font-family="monospace" font-size="24" font-weight="700">tuple</text>
+</g>
+<text x="806" y="240" fill="#f3e8ff" font-family="monospace" font-size="17">("tcp", "198.51.100.9", 443)</text>
+<text x="806" y="272" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="15">순서 있음 · 중복 허용 · 항목 재대입 불가</text>
+<text x="806" y="304" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">변경하면 안 되는</text>
+<text x="806" y="330" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">고정된 묶음 표현</text>
+<text x="806" y="358" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="14">protocol, ip, port = endpoint</text>
+
+<!-- set -->
+<g filter="url(#shadow6)">
+<rect x="60" y="400" width="680" height="230" rx="20" fill="#102338" stroke="#22c55e" stroke-width="3"/>
+<rect x="60" y="400" width="680" height="54" rx="20" fill="#22c55e"/>
+<rect x="60" y="430" width="680" height="24" fill="#22c55e"/>
+<text x="86" y="436" fill="#071a2b" font-family="monospace" font-size="24" font-weight="700">set</text>
+</g>
+<text x="86" y="500" fill="#dcfce7" font-family="monospace" font-size="16">{"10.0.0.5", "198.51.100.9"}</text>
+<text x="86" y="532" fill="#86efac" font-family="Arial, sans-serif" font-size="15">순서에 의존하지 않음 · 중복 제거 · 변경 가능</text>
+<text x="86" y="564" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">고유값, 중복 제거,</text>
+<text x="86" y="590" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">빠른 포함 확인·집합 연산</text>
+<text x="86" y="618" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="14">observed &amp; blocked, observed - blocked</text>
+
+<!-- dict -->
+<g filter="url(#shadow6)">
+<rect x="780" y="400" width="660" height="230" rx="20" fill="#102338" stroke="#f59e0b" stroke-width="3"/>
+<rect x="780" y="400" width="660" height="54" rx="20" fill="#f59e0b"/>
+<rect x="780" y="430" width="660" height="24" fill="#f59e0b"/>
+<text x="806" y="436" fill="#071a2b" font-family="monospace" font-size="24" font-weight="700">dict</text>
+</g>
+<text x="806" y="500" fill="#fef3c7" font-family="monospace" font-size="16">{"action": "DENY", "port": 443}</text>
+<text x="806" y="532" fill="#fcd34d" font-family="Arial, sans-serif" font-size="15">입력 순서 유지 · 키 중복 불가 · 변경 가능</text>
+<text x="806" y="564" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">이름이 붙은 속성과</text>
+<text x="806" y="590" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="17">빠른 키 조회</text>
+<text x="806" y="618" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="14">event["ip"], event.get("severity")</text>
+
+<!-- footer combo: list[dict] -->
+<g filter="url(#shadow6)">
+<rect x="60" y="650" width="1380" height="170" rx="20" fill="#0d1f30" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="90" y="690" fill="#e6f6ff" font-family="monospace" font-size="22" font-weight="700">list[dict]</text>
+<text x="90" y="716" fill="#bfe6f7" font-family="Arial, sans-serif" font-size="16">이름표가 있는 이벤트가 여러 개일 때 — list 안에 dict를 담는다</text>
+
+<rect x="330" y="742" width="1060" height="104" rx="14" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="350" y="802" fill="#7fb2cc" font-family="monospace" font-size="30" font-weight="700">[</text>
+
+<g>
+<rect x="390" y="760" width="280" height="66" rx="10" fill="#0f2437" stroke="#f59e0b" stroke-width="2"/>
+<text x="530" y="786" text-anchor="middle" fill="#fcd34d" font-family="monospace" font-size="14" font-weight="700">events[0]</text>
+<text x="530" y="810" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">{"action": "ALLOW", ...}</text>
+</g>
+<g>
+<rect x="695" y="760" width="280" height="66" rx="10" fill="#0f2437" stroke="#f59e0b" stroke-width="2"/>
+<text x="835" y="786" text-anchor="middle" fill="#fcd34d" font-family="monospace" font-size="14" font-weight="700">events[1]</text>
+<text x="835" y="810" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">{"action": "DENY", ...}</text>
+</g>
+<g>
+<rect x="1000" y="760" width="280" height="66" rx="10" fill="#0f2437" stroke="#f59e0b" stroke-width="2"/>
+<text x="1140" y="786" text-anchor="middle" fill="#fcd34d" font-family="monospace" font-size="14" font-weight="700">events[2]</text>
+<text x="1140" y="810" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="13">{"action": "DENY", ...}</text>
+</g>
+<text x="1350" y="802" fill="#7fb2cc" font-family="monospace" font-size="30" font-weight="700">]</text>
+</svg>

@@ -16,6 +16,7 @@
 - 지역·바깥 함수·전역·내장 스코프의 이름 탐색 순서를 설명한다.
 - 순수 함수, 부수 효과, 단일 책임을 기준으로 함수를 설계한다.
 - docstring·타입 힌트·`assert`로 함수의 계약과 경계값을 검증한다.
+- 판단 함수를 인자로 전달하고 작은 함수를 처리 흐름으로 조합한다.
 {% endhint %}
 
 ## 학습 우선순위
@@ -24,7 +25,7 @@
 | --- | --- |
 | 필수 | 함수 정의·호출, 매개변수·인자, `return`, 조기 반환 |
 | 권장 | 기본값, 변경 가능한 기본값, 객체 전달, 스코프, 단일 책임 |
-| 심화 | 키워드 전용·가변 인자, `nonlocal`, 콜백·lambda, 재귀 |
+| 심화 | 키워드 전용·가변 인자, `nonlocal`, 콜백·lambda, 의존성 주입 용어, 재귀 |
 
 ## 학습 범위와 연결
 
@@ -174,6 +175,8 @@ returned = get_action()
 print(shown)      # None
 print(returned)   # DENY
 ```
+
+![print()은 사람이 보는 것, return은 코드가 쓰는 것](../assets/03-5-return-vs-print.svg)
 
 `show_action()`은 화면에 출력하지만 명시적인 반환값이 없다. Python 함수는 `return`이 없으면 `None`을 반환한다.
 
@@ -374,6 +377,8 @@ print(add_tag_bad("web"))       # ['web']
 print(add_tag_bad("critical"))  # ['web', 'critical']
 ```
 
+![기본값은 호출마다가 아니라 def를 실행할 때 한 번 만들어진다](../assets/03-5-mutable-default.svg)
+
 호출마다 새 컬렉션이 필요하면 `None`을 표식으로 사용한다.
 
 ```python
@@ -423,6 +428,8 @@ append_event(records, {"action": "DENY"})
 
 print(records)  # [{'action': 'DENY'}]
 ```
+
+![재할당은 이름표를 바꾸고, 내부 변경은 객체 자체를 바꾼다](../assets/03-5-reassign-vs-mutate.svg)
 
 입력을 변경하는 함수는 이름과 docstring에 그 사실을 드러낸다. 변경이 필요하지 않다면 새 객체를 반환하는 방식이 예측하기 쉽다.
 
@@ -540,6 +547,8 @@ counter = make_counter()
 print(counter())  # 1
 print(counter())  # 2
 ```
+
+![LEGB: Local부터 Built-in까지 바깥으로 확장하며 이름을 찾는다](../assets/03-5-legb-scope.svg)
 
 문법을 알아야 기존 코드를 읽을 수 있지만, 초급 단계에서는 전역 상태를 바꾸기보다 값을 인자로 받고 결과를 반환하는 방식을 우선한다. 숨은 상태가 적을수록 호출 순서에 덜 의존하고 테스트하기 쉽다.
 
@@ -679,6 +688,135 @@ assert is_valid_port(True) is False
 ```
 
 목록을 받는 함수에는 빈 목록, 한 항목, 여러 항목, 잘못된 항목이 섞인 경우를 확인한다. `assert`는 학습과 내부 가정 확인에 유용하다. 사용자 입력 오류를 처리하는 방법은 03-6에서 예외와 함께 다룬다.
+
+## 응용 인사이트 모음: 함수를 작은 시스템으로 조합하기
+
+### 응용 인사이트: 함수 계약은 구현보다 오래 남는 경계다
+
+이벤트 점수 계산 규칙은 바뀔 수 있지만, 호출자는 입력 필드와 반환 구조가 안정적이기를 기대한다. 단순히 정수 하나만 반환하면 계산 근거를 잃고, 호출 경로마다 서로 다른 자료형을 반환하면 후속 코드가 복잡해진다. 점수와 근거가 함께 필요하다면 처음부터 이름 있는 필드로 계약을 만든다.
+
+```python
+def score_event(event: dict) -> dict:
+    """검증된 이벤트의 점수와 점수 근거를 반환한다."""
+    score = 0
+    reasons = []
+
+    if event["action"] == "DENY":
+        score += 2
+        reasons.append("denied")
+    if event["port"] in {22, 3389}:
+        score += 3
+        reasons.append("sensitive_port")
+
+    return {"score": score, "reasons": reasons}
+
+
+finding = score_event({"action": "DENY", "port": 22})
+assert finding == {
+    "score": 5,
+    "reasons": ["denied", "sensitive_port"],
+}
+```
+
+두 값뿐이고 의미가 호출부에서 명확하면 튜플도 가능하지만, 필드가 늘어나거나 보고서에 전달된다면 딕셔너리처럼 이름이 있는 구조가 안전하다. 어떤 분기에서는 정수, 다른 분기에서는 딕셔너리를 반환하거나, 문서 없이 반환 키를 바꾸는 것은 계약을 깨뜨리는 안티패턴이다.
+
+{% hint style="info" %}
+사고 질문: 점수 규칙이 변경되어도 `score`와 `reasons`라는 반환 필드를 유지한다면 호출 코드는 얼마나 바뀌는가? 반대로 함수가 내부에서 바로 경고 문구를 출력한다면 같은 결과를 다른 화면에서 재사용할 수 있는가?
+{% endhint %}
+
+### 응용 인사이트: 순수 함수와 방어적 복사는 변경의 영향 범위를 줄인다
+
+수집한 원본 이벤트를 정규화할 때 입력 딕셔너리를 직접 바꾸면 이후 감사나 비교 단계에서 원문을 잃을 수 있다. 새 딕셔너리를 반환하는 순수한 변환은 호출 전후를 쉽게 비교하고 같은 입력으로 결과를 재현할 수 있다.
+
+```python
+def normalize_event(event: dict) -> dict:
+    normalized = event.copy()
+    normalized["action"] = event["action"].strip().upper()
+    return normalized
+
+
+raw_event = {"action": " deny ", "ip": "198.51.100.9"}
+normalized_event = normalize_event(raw_event)
+
+assert raw_event["action"] == " deny "
+assert normalized_event["action"] == "DENY"
+```
+
+새 객체 생성에는 시간과 메모리가 들기 때문에 매우 큰 구조를 항상 복사하는 것이 정답은 아니다. 성능상 제자리 변경이 필요하다면 `normalize_event_in_place()`처럼 이름과 문서에 변경 사실을 드러낸다. 또한 `dict.copy()`는 얕은 복사이므로 중첩 리스트·딕셔너리까지 독립시키지 않는다. “복사했으니 모든 내부 객체가 분리되었다”고 가정하는 것이 대표적인 실패 조건이다.
+
+### 응용 인사이트: 판단 함수를 인자로 받아 바뀌는 정책을 분리한다
+
+어떤 이벤트를 검토 대상으로 볼지는 교육 환경, 운영 정책, 테스트마다 달라질 수 있다. 함수 안에서 전역 차단 목록을 직접 읽는 대신 **판단 함수**를 인자로 받으면 핵심 처리 흐름은 유지하면서 정책만 교체할 수 있다. 이처럼 함수가 필요한 협력 대상이나 정책을 인자로 받는 방식을 의존성 주입이라고 한다.
+
+처음에는 **판단 함수를 인자로 전달한다**는 실행 흐름만 이해하면 충분하다. 의존성 주입이라는 설계 용어와 더 큰 프로그램에서의 적용은 심화 내용이며, [03-7의 의존 방향](03-7-modules-packages.md#응용-인사이트-의존-방향은-입출력-계층에서-핵심-정책-쪽을-향한다)과 [03-8의 합성](03-8-classes-dataclasses.md#응용-인사이트-합성은-바뀌는-정책을-교체-가능한-의존성으로-만든다)에서 다시 확장한다.
+
+```python
+def classify_with_rule(event, risk_rule):
+    if risk_rule(event):
+        return "REVIEW"
+    return "NORMAL"
+
+
+def is_denied(event):
+    return event["action"] == "DENY"
+
+
+def uses_sensitive_port(event):
+    return event["port"] in {22, 3389}
+
+
+event = {"action": "ALLOW", "port": 22}
+assert classify_with_rule(event, is_denied) == "NORMAL"
+assert classify_with_rule(event, uses_sensitive_port) == "REVIEW"
+```
+
+고정 정책 하나뿐인 작은 프로그램에서는 직접 호출하는 방식이 더 단순할 수 있다. 그러나 전역 변수에 숨은 정책은 테스트 순서와 실행 환경에 영향을 받기 쉽다. 반대로 모든 값을 무조건 인자로 넘기면 호출부가 복잡해지므로, **자주 바뀌거나 외부 환경에 의존하고 테스트에서 대체할 필요가 있는 것**을 우선 주입한다.
+
+{% hint style="warning" %}
+주입된 함수도 계약을 지켜야 한다. 위 예의 `risk_rule`은 이벤트 하나를 받고 bool을 반환해야 한다. 반환형과 부수 효과가 제각각인 함수를 무분별하게 주입하면 결합도가 다른 형태로 이동할 뿐이다.
+{% endhint %}
+
+### 응용 인사이트: 조합 함수는 흐름을 보여 주고 세부 함수는 규칙을 맡는다
+
+자동화 분석은 보통 정규화 → 검증 → 분류 → 집계 순서로 진행된다. 모든 단계를 한 함수에 넣으면 한 규칙을 바꿀 때 전체 흐름을 다시 확인해야 한다. 반대로 지나치게 잘게 나누면 호출 관계를 따라가기 어렵다. 각 단계가 독립적으로 검증할 가치가 있는지를 분리 기준으로 삼는다.
+
+```python
+def normalize_action_value(action):
+    return action.strip().upper()
+
+
+def has_supported_action(event):
+    return event["action"] in {"ALLOW", "DENY"}
+
+
+def analyze_one_event(raw_event, risk_rule):
+    event = {
+        **raw_event,
+        "action": normalize_action_value(raw_event["action"]),
+    }
+
+    if not has_supported_action(event):
+        return {"status": "INVALID", "event": event}
+
+    return {
+        "status": classify_with_rule(event, risk_rule),
+        "event": event,
+    }
+
+
+result = analyze_one_event(
+    {"action": " deny ", "port": 443},
+    is_denied,
+)
+assert result["status"] == "REVIEW"
+assert result["event"]["action"] == "DENY"
+```
+
+`analyze_one_event()`는 단계의 순서를 조정하는 **조합 함수**이고, 나머지는 한 규칙에 집중한다. 조합 함수에서 다시 정규화 세부 규칙까지 구현하거나, 세부 함수가 화면 출력과 전역 상태 변경까지 담당하면 책임 경계가 무너진다.
+
+{% hint style="info" %}
+사고 질문: 검증을 정규화보다 먼저 수행하면 공백이 있는 `" deny "`는 어떤 결과가 되는가? 단계 순서가 결과를 바꾼다면 그 순서도 함수 계약에 포함해야 하지 않는가?
+{% endhint %}
 
 ## 20. 미니 실습: 이벤트 분석을 함수로 분리
 
@@ -1050,7 +1188,7 @@ assert cart[0] == {"price": 10_000, "quantity": 2}
 
 ## 24. 완료 기준
 
-다음 항목을 코드와 말로 설명하고 결과물로 확인한다.
+다음은 권장·심화 내용을 포함한 장 전체의 최종 완료 기준이다. 첫 학습에서는 앞의 학습 우선순위 표에서 필수 항목을 먼저 확인하고 나머지를 단계적으로 확장한다.
 
 - [ ] 함수의 입력·처리·출력·부수 효과를 설명한다.
 - [ ] 정의와 호출, 매개변수와 인자를 구분한다.
@@ -1061,6 +1199,8 @@ assert cart[0] == {"price": 10_000, "quantity": 2}
 - [ ] LEGB 순서와 `global`, `nonlocal`의 영향을 설명한다.
 - [ ] 계산과 출력·상태 변경을 분리한다.
 - [ ] 함수 객체를 인자로 전달하고 짧은 `lambda`의 적정 범위를 판단한다.
+- [ ] 순수 변환과 제자리 변경의 비용·영향 범위를 비교한다.
+- [ ] 심화: 판단 함수를 인자로 전달하고 정규화·검증·분류 단계를 조합한다.
 - [ ] 정상·경계·잘못된 입력과 빈 컬렉션을 `assert`로 검증한다.
 - [ ] 장바구니 전이 연습을 입력 변경 없는 함수로 완성한다.
 
@@ -1073,5 +1213,6 @@ assert cart[0] == {"price": 10_000, "quantity": 2}
 - 함수에 전달한 변경 가능한 객체의 내부를 바꾸면 호출자에게도 보인다.
 - 전역 상태 변경보다 필요한 값을 인자로 받고 결과를 반환하는 방식을 우선한다.
 - 한 함수는 한 책임에 집중하고 계산과 부수 효과를 분리한다.
+- 바뀌는 정책은 명확한 계약을 가진 의존성으로 주입하고, 조합 함수는 단계 순서를 드러낸다.
 - docstring과 타입 힌트는 계약을 설명하지만 실행 시 입력을 자동 검증하지 않는다.
 - 작은 함수도 정상값·경계값·잘못된 값·빈 입력으로 검증한다.

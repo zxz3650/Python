@@ -1,2 +1,1 @@
-"""Python Basic security learning project."""
-
+"""Python 기초 보안 학습 프로젝트다."""

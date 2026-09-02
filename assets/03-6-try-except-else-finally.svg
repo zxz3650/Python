@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="640" viewBox="0 0 1500 640" role="img" aria-labelledby="title2 desc2">
+<title id="title2">try, except, else, finally의 실행 조건</title>
+<desc id="desc2">try가 예외 없이 끝나면 else가 실행되고 예외가 발생하면 일치하는 except가 실행되며 두 경로 모두 마지막에는 finally가 반드시 실행됨을 성공과 실패 두 시나리오로 비교하는 다이어그램</desc>
+<defs>
+  <filter id="shadowU1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowU1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+  <marker id="arrowGreenU1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/>
+  </marker>
+  <marker id="arrowAmberU1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+  </marker>
+</defs>
+<rect width="1500" height="640" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">else는 성공했을 때만, finally는 항상 실행된다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">port = int(text) — text 값에 따라 두 경로 중 하나를 지나 finally에서 합류한다</text>
+
+<!-- try block -->
+<rect x="560" y="115" width="380" height="60" rx="12" fill="#102338" stroke="#38bdf8" stroke-width="3"/>
+<text x="750" y="152" text-anchor="middle" fill="#e6f6ff" font-family="monospace" font-size="16">try: port = int(text)</text>
+
+<line x1="680" y1="175" x2="480" y2="220" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenU1)"/>
+<text x="480" y="200" fill="#4ade80" font-family="Arial, sans-serif" font-size="13" font-weight="700">text="443" → 성공</text>
+
+<line x1="820" y1="175" x2="1020" y2="220" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrowAmberU1)"/>
+<text x="960" y="200" fill="#fcd34d" font-family="Arial, sans-serif" font-size="13" font-weight="700">text="abc" → ValueError</text>
+
+<!-- success path: else -->
+<g filter="url(#shadowU1)">
+<rect x="260" y="225" width="440" height="90" rx="14" fill="#14532d" stroke="#22c55e" stroke-width="2.5"/>
+</g>
+<text x="290" y="255" fill="#dcfce7" font-family="monospace" font-size="15" font-weight="700">else:</text>
+<text x="310" y="280" fill="#dcfce7" font-family="monospace" font-size="14">result = f"변환 성공: {port}"</text>
+<text x="290" y="300" fill="#86efac" font-family="Arial, sans-serif" font-size="12">try가 예외 없이 끝났을 때만 실행</text>
+
+<!-- fail path: except -->
+<g filter="url(#shadowU1)">
+<rect x="800" y="225" width="440" height="90" rx="14" fill="#1f1a12" stroke="#f59e0b" stroke-width="2.5"/>
+</g>
+<text x="830" y="255" fill="#fef3c7" font-family="monospace" font-size="15" font-weight="700">except ValueError:</text>
+<text x="850" y="280" fill="#fef3c7" font-family="monospace" font-size="14">result = "변환 실패"</text>
+<text x="830" y="300" fill="#fcd34d" font-family="Arial, sans-serif" font-size="12">일치하는 예외가 발생했을 때만 실행</text>
+
+<line x1="480" y1="315" x2="700" y2="380" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrowGreenU1)"/>
+<line x1="1020" y1="315" x2="800" y2="380" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrowAmberU1)"/>
+
+<!-- finally -->
+<g filter="url(#shadowU1)">
+<rect x="500" y="385" width="500" height="90" rx="14" fill="#0d1f30" stroke="#a855f7" stroke-width="3"/>
+</g>
+<text x="530" y="418" fill="#f3e8ff" font-family="monospace" font-size="16" font-weight="700">finally:</text>
+<text x="550" y="443" fill="#f3e8ff" font-family="monospace" font-size="15">finished = True</text>
+<text x="530" y="463" fill="#d8b4fe" font-family="Arial, sans-serif" font-size="12">성공·실패와 관계없이 항상 실행</text>
+
+<rect x="150" y="520" width="600" height="90" rx="12" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="180" y="550" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">text="443"일 때 출력</text>
+<text x="180" y="575" fill="#93c5fd" font-family="monospace" font-size="14">result = "변환 성공: 443"</text>
+<text x="180" y="597" fill="#93c5fd" font-family="monospace" font-size="14">finished = True</text>
+
+<rect x="770" y="520" width="600" height="90" rx="12" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="800" y="550" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="14" font-weight="700">text="abc"일 때 출력</text>
+<text x="800" y="575" fill="#fcd34d" font-family="monospace" font-size="14">result = "변환 실패"</text>
+<text x="800" y="597" fill="#fcd34d" font-family="monospace" font-size="14">finished = True</text>
+</svg>

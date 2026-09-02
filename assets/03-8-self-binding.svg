@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title1 desc1">
+<title id="title1">book.describe()는 Book.describe(book)과 같다</title>
+<desc id="desc1">인스턴스로 메서드를 호출하면 Python이 그 인스턴스 자신을 자동으로 첫 번째 인자 self로 넘긴다는 것을 두 호출 형태의 동치 관계로 보여주는 다이어그램</desc>
+<defs>
+  <filter id="shadowBB1"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  <marker id="arrowBB1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7fb2cc"/>
+  </marker>
+</defs>
+<rect width="1500" height="560" rx="32" fill="#071a2b"/>
+<text x="60" y="55" fill="#e6f6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">self는 마법이 아니라 인스턴스가 자동으로 채워지는 첫 번째 자리다</text>
+<text x="60" y="86" fill="#9cc8dc" font-family="Arial, sans-serif" font-size="17">class Book: def describe(self): return f"도서: {self.title}"</text>
+
+<rect x="60" y="120" width="500" height="70" rx="12" fill="#102338" stroke="#334155" stroke-width="2"/>
+<text x="90" y="163" fill="#e6f6ff" font-family="monospace" font-size="16">book = Book("Python 기초")</text>
+
+<!-- Left: instance call -->
+<g filter="url(#shadowBB1)">
+<rect x="60" y="220" width="620" height="130" rx="16" fill="#0d1f30" stroke="#38bdf8" stroke-width="3"/>
+</g>
+<text x="90" y="255" fill="#93c5fd" font-family="Arial, sans-serif" font-size="15" font-weight="700">우리가 실제로 쓰는 방식</text>
+<text x="90" y="290" fill="#e6f6ff" font-family="monospace" font-size="20" font-weight="700">book.describe()</text>
+<text x="90" y="322" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">점(.) 앞의 book이 self 자리로 자동 전달됨</text>
+
+<text x="700" y="290" fill="#facc15" font-family="Arial, sans-serif" font-size="22" font-weight="700">≡</text>
+
+<!-- Right: explicit class call -->
+<g filter="url(#shadowBB1)">
+<rect x="780" y="220" width="660" height="130" rx="16" fill="#0d1f30" stroke="#22c55e" stroke-width="3"/>
+</g>
+<text x="810" y="255" fill="#86efac" font-family="Arial, sans-serif" font-size="15" font-weight="700">내부적으로 벌어지는 일과 동치</text>
+<text x="810" y="290" fill="#e6f6ff" font-family="monospace" font-size="18" font-weight="700">Book.describe(book)</text>
+<text x="810" y="322" fill="#7fb2cc" font-family="Arial, sans-serif" font-size="13">book을 self 자리에 직접 넘긴 것과 같은 결과</text>
+
+<line x1="370" y1="350" x2="370" y2="400" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowBB1)"/>
+<line x1="1110" y1="350" x2="1110" y2="400" stroke="#7fb2cc" stroke-width="2" marker-end="url(#arrowBB1)"/>
+
+<rect x="200" y="405" width="1100" height="60" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+<text x="750" y="442" text-anchor="middle" fill="#dcfce7" font-family="monospace" font-size="16" font-weight="700">두 표현 모두 결과: "도서: Python 기초"</text>
+
+<!-- bound method note -->
+<rect x="200" y="480" width="1100" height="60" rx="10" fill="#0d1f30" stroke="#334155" stroke-width="2"/>
+<text x="230" y="510" fill="#e6f6ff" font-family="monospace" font-size="14">bound_method = book.describe</text>
+<text x="700" y="510" fill="#93c5fd" font-family="Arial, sans-serif" font-size="13">→ bound_method.__self__ is book (book이 이미 묶여 저장됨)</text>
+</svg>

@@ -301,7 +301,7 @@ print(query_pairs)
 5. 정상 건수 + 오류 건수가 전체 행 수와 같은지 검증한다.
 6. 메시지에 `password=`·`token=`이 있으면 보고서용 값에서는 마스킹한다.
 
-### TODO 골격
+### 실습 과제 골격
 
 ```python
 from pathlib import Path
@@ -313,8 +313,8 @@ errors = []
 
 with FIXTURE_PATH.open("r", encoding="utf-8", errors="strict") as file:
     for line_number, line in enumerate(file, start=1):
-        # TODO 1: parse_event_line()을 호출한다.
-        # TODO 2: 정상 레코드와 구조화된 오류를 분리한다.
+        # 실습 과제 1: parse_event_line()을 호출한다.
+        # 실습 과제 2: 정상 레코드와 구조화된 오류를 분리한다.
         pass
 ```
 

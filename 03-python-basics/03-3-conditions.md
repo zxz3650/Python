@@ -219,6 +219,41 @@ else:
 - 여러 규칙이 동시에 성립할 수 있고 각각 처리해야 한다 → 독립된 `if`
 - 하나의 등급이나 상태만 선택해야 한다 → `if`·`elif`·`else`
 
+![여러 if는 각각 실행되고, elif는 하나만 선택한다](../assets/03-3-if-vs-elif.svg)
+
+### 응용 인사이트: 분류와 후속 조치는 분기 구조가 다르다
+
+이벤트의 심각도처럼 결과가 하나여야 하는 값은 `if`·`elif`로 분류한다. 반면 같은 이벤트에 “담당자 검토”와 “추가 기록 보존”이 동시에 필요하다면 독립된 `if`로 각각 판단한다.
+
+```python
+is_invalid = False
+has_repeated_failures = True
+is_sensitive_path = True
+
+if is_invalid:
+    level = "INVALID"
+elif has_repeated_failures and is_sensitive_path:
+    level = "CRITICAL"
+elif has_repeated_failures or is_sensitive_path:
+    level = "REVIEW"
+else:
+    level = "NORMAL"
+
+follow_up_actions = []
+
+if has_repeated_failures:
+    follow_up_actions.append("CHECK_SOURCE_HISTORY")
+if is_sensitive_path:
+    follow_up_actions.append("PRESERVE_RELATED_LOGS")
+
+print(level)              # CRITICAL
+print(follow_up_actions)  # 두 조치가 모두 포함됨
+```
+
+모든 조건을 독립된 `if`로 만들면 하나여야 할 등급이 여러 번 덮어써질 수 있다. 반대로 모든 조치를 `elif`로 묶으면 앞 조건이 참일 때 필요한 다른 조치가 누락된다. 먼저 결과가 상호 배타적인지 질문한 뒤 분기 구조를 선택한다.
+
+> 사고 질문: “이벤트 등급”과 “수행할 검토 목록” 중 어느 쪽이 여러 값을 동시에 가질 수 있는가?
+
 ## 6. 비교 연산자와 자료형
 
 | 연산자 | 의미 | 예 |
@@ -276,6 +311,24 @@ print(port >= 1 and port <= 65535)  # True
 | `65536` | `False` | 최댓값 바로 위 |
 
 `<`와 `<=`의 차이는 정상값 하나만 시험해서는 발견하기 어렵다. 항상 경계값과 경계 바로 밖의 값을 함께 시험한다.
+
+![경계값은 정상값 하나로는 드러나지 않는다](../assets/03-3-boundary-values.svg)
+
+### 응용 인사이트: 임계값에는 단위와 시간 범위가 필요하다
+
+`failed_count >= 3`이라는 식만으로는 완전한 정책이 아니다. 3회의 포함 여부뿐 아니라 “한 계정에서”, “5분 안에”처럼 무엇을 어떤 구간에서 센 값인지 함께 정의해야 한다. 같은 숫자라도 하루 전체 집계와 5분 집계는 의미가 다르다.
+
+```python
+review_threshold = 3  # 5분 동안 같은 계정에서 발생한 실패 횟수
+
+print(2 >= review_threshold)  # False: 경계 바로 아래
+print(3 >= review_threshold)  # True: 경계 포함
+print(4 >= review_threshold)  # True: 경계 바로 위
+```
+
+임계값을 변수로 두면 정책의 의미를 이름으로 드러내고 조정하기 쉽다. 다만 값만 바꾸고 집계 단위나 시간 범위를 함께 바꾸지 않으면 테스트와 운영 기준이 어긋난다. 정상값 하나가 아니라 경계 바로 아래·경계·경계 바로 위를 한 세트로 검증한다.
+
+> 사고 질문: “3회 이상”을 `> 3`으로 구현하면 최초 검토 대상은 몇 회부터인가? 요구사항의 ‘이상’과 ‘초과’를 코드에서 어떻게 구분하는가?
 
 ## 8. 멤버십 연산자: in과 not in
 
@@ -455,6 +508,26 @@ is_critical = (
 )
 ```
 
+### 응용 인사이트: 괄호는 접근 정책의 경계를 보존한다
+
+논리식의 우선순위를 잘못 해석하면 특정 그룹만 승인 검사를 우회하는 결과가 생길 수 있다. 예를 들어 “내부 사용자 또는 관리자이면서 승인을 받은 경우”라는 문장은 두 가지로 읽힐 수 있다.
+
+```python
+is_internal = True
+is_admin = False
+is_approved = False
+
+implicit = is_internal or is_admin and is_approved
+approval_required = (is_internal or is_admin) and is_approved
+
+print(implicit)           # True: 내부 사용자는 승인 없이 통과
+print(approval_required)  # False: 모든 대상에게 승인 필요
+```
+
+첫 식은 문법상 `is_internal or (is_admin and is_approved)`다. 정책이 정말 내부 사용자의 승인을 면제하는 것이라면 맞지만, 그렇지 않다면 중요한 우회 조건이 된다. 괄호와 의미 있는 bool 변수는 단지 가독성을 높이는 것이 아니라 정책의 적용 범위를 검토 가능하게 만든다.
+
+> 사고 질문: 승인 조건은 관리자에게만 필요한가, 내부 사용자와 관리자 모두에게 필요한가? 자연어 정책에서 이 질문에 답하지 못하면 코드를 먼저 작성해도 되는가?
+
 ## 12. 단락 평가
 
 Python은 결과가 이미 결정되면 뒤 조건을 평가하지 않는다.
@@ -480,6 +553,8 @@ user = None
 # AttributeError: None에는 startswith 메서드가 없음
 ```
 
+![and의 단락 평가: 조건 순서가 안전성을 결정한다](../assets/03-3-short-circuit.svg)
+
 안전성 검사와 비용이 낮은 조건을 앞에 두고, 그 조건이 만족될 때만 실행할 검사를 뒤에 둔다.
 
 ```python
@@ -488,6 +563,26 @@ parts = ["DENY", "198.51.100.9"]
 has_port = len(parts) >= 3 and parts[2].isdigit()
 print(has_port)  # False, parts[2]는 조회하지 않음
 ```
+
+### 응용 인사이트: 단락 평가는 실행 순서를 설계하는 도구다
+
+단락 평가는 단순한 속도 최적화가 아니라 **뒤 검사를 실행해도 안전한지 보장하는 제어 흐름**이다. 일반적으로 존재 여부와 자료형처럼 값싼 전제 조건을 앞에 두고, 그 전제가 참일 때만 가능한 접근이나 비용이 큰 검사를 뒤에 둔다.
+
+```python
+user = None
+
+has_admin_prefix = (
+    user is not None
+    and len(user) >= 6
+    and user.startswith("admin-")
+)
+
+print(has_admin_prefix)  # False
+```
+
+이 방법은 선택 필드가 없을 때 오류 없이 거짓으로 판단해야 하는 경우에 적합하다. 그러나 필수 필드 누락까지 조용히 `False`로 바꾸면 입력 품질 문제가 숨을 수 있다. 또한 오른쪽 조건에 로그 기록이나 값 변경 같은 부수 효과를 넣으면 앞 조건에 따라 그 작업이 실행되지 않는다. 조건식은 판단에 집중하고 필수 입력 오류와 후속 작업은 별도 단계로 분리한다.
+
+> 사고 질문: `user`가 반드시 있어야 하는 정책에서도 위 코드로 `False`만 반환하는 것이 맞는가, 아니면 입력 오류를 별도로 보고해야 하는가?
 
 ## 13. and와 or는 피연산자를 반환한다
 
@@ -742,6 +837,8 @@ print(level)  # CRITICAL
 ```
 
 유효성 검증과 위험 분류를 별도 bool 변수로 분리하면 정책을 검토하고 시험하기 쉽다.
+
+![결정표를 우선순위 순서의 if·elif·else로 옮기기](../assets/03-3-decision-table-flow.svg)
 
 ## 20. 안전한 기본값과 판단 순서
 
@@ -1163,6 +1260,8 @@ assert shipping_status == "FREE_SHIPPING"
 
 ## 완료 기준
 
+다음은 권장·심화 내용을 포함한 장 전체의 최종 완료 기준이다. 첫 학습에서는 앞의 학습 우선순위 표에서 필수 항목을 먼저 확인하고 나머지를 단계적으로 확장한다.
+
 - [ ] `if`, `elif`, `else`의 실행 순서를 설명할 수 있다.
 - [ ] 독립된 여러 `if`와 `if`·`elif`의 결과 차이를 설명할 수 있다.
 - [ ] 비교·연쇄 비교·멤버십·동일성 연산자를 구분할 수 있다.
@@ -1173,6 +1272,9 @@ assert shipping_status == "FREE_SHIPPING"
 - [ ] truthy/falsey와 `None`, `0`, 빈 값의 업무 의미를 구분할 수 있다.
 - [ ] 드모르간 법칙과 `any()`, `all()`을 사용할 수 있다.
 - [ ] 경계값과 결정표로 분기 로직을 검증할 수 있다.
+- [ ] 상호 배타적 분류와 동시에 수행할 후속 조치에 알맞은 분기 구조를 선택할 수 있다.
+- [ ] 임계값의 포함 여부·단위·시간 범위와 논리식 괄호의 정책 의미를 설명할 수 있다.
+- [ ] 단락 평가가 필수 입력 오류를 숨길 수 있는 조건을 판단할 수 있다.
 - [ ] 미니 실습의 모든 `assert`를 통과했다.
 - [ ] 주문 배송 전이 연습의 분기 순서와 경계값을 검증했다.
 
@@ -1183,10 +1285,12 @@ assert shipping_status == "FREE_SHIPPING"
 - 값 비교는 `==`, `None` 동일성 확인은 `is None`을 사용한다.
 - `and`는 모두 참, `or`는 하나 이상 참, `not`은 판단을 반대로 만든다.
 - 논리 우선순위는 비교 → `not` → `and` → `or`이며 복합 조건에는 괄호를 사용한다.
-- 단락 평가는 뒤 조건의 실행 여부를 결정한다.
+- 괄호는 논리식의 계산 순서뿐 아니라 정책이 적용되는 대상 범위를 명시한다.
+- 단락 평가는 뒤 조건의 실행 여부를 결정하므로 안전성 검사 순서와 필수 입력 처리 방식을 함께 설계한다.
 - `and`와 `or`는 bool이 아닌 피연산자를 반환할 수 있다.
 - truthy/falsey가 같은 값도 업무 의미는 다를 수 있으므로 필요한 경우 명시적으로 비교한다.
 - 경계값과 결정표는 누락된 분기와 잘못된 우선순위를 찾는 도구다.
+- 임계값은 포함 여부뿐 아니라 집계 단위와 시간 범위를 함께 정의한다.
 - 유효성 검증과 위험 분류를 분리하고, 알 수 없는 상태의 처리 방식을 명시한다.
 
 ---
