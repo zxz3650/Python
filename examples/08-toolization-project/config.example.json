@@ -1,0 +1,7 @@
+{
+  "target": "http://127.0.0.1:8080",
+  "output": "artifacts/web-security-report.json",
+  "timeout": 3.0,
+  "log_level": "INFO",
+  "log_file": "artifacts/http-tool.log"
+}
