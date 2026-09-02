@@ -30,6 +30,20 @@
 
 04-1~04-8은 개념을 익힌 뒤 바로 실행하는 학습자용 실습입니다. 04-9는 정답 코드를 먼저 보는 자료가 아니라, 요구사항에 맞게 직접 구현한 뒤 기준 구현과 결과를 비교하는 풀이 검증용 노트북입니다.
 
+## 05장 절별 실습
+
+- [`05-1-normalization.ipynb`](05-1-normalization.ipynb): 원문을 보존하며 필드별 공백·대소문자·유니코드 정규화를 연습합니다.
+- [`05-2-split-search-replace.ipynb`](05-2-split-search-replace.ipynb): 고정 구분자 형식, 필드 수, 메시지 내 구분자 경계를 연습합니다.
+- [`05-3-regex-basics.ipynb`](05-3-regex-basics.ipynb): 부분 검색과 전체 일치, 정상·경계·실패 패턴을 연습합니다.
+- [`05-4-groups-capture.ipynb`](05-4-groups-capture.ipynb): 이름 있는 그룹으로 날짜·수준·메시지를 구조화합니다.
+- [`05-5-validation.ipynb`](05-5-validation.ipynb): 필수값·형식·허용값·범위 오류를 구조화합니다.
+- [`05-6-datetime.ipynb`](05-6-datetime.ipynb): ISO 8601, `Z`, naive/aware datetime, UTC 변환을 연습합니다.
+- [`05-7-numpy-array.ipynb`](05-7-numpy-array.ipynb): 결측값·조건 마스크·벡터 집계를 연습합니다.
+- [`05-8-pandas-dataframe.ipynb`](05-8-pandas-dataframe.ipynb): 숫자 변환 오류 보존, DataFrame 집계, `chunksize` 처리를 연습합니다.
+- [`05-9-web-log-analysis.ipynb`](05-9-web-log-analysis.ipynb): strict 디코딩, IP·URL 검증, 5분 특징, NumPy 후보 마스크, 민감정보 가명처리를 통합합니다.
+
+05장의 절별 Notebook은 함수 시그니처·TODO·공개 경계 검증을 담은 **학습자용** 파일입니다. 실습 입력은 [`../fixtures/05-text-processing/`](../fixtures/05-text-processing/README.md)에 있으며, 자신의 구현을 먼저 완성한 뒤 [`solutions/`](solutions/README.md)의 풀이 검증용 Notebook과 비교합니다. 공개 저장소의 풀이는 평가 정답을 숨기지 못하므로 실제 평가에서는 교수자용 비공개 테스트를 별도로 사용합니다.
+
 ## 03장 통합 실습
 
 `03_python_basic.ipynb`는 03장 전체 내용을 학습한 뒤 다음 순서로 진행합니다.

@@ -1,0 +1,4 @@
+2026-08-14 | INFO | login completed
+2026-08-14 | WARNING | token=training-token&action=retry
+2026-08-15 | ERROR | message contains | delimiter
+broken | only-two-fields
