@@ -1,0 +1,4 @@
+2026-08-14 INFO completed
+2026-08-14 WARNING retry scheduled
+2026-08-15 ERROR authentication failed
+not-an-event

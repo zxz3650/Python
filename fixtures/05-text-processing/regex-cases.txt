@@ -1,0 +1,6 @@
+identifier|AB-2026|valid
+identifier|X-20|invalid
+identifier|AB-２０２６|invalid
+filename|report.csv|valid
+filename|archive.csv.exe|invalid
+number|ticket 125 completed|125

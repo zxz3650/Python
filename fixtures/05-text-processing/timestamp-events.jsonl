@@ -1,0 +1,4 @@
+{"event":"login","timestamp":"2026-08-14T10:30:00+09:00"}
+{"event":"api","timestamp":"2026-08-14T01:45:00Z"}
+{"event":"naive","timestamp":"2026-08-14T03:00:00"}
+{"event":"invalid","timestamp":"2026-02-30T10:00:00+09:00"}

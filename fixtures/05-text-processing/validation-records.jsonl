@@ -1,0 +1,5 @@
+{"account":"alice_01","ip":"203.0.113.10","result":"success","risk_score":12,"target":"/login?token=training"}
+{"account":"  ","ip":"999.10.20.30","result":"MAYBE","risk_score":true,"target":"/admin/%2e%2e/settings?token=secret"}
+{"account":"blue-team","ip":"2001:0db8:0000::10","result":"LOCKED","risk_score":85,"target":"/admin"}
+{"account":"carol","ip":"192.0.2.44","result":"failure","risk_score":101,"target":"/%252e%252e/admin"}
+{"account":"broken"

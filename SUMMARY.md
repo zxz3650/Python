@@ -32,7 +32,7 @@
   - [05-6. 날짜와 시간](05-text-processing/05-6-datetime.md)
   - [05-7. NumPy 배열과 대용량 수치 처리](05-text-processing/05-7-numpy-array.md)
   - [05-8. pandas와 DataFrame 기반 대용량 처리](05-text-processing/05-8-pandas-dataframe.md)
-  - [05-9. 웹 로그 분석](05-text-processing/05-9-web-log-analysis.md)
+  - [05-9. 웹 접근 로그 분석 종합 실습](05-text-processing/05-9-web-log-analysis.md)
 - [06. 네트워크 프로그래밍](06-network-programming.md)
   - [06-1. 네트워크와 소켓 기초](06-network-programming/06-1-network-socket-basics.md)
   - [06-2. TCP 클라이언트](06-network-programming/06-2-tcp-client.md)
