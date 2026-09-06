@@ -17,14 +17,6 @@
 
 04-1의 상대·절대 경로, `Path.resolve()`, 파일·디렉터리 판정, `resolve_under()`를 이해해야 한다. 이 절의 예제를 하나의 Python 파일에서 실행한다면 04-1에서 완성한 `resolve_under()`를 예제보다 위에 둔다.
 
-## 학습 우선순위
-
-| 구분 | 내용 |
-| --- | --- |
-| 필수 | 전용 작업 영역, `mkdir()`, `x` 모드, `copy2()`, `rename()`, `unlink()`, `rmdir()` |
-| 권장 | 원본·목적지 검증, 이름 충돌 정책, 구체적인 파일 시스템 예외 처리 |
-| 심화 | 심볼릭 링크 정책, 검사와 사용 사이의 경쟁 조건, 파일 시스템 간 이동 |
-
 전용 실습은 [`notebooks/04-2-filesystem-operations.ipynb`](../notebooks/04-2-filesystem-operations.ipynb)에서 진행할 수 있다.
 
 ## 0. 학습 전 확인
