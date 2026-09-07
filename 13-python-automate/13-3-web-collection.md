@@ -1,142 +1,69 @@
-# 13-3. 웹 정보 수집
+# 13-3. 아티팩트 파서와 분석 엔진 연계
 
-웹 자동화는 요청을 보내는 기술보다 수집 범위, 응답 계약, 속도 제한, 변경 감지를 설계하는 일이 더 중요합니다. 가능하면 HTML 화면보다 공식 API를 우선합니다.
+> **핵심 질문** · 파일을 읽는 파서와 의심 조건을 찾는 탐지 엔진은 어떤 역할이 다를까요?
 
-{% hint style="info" %}
-## 🧭 학습 목표
+바이너리 아티팩트는 CSV처럼 직접 읽을 수 없습니다. 형식별 파서가 구조를 해석한 다음, 분석 엔진이나 Python 코드가 그 결과에 조건을 적용합니다. 하나의 도구가 두 역할을 함께 제공할 수도 있지만 결과를 기록할 때는 단계를 구분합니다.
 
-- API, 정적 HTML, 브라우저 자동화의 선택 기준을 설명합니다.
-- 타임아웃·상태·형식·크기를 검증합니다.
-- 상대 URL과 콘텐츠를 해석합니다.
-- 서비스 정책·개인정보·수집 주기를 통제합니다.
-{% endhint %}
+## 1. 도구를 입력 형식과 연결합니다
 
-## 1. 가장 안정적인 접근부터 선택
+| 아티팩트 | 파서·엔진 후보 | Python 통합 시 보존할 내용 |
+| --- | --- | --- |
+| EVTX | EvtxECmd, `python-evtx`; 탐지 결과는 Hayabusa·Chainsaw | Provider·Channel·Event ID·Record ID·시각·원본 경로 |
+| Prefetch | PECmd | 마지막 실행 시각의 의미, 실행 횟수, 참조 정보 |
+| Shimcache / Amcache | AppCompatCacheParser / AmcacheParser | 관찰·캐시·파일 시간의 의미, OS·파서 버전 |
+| MFT / USN | MFTECmd | 엔트리·시퀀스, SI/FN 시각 구분, 변경 사유 |
+| 레지스트리 | RECmd, `python-registry` | 하이브·키·값 이름·값 데이터·키 LastWrite |
+| 작업·서비스 | 해당 EVTX, 작업 XML·레지스트리용 파서 | 등록·구성·실행을 구분하는 시간과 원본 위치 |
+| 여러 자료 형식 | `dissect.target`의 지원 플러그인 | 플러그인별 출력 스키마와 지원 입력 확인 |
 
-1. **공식 API**: 필드와 오류 형식이 정의되어 있으면 가장 먼저 선택합니다.
-2. **정적 HTML**: 서버가 보낸 HTML에 필요한 데이터가 있을 때 `requests`와 Beautiful Soup을 사용합니다.
-3. **브라우저 자동화**: JavaScript 실행·사용자 상호작용이 필수인 경우에만 사용합니다.
+도구별 공식 링크와 해석 한계는 [13-8](13-8-artifact-reference.md)에 정리했습니다. `python-evtx`는 EVTX용이며 Prefetch·Shimcache·Amcache의 공통 파서로 사용하지 않습니다.
 
-CSS 선택자와 화면 좌표에 강하게 의존할수록 사이트 변경에 취약해집니다.
+## 2. 실제 엔진을 실행하기 전에 고정할 것
 
-## 2. 수집 전 확인
-
-- 명시적으로 허용된 사이트와 경로인가?
-- 사이트 이용 약관과 `robots.txt`를 확인했는가?
-- 로그인, 유료 콘텐츠, 개인정보를 수집하지 않는가?
-- 요청 주기와 최대 건수가 서버에 부담을 주지 않는가?
-- 저장 기간·접근 권한·삭제 방법이 있는가?
-
-`robots.txt`는 접근 권한을 부여하는 문서가 아니며, 허용 범위는 이용 약관과 소유자의 승인을 함께 확인해야 합니다.
-
-## 3. 제한이 있는 HTTP 요청
-
-```python
-import requests
-
-MAX_BYTES = 2 * 1024 * 1024
-
-
-def download_html(url):
-    with requests.get(
-        url,
-        timeout=(3.05, 10),
-        stream=True,
-        headers={"User-Agent": "Python-Automate-Class/1.0"},
-    ) as response:
-        response.raise_for_status()
-
-        content_type = response.headers.get("Content-Type", "")
-        if "text/html" not in content_type.lower():
-            raise ValueError(f"예상하지 않은 형식: {content_type}")
-
-        chunks = []
-        size = 0
-        for chunk in response.iter_content(64 * 1024):
-            size += len(chunk)
-            if size > MAX_BYTES:
-                raise ValueError("응답 크기 제한을 초과했습니다.")
-            chunks.append(chunk)
-
-        return b"".join(chunks).decode(
-            response.encoding or "utf-8",
-            errors="replace",
-        )
-```
-
-연결 타임아웃과 응답 타임아웃을 두고, 전체 응답 크기를 제한합니다. `Content-Length`는 없거나 부정확할 수 있으므로 실제로 읽은 바이트도 계산합니다.
-
-## 4. HTML 해석
-
-```python
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin
-
-
-def extract_articles(html, base_url):
-    soup = BeautifulSoup(html, "html.parser")
-    rows = []
-
-    for article in soup.select("article"):
-        heading = article.select_one("h2")
-        link = article.select_one("a[href]")
-        if heading is None or link is None:
-            continue
-
-        rows.append({
-            "title": heading.get_text(" ", strip=True),
-            "url": urljoin(base_url, link["href"]),
-        })
-
-    return rows
-```
-
-하나의 선택자에 모든 규칙을 묶지 말고, 필수 필드·선택 필드·누락 건수를 나누어 기록합니다.
-
-## 5. 변경 감지와 저장
-
-웹 데이터에는 수집 시각, 원본 URL, 응답 식별자를 함께 저장합니다.
-
-- `ETag`, `Last-Modified`가 있으면 조건부 요청에 활용합니다.
-- 중복 URL과 중복 콘텐츠 해시를 분리합니다.
-- HTML 전체보다 필요한 정규화 필드를 저장합니다.
-- 원본을 저장해야 한다면 보관 기간과 접근 권한을 적용합니다.
-
-## 6. 재시도 정책
-
-| 상황 | 기본 동작 |
+| 계약 | 기록할 항목 |
 | --- | --- |
-| 연결 실패·타임아웃 | 지수 백오프로 제한적 재시도 |
-| 429 | `Retry-After`를 존중하고 재시도 횟수 제한 |
-| 500·502·503·504 | 일시 장애로 판단하되 제한적 재시도 |
-| 400·401·403·404 | 요청·권한·경로를 수정하기 전에 재시도하지 않음 |
+| 실행 파일 | 검증한 경로·버전·해시, 실행 환경 |
+| 입력 | 읽기 전용 작업 사본 경로·자료 해시 |
+| 옵션 | 명시적 인자 배열, 출력 형식·프로필 |
+| 탐지 규칙 | 규칙 집합 버전·커밋·매핑 설정 |
+| 자원 제한 | 실행 기한, 워커 수, 디스크·출력 크기 |
+| 성공 확인 | 종료 코드뿐 아니라 산출물 존재·헤더·행 수 검증 |
 
-POST·전송·결제처럼 상태를 변경하는 요청은 멱등성 키나 처리 ID 확인 없이 자동 재시도하지 않습니다.
+자료 안의 명령행을 실행 인자로 가져오지 않습니다. 명령행은 **분석할 텍스트**이며 실행할 작업이 아닙니다. 웹 검색으로 찾은 바이너리나 증거 폴더 안의 프로그램을 자동 실행하지 않습니다.
 
-## 7. 로컬 재현 실습
+## 3. 실행 흐름 설계 — 확장 과정
 
-외부 사이트 대신 실습용 HTML을 로컬 서버로 제공합니다.
-
-```bash
-cd lab-site
-python -m http.server 8000 --bind 127.0.0.1
+```mermaid
+flowchart TD
+    A["완료된 수집 사본"] --> B["아티팩트별 고정 작업 선택"]
+    B --> C["검증한 파서 실행"]
+    C --> D{"종료·출력 검증"}
+    D -- "실패" --> E["실패 이력·부분 출력 격리"]
+    D -- "성공" --> F["CSV/JSON 출력 계약 확인"]
+    F --> G["완료 manifest 게시"]
+    G --> H["Python 정규화"]
 ```
 
-다음 상황을 별도 HTML 파일로 만듭니다.
+08장의 `subprocess.run()`을 연결할 때 `shell=False`와 인자 목록, 명시적 작업 폴더, 타임아웃을 사용합니다. 도구별 옵션은 설치한 버전의 공식 도움말과 일치시킵니다. 이 교안의 기본 코드에는 외부 프로세스 실행이 없으며, 이 단계는 Windows 분석 환경에서 별도로 검증하는 확장 과제입니다.
 
-- 정상 기사 3건
-- 제목이 없는 기사 1건
-- 상대 URL과 절대 URL이 섞인 링크
-- 크기 제한을 넘는 응답
+## 4. Sigma 결과를 가져오는 것과 Sigma를 실행하는 것
 
-## 완료 기준
+Sigma는 탐지 조건을 표현하는 규칙 형식입니다. 엔진마다 필드 매핑과 지원 기능, 출력 프로필이 달라 같은 규칙 이름만으로 동일 결과를 가정할 수 없습니다.
 
-- [ ] API가 있는지 먼저 확인했습니다.
-- [ ] 수집 범위와 요청 주기를 정의했습니다.
-- [ ] 타임아웃·상태·형식·크기를 검증합니다.
-- [ ] 누락 필드와 파싱 오류 건수를 보존합니다.
-- [ ] 재시도해야 할 실패와 즉시 중단할 실패를 구분합니다.
+기본 파이프라인의 `artifact="detection"`은 **이미 생성된 탐지 CSV 결과**를 가져옵니다. 매핑 가능한 필드는 `rule_id`, `rule_title`, `rule_level`, `attack_id` 등입니다. 원래 정보는 정규화 행에 남기고, 보고서에는 `IMPORTED:`로 시작하는 검토 항목을 만듭니다. 이것은 Sigma 규칙 실행이나 triager의 전체 기능 재현이 아닙니다.
+
+두 엔진이 같은 원본 이벤트에 일치해도 독립된 침해 증거 두 개라고 점수를 합치지 않습니다. 엔진별 규칙 정보와 원본 이벤트 식별자를 연결하고 중복 여부를 따로 검토합니다.
+
+## 실습과 완료 기준
+
+1. 한 아티팩트를 선택해 원본 형식·파서·출력 형식·필수 열을 적습니다.
+2. 출력 파일이 있어도 실행 실패로 분류해야 하는 사례를 두 개 만듭니다.
+3. 빈 탐지 결과에 대해서도 실행한 규칙·입력 범위가 필요함을 설명합니다.
+
+- [ ] 파싱과 탐지, 결과 가져오기의 차이를 설명합니다.
+- [ ] 엔진 옵션·규칙 버전을 고정하는 작업 계약이 있습니다.
+- [ ] 실제 사건 자료나 바이너리를 저장소에 추가하지 않습니다.
 
 ---
 
-다음: [13-4. 스프레드시트와 문서 자동화](13-4-spreadsheet-documents.md)
+다음: [13-4. 공통 스키마·시간 정규화·보고서](13-4-spreadsheet-documents.md)

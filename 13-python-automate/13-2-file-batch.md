@@ -1,154 +1,85 @@
-# 13-2. 파일과 폴더 일괄 처리
+# 13-2. KAPE 결과 구조와 증거 목록
 
-파일 자동화는 경로 선택, 분류, 이름 변경, 복사·이동, 압축, 작업 기록으로 구성됩니다. 실수의 영향이 크므로 코드보다 작업 범위와 복구 전략을 먼저 확정합니다.
+> **핵심 질문** · CSV가 여러 개 있을 때, 어느 호스트의 어떤 원본에서 나온 결과인지 어떻게 알 수 있을까요?
 
-{% hint style="info" %}
-## 🧭 학습 목표
+KAPE의 Target(`.tkape`)은 수집할 아티팩트를 정의하고 Module(`.mkape`)은 도구를 실행해 수집 자료를 처리하는 작업을 정의합니다. `kape.exe`는 명령줄 실행에, `gkape.exe`는 GUI 구성에 사용됩니다. 수집 결과가 항상 CSV인 것은 아닙니다. EVTX·레지스트리 하이브 등은 전용 파서를 거쳐야 합니다. [KapeFiles 공식 저장소](https://github.com/EricZimmerman/KapeFiles)
 
-- `pathlib` 경로를 기준 경로와 비교합니다.
-- 파일 선택, 분류, 이름 충돌 처리를 함수로 나눕니다.
-- 변경 계획을 먼저 만들고 승인 후 적용합니다.
-- ZIP 압축 해제 시 경로 탈출을 방지합니다.
-{% endhint %}
-
-## 1. 작업 범위 고정
-
-```python
-from pathlib import Path
-
-root = Path("lab/inbox").resolve()
-
-if not root.exists() or not root.is_dir():
-    raise ValueError("작업 폴더를 확인하세요.")
-
-files = [
-    path
-    for path in root.iterdir()
-    if path.is_file() and not path.is_symlink()
-]
-```
-
-`iterdir()`는 한 단계만, `rglob()`는 하위 폴더 전체를 탐색합니다. 최초 버전은 한 단계만 처리하고, 하위 폴더가 필요할 때 제외 규칙과 심볼릭 링크 정책을 먼저 추가합니다.
-
-## 2. 분류 규칙을 데이터로 분리
-
-```python
-CATEGORIES = {
-    "images": {".jpg", ".jpeg", ".png", ".gif", ".webp"},
-    "documents": {".pdf", ".docx", ".pptx", ".txt", ".md"},
-    "data": {".csv", ".json", ".xlsx", ".xml"},
-    "archives": {".zip", ".tar", ".gz", ".7z"},
-}
-
-
-def category_for(path):
-    suffix = path.suffix.lower()
-    for category, suffixes in CATEGORIES.items():
-        if suffix in suffixes:
-            return category
-    return "other"
-```
-
-규칙을 조건문 여러 개로 퍼뜨리지 않으면 설정 파일로 분리하거나 테스트하기 쉽습니다. 확장자는 내용을 보증하지 않으므로 보안 판정 기준으로 사용하지 않습니다.
-
-## 3. 이름 충돌
-
-도착지에 같은 이름이 있으면 무조건 덮어쓰지 않습니다.
-
-```python
-def unique_destination(destination, reserved):
-    candidate = destination
-    number = 2
-
-    while candidate.exists() or candidate in reserved:
-        candidate = destination.with_name(
-            f"{destination.stem}_{number}{destination.suffix}"
-        )
-        number += 1
-
-    reserved.add(candidate)
-    return candidate
-```
-
-`reserved`는 현재 계획에서 이미 배정한 이름까지 충돌 검사에 포함합니다.
-
-## 4. 계획과 적용
+## 1. 입력·중간 결과·출력 폴더를 분리합니다
 
 ```text
-파일 탐색
-→ 제외 규칙
-→ 분류·충돌 해결
-→ 변경 계획 출력
-→ 사용자 검토
-→ 작업 기록 생성
-→ 하나씩 이동·상태 갱신
-→ 최종 건수 검증
+case-001/
+├── evidence/             수집 원본: EVTX, Prefetch, 하이브, MFT 등
+├── parsed/               파서가 만든 CSV·JSON과 파서 실행 로그
+├── intake/
+│   ├── manifest.json     어떤 파일을 어떤 의미로 읽을지 선언
+│   └── exports/          승인된 CSV 작업 사본
+└── analysis-run-001/     Python 분석 결과; 기존 결과와 별도
 ```
 
-작업 도중 실패하면 이미 적용된 항목과 적용되지 않은 항목을 기록으로 구분해야 합니다. 그래야 도중부터 재개하거나 이미 적용된 항목만 되돌릴 수 있습니다.
+이는 교안의 권장 작업 구조이며 KAPE의 고정 출력 디렉터리 규격이 아닙니다. Target·Module·실행 옵션에 따라 실제 구조가 달라질 수 있습니다.
 
-## 5. 복사·이동·삭제
+## 2. manifest는 파일 이름 추측을 없앱니다
 
-| 작업 | 함수 | 주의점 |
-| --- | --- | --- |
-| 파일 복사 | `shutil.copy2()` | 메타데이터 보존 여부 확인 |
-| 폴더 복사 | `shutil.copytree()` | 기존 도착지 정책 확인 |
-| 이동 | `shutil.move()` | 파일시스템 경계에서 복사+삭제가 될 수 있음 |
-| 단일 파일 삭제 | `Path.unlink()` | 복구 불가능, 명시적 승인 필요 |
-| 빈 폴더 삭제 | `Path.rmdir()` | 비어 있을 때만 성공 |
-
-초기 버전에서는 삭제를 구현하지 않고 격리 폴더로 이동하는 방식이 안전합니다.
-
-## 6. ZIP 압축과 경로 탈출
-
-압축 내부 이름에 `../`나 절대 경로가 있으면 압축 해제 폴더 밖으로 파일을 쓸 수 있습니다.
-
-```python
-from zipfile import ZipFile
-
-
-def safe_extract(archive_path, output_dir):
-    output_root = output_dir.resolve()
-
-    with ZipFile(archive_path) as archive:
-        for member in archive.infolist():
-            destination = (output_root / member.filename).resolve()
-            if not destination.is_relative_to(output_root):
-                raise ValueError(f"위험한 압축 경로: {member.filename}")
-        archive.extractall(output_root)
+```json
+{
+  "schema_version": 1,
+  "case_id": "CASE-001",
+  "sources": [
+    {
+      "id": "host-a-security",
+      "host": "HOST-A",
+      "artifact": "evtx",
+      "path": "exports/security.csv",
+      "parser": "사용한 파서 이름",
+      "parser_version": "실제 버전",
+      "timestamp_kind": "event_created",
+      "columns": {
+        "timestamp": "TimeCreated",
+        "event_id": "EventId",
+        "channel": "Channel",
+        "provider": "Provider",
+        "record_id": "EventRecordId",
+        "user": "TargetUser",
+        "src_ip": "SourceAddress",
+        "logon_type": "LogonType"
+      }
+    }
+  ]
+}
 ```
 
-실무에서는 파일 개수, 개별·전체 해제 크기, 압축률 제한도 추가합니다.
+오른쪽 열 이름은 **매핑 방법을 설명하기 위한 예**입니다. 특정 EvtxECmd 버전의 실제 헤더라고 가정하지 않습니다. 실제 CSV 헤더를 확인해 바꾸어야 하며, 이벤트별 값이 복합 필드에 들어 있다면 별도 어댑터가 먼저 필요합니다.
 
-## 7. 파일 무결성 실습으로 연결
+`host`는 수집 자료의 원래 호스트입니다. 분석을 수행하는 PC 이름으로 채우지 않습니다. 도메인 계정·SID와 호스트별 로컬 계정은 구분하고, 별칭을 자동으로 같은 사용자로 합치지 않습니다.
 
-[13-6 프로젝트](13-6-safe-file-organizer-project.md)에서는 파일 선택과 경로 관리에 내용 비교를 더합니다. 승인된 학습용 폴더의 상대 경로와 SHA-256을 기준선에 기록하고, 다음 검사에서 추가·수정·삭제를 구분합니다.
+## 3. 원본으로 되돌아갈 수 있어야 합니다
 
-| 이 단원의 개념 | 무결성 프로젝트의 적용 |
+예제는 CSV 바이트의 SHA-256, 파일 상대 경로, 헤더를 1로 센 레코드 번호를 정규화 행마다 저장합니다. 줄바꿈이 포함된 CSV 셀은 여러 줄을 차지할 수 있으므로 레코드 번호는 물리적 줄 번호와 다릅니다.
+
+CSV 해시는 **분석에 입력된 CSV의 동일성**을 확인합니다. 수집 원본 EVTX의 해시나 적법한 증거 인계 기록을 대신하지 않습니다. 실제 사건에는 원본 아티팩트 경로·해시·수집 시각·수집 도구 버전·인계 기록을 별도로 연결합니다.
+
+## 4. 누락과 0건의 차이
+
+| 상태 | 의미 |
 | --- | --- |
-| 작업 범위 고정 | 검사 루트를 고정하고 기준선·결과는 그 밖에 저장 |
-| 파일 선택 | 일반 파일만 읽고 링크·특수 파일 발견 시 검사 중단 |
-| 이름 충돌 방지 | 기존 기준선과 검사 결과 덮어쓰기 거부 |
-| 원본 보존 | 검사 대상은 읽기만 하고 변경 목록을 별도로 출력 |
+| `processed` | 헤더와 모든 행을 처리함 |
+| `empty` | 유효한 헤더가 있으나 데이터 행이 없음 |
+| `partial` | 유효한 행과 격리한 오류 행이 함께 있음 |
+| `parse_failed` | 인코딩·CSV 형식·헤더 계약 오류 |
+| `missing` | manifest에 선언한 파일을 받지 못함 |
 
-확장자는 파일의 내용을 보증하지 않습니다. 무결성 비교에는 파일 내용을 읽어 계산한 해시를 사용하며, 변경이 발견되면 승인된 수정인지 별도로 확인합니다.
+manifest에 선언하지 않은 자료의 수집 여부는 알 수 없습니다. 기본 프로그램이 디스크 전체를 검색하거나 필요한 자료를 자동으로 찾아내는 것은 아닙니다.
 
 ## 실습
 
-1. 임시 폴더에 확장자가 다른 파일 6개를 만듭니다.
-2. 분류 계획을 JSON으로만 출력합니다.
-3. 도착지에 같은 이름의 파일을 미리 만들어 충돌 처리를 확인합니다.
-4. 심볼릭 링크가 제외되는지 확인합니다.
-5. 원상복구 기록에 필요한 필드를 정의합니다.
+1. 합성 자료를 생성하고 manifest와 실제 CSV 헤더를 나란히 읽습니다.
+2. 존재하지 않는 `amcache.csv`가 왜 `missing`인지 설명합니다.
+3. 헤더만 있는 파일과 헤더가 틀린 파일을 만들어 각각의 상태를 비교합니다.
 
-## 완료 기준
-
-- [ ] 작업 경로를 명시적으로 고정했습니다.
-- [ ] 도착 파일을 무조건 덮어쓰지 않습니다.
-- [ ] 미리보기와 적용 단계를 분리했습니다.
-- [ ] 작업 도중 실패 시 적용 상태를 확인할 수 있습니다.
-- [ ] 위험한 ZIP 내부 경로를 거부할 수 있습니다.
+- [ ] 수집 원본·파서 결과·분석 결과를 구분합니다.
+- [ ] 자료별 호스트·파서·열 매핑이 선언되어 있습니다.
+- [ ] 해시만으로 증거의 모든 신뢰성을 보장한다고 설명하지 않습니다.
 
 ---
 
-다음: [13-3. 웹 정보 수집](13-3-web-collection.md)
+다음: [13-3. 아티팩트 파서와 분석 엔진 연계](13-3-web-collection.md)

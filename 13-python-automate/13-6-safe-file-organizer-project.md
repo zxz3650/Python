@@ -1,132 +1,131 @@
-# 13-6. 프로젝트 A - 파일 무결성 변경 탐지기
+# 13-6. 프로젝트 A - KAPE 결과 정규화
 
-서버 설정과 배포 파일이 승인된 상태에서 바뀌었는지 확인하는 도구를 만듭니다. 학습용 폴더의 상대 경로와 SHA-256을 JSON 기준선으로 저장한 뒤, 다시 검사해 추가·수정·삭제된 파일을 보고합니다.
+> **핵심 질문** · 분석 조건을 적용하기 전에 자료를 같은 기준으로 읽고 출처를 보존할 수 있을까요?
 
-{% hint style="info" %}
-## 🧭 프로젝트 목표
+프로젝트 A에서는 파서 출력 CSV를 공통 레코드로 바꾸는 부분을 구현합니다. 프로젝트 B는 같은 레코드에서 검토 항목과 관련 근거를 추출합니다. 제공 `pipeline.py`에는 두 단계가 함께 있으므로 먼저 `load_case()`와 `normalize()`를 읽고 결과를 대조합니다.
 
-- `pathlib`, 반복문, 바이너리 읽기로 파일 목록과 해시를 수집합니다.
-- 딕셔너리와 집합 연산으로 두 시점의 차이를 구분합니다.
-- `baseline`, `check` CLI와 종료 코드로 예약 검사 흐름을 만듭니다.
-- 파일 변경 사실과 보안 사고 판정을 구분합니다.
-{% endhint %}
+## 1. 실습 파일
 
-## 1. 보안 업무 시나리오
+- [`make_sample.py`](../examples/13-kape-triage/make_sample.py): 합성 CSV·manifest 생성
+- [`pipeline.py`](../examples/13-kape-triage/pipeline.py): 정규화·검토 항목 추출·HTML 보고
+- [`실행 안내`](../examples/13-kape-triage/README.md)
 
-관리자가 승인한 설정 파일로 기준선을 만듭니다. 이후 설정 변경이나 파일 누락이 발생하면 변경 목록을 확인하고, 승인된 배포인지 조사합니다. 이 도구는 변경을 탐지하며 원인을 확정하거나 파일을 복구하지 않습니다.
+Python 표준 라이브러리만 사용합니다. 제공 자료는 실제 KAPE·PECmd·EvtxECmd 출력이 아니며 **열 매핑과 오류 처리를 학습하기 위한 합성 내보내기 형식**입니다. 해당 도구들의 원본 CSV와 직접 호환된다고 가정하지 않습니다.
 
-실습 코드는 [`file_integrity.py`](../examples/13-python-automate/file_integrity.py)입니다. 저장소 루트에서 명령을 실행합니다. Python 표준 라이브러리만 사용합니다.
+## 2. 입력 만들기
 
-## 2. 기능 요구사항
-
-| 기능 | 요구사항 | 실패 처리 |
-| --- | --- | --- |
-| 기준선 생성 | 하위 폴더의 일반 파일을 64 KiB씩 읽어 SHA-256 기록 | 기존 기준선 덮어쓰기 거부 |
-| 경로 관리 | 기준선에 상대 경로, 검사 루트, 형식 버전 저장 | 다른 루트의 기준선 사용 거부 |
-| 변경 비교 | `added`, `modified`, `deleted`, `unchanged` 분리 | 손상된 기준선이면 검사 실패 |
-| 결과 저장 | 표준 출력과 선택적 JSON 파일 출력 | 기존 결과 덮어쓰기 거부 |
-| 범위 관리 | 기준선·결과를 검사 폴더 밖에 저장 | 링크·특수 파일·읽기 실패 시 중단 |
-
-심볼릭 링크는 조용히 제외하지 않고 오류로 처리합니다. 일부 파일을 읽지 못했는데도 전체 검사가 정상이라고 표시하지 않기 위해서입니다.
-
-## 3. 학습용 폴더 준비
-
-저장소 루트에서 아래 Python 코드를 한 번 실행합니다. 실제 설정이나 비밀번호는 사용하지 않습니다. 재실습할 때는 `integrity-lab-02`처럼 새 폴더 이름을 사용합니다.
-
-```python
-from pathlib import Path
-
-root = Path("outputs/integrity-lab/target")
-root.mkdir(parents=True, exist_ok=False)
-(root / "app.conf").write_text("debug=false\n", encoding="utf-8")
-(root / "policy.txt").write_text("session_timeout=600\n", encoding="utf-8")
-(root / "notice.txt").write_text("training only\n", encoding="utf-8")
-```
-
-## 4. 기준선 생성과 정상 검사
+저장소 루트에서 실행합니다. 기존 폴더가 없는 새 이름을 사용합니다.
 
 ```bash
-python examples/13-python-automate/file_integrity.py baseline outputs/integrity-lab/target --baseline outputs/integrity-lab/baseline.json
-python examples/13-python-automate/file_integrity.py check outputs/integrity-lab/target --baseline outputs/integrity-lab/baseline.json
+python examples/13-kape-triage/make_sample.py outputs/kape-input
 ```
-
-기준선 생성 시 `기준선 생성: 3개 파일`을 출력합니다. 최초 검사에서는 `unchanged`에 세 파일이 있고 나머지 목록은 비어 있습니다. 두 명령 모두 종료 코드 0입니다.
-
-## 5. 변경을 만들어 탐지하기
-
-앞서 만든 학습용 파일만 변경합니다.
-
-```python
-from pathlib import Path
-
-root = Path("outputs/integrity-lab/target")
-(root / "app.conf").write_text("debug=true\n", encoding="utf-8")
-(root / "policy.txt").unlink()
-(root / "new.conf").write_text("feature=enabled\n", encoding="utf-8")
-```
-
-```bash
-python examples/13-python-automate/file_integrity.py check outputs/integrity-lab/target --baseline outputs/integrity-lab/baseline.json --output outputs/integrity-lab/changes.json
-```
-
-예상 결과는 다음과 같고 종료 코드는 2입니다.
-
-```json
-{
-  "added": ["new.conf"],
-  "deleted": ["policy.txt"],
-  "modified": ["app.conf"],
-  "unchanged": ["notice.txt"]
-}
-```
-
-같은 검사를 반복해도 분류는 같습니다. 저장하려면 새 결과 이름을 지정하거나 `--output`을 생략합니다. 파일 이름 변경은 삭제와 추가로 표시합니다.
-
-## 6. 직접 구현할 핵심 로직
-
-예제 코드를 실행한 다음 `snapshot()`, `compare()`, `load_baseline()`을 직접 구현해 봅니다.
 
 ```text
-검사 루트 확인 → 일반 파일 목록 → 청크 단위 SHA-256
-→ 기준선과 현재 경로 집합 비교
-→ 공통 경로의 해시 비교 → 변경 목록 정렬 → 결과 출력
+kape-input/
+├── manifest.json
+├── events-host-a.csv
+├── events-host-b.csv
+├── prefetch.csv
+├── registry.csv
+├── mft.csv
+└── shimcache.csv
 ```
 
-| 종료 코드 | 의미 | 예약 작업의 후속 처리 |
-| --- | --- | --- |
-| 0 | 기준선 생성 성공 또는 변경 없음 | 실행 이력 보관 |
-| 1 | 읽기·기준선·출력 오류 | 검사 실패 원인 확인 |
-| 2 | 파일 변경 발견 | 승인된 변경인지 검토 |
+manifest에는 `amcache.csv`도 선언되어 있지만 파일은 만들지 않습니다. 미수집 상태를 보고하는 연습입니다. 합성 IP `192.0.2.50`은 자료 안의 값이며 접속 대상이 아닙니다.
 
-## 7. 결과 해석과 한계
+## 3. 한 행의 변환을 따라갑니다
 
-- 해시가 다르다는 사실만으로 악성 변경이라고 판단할 수 없습니다. 변경 승인 내역과 대조합니다.
-- 기준선까지 바뀌면 비교 결과를 신뢰할 수 없습니다. 승인된 기준선을 검사 대상과 분리하고 접근 권한을 관리합니다. SHA-256 자체는 기준선 작성자를 인증하지 않습니다.
-- 실습은 검사 중 파일이 바뀌지 않는 폴더를 전제로 합니다. 운영 환경의 동시 변경과 링크 교체 경쟁 조건을 방어하는 제품 수준의 감시 도구는 아닙니다.
-- 내용만 비교하므로 권한·소유자·시간 정보의 변경은 탐지하지 않습니다. 빈 폴더 변경도 대상에 포함하지 않습니다.
+예제 `events-host-b.csv`의 첫 시각은 `2026-09-01T09:06:00+09:00`입니다.
 
-## 8. 테스트와 확장 과제
+| 입력·설정 | 정규화 결과 |
+| --- | --- |
+| source의 `host=HOST-B` | 원래 호스트 유지 |
+| `columns.timestamp=When` | `When` 열을 시각 필드로 읽음 |
+| 시각의 `+09:00` | UTC로 바꾸어 `2026-09-01T00:06:00Z` |
+| `timestamp_kind=event_created` | 다른 아티팩트의 실행·파일 시각과 구분 |
+| CSV 바이트·레코드 번호 | 해시·출처 위치·안정적인 UID 생성 |
+
+`When`이 모든 파서에 있는 표준 열이어서 읽는 것이 아닙니다. manifest가 원본 열과 공통 필드의 관계를 알려 줍니다.
+
+## 4. 실행과 예상 결과
 
 ```bash
-python -m pytest -q tests/test_security_automation.py
+python examples/13-kape-triage/pipeline.py outputs/kape-input/manifest.json --output outputs/kape-report-01
 ```
 
-1. 정상·추가·수정·삭제·빈 파일을 준비해 결과를 비교합니다.
-2. 기존 기준선에 다시 쓰기를 시도해 원본이 유지되는지 확인합니다.
-3. 없는 폴더, 손상된 JSON, 잘못된 해시, 심볼릭 링크에서 정상 판정이 나오지 않는지 확인합니다.
-4. 확장: 검사 시각과 이전·현재 해시를 결과에 추가합니다.
-5. 확장: 승인 사유를 기록하고 새로운 이름으로 기준선을 갱신하는 절차를 설계합니다.
+표준 출력 첫 줄:
 
-{% hint style="success" %}
-## ✅ 완료 기준
+```json
+{"events": 14, "findings": 8, "issues": 1, "undated": 1, "missing_sources": 1}
+```
 
-- [ ] 기준선 생성 후 원본 파일 내용이 유지됩니다.
-- [ ] 추가·수정·삭제·변경 없음을 구분합니다.
-- [ ] 검사 실패와 변경 발견의 종료 코드를 구분합니다.
-- [ ] 기준선과 출력 파일을 덮어쓰지 않습니다.
-- [ ] 파일 변경을 사고로 확정할 수 없는 이유를 설명합니다.
-{% endhint %}
+종료 코드는 `2`이며 처리 상태는 `partial`입니다. 실패한 프로그램이라는 뜻이 아니라, 일부 입력 문제와 누락을 보존한 보고서가 만들어졌다는 뜻입니다.
+
+| 대조 항목 | 예상값 | 의미 |
+| --- | --- | --- |
+| 선언 자료 | 7개 | CSV 6개 + 누락 Amcache 1개 |
+| 읽은 CSV 행 | 15개 | 헤더 제외 |
+| 유효한 레코드 | 14개 | 시각 없는 Shimcache 1개 포함 |
+| 격리 행 | 1개 | 시간대 없는 HOST-B 이벤트 |
+| 시각 있는 레코드 | 13개 | UTC 타임라인에 정렬 |
+| 시각 없는 레코드 | 1개 | 삭제하지 않고 끝에 보존 |
+
+자료 파일 형식 전체가 손상된 경우에는 읽지 못한 뒷부분의 행 수까지 알 수 없습니다. 이때 `parse_failed`와 실제 읽은 행 수를 기록하므로 모든 실패 파일에서 전체 입력 행 수를 정확히 계산했다고 설명하지 않습니다.
+
+## 5. 산출물 확인
+
+```text
+kape-report-01/
+├── normalized.jsonl     공통 레코드 전체
+├── report.json          처리 범위·오류·검토 항목·관련 경로 전체
+├── report.html          로컬에서 읽는 요약 화면
+└── complete.json        결과 저장 완료 표시와 report.json 해시
+```
+
+```python
+import json
+from pathlib import Path
+
+report = json.loads(Path("outputs/kape-report-01/report.json").read_text(encoding="utf-8"))
+assert len(report["events"]) == 14
+assert report["summary"]["undated"] == 1
+assert report["processing_status"] == "partial"
+print("입력 검증 결과 확인 완료")
+```
+
+## 6. 직접 구현할 부분
+
+| 함수 | 학습할 책임 |
+| --- | --- |
+| `input_path()` | 입력 루트·상대 경로·링크 정책 확인 |
+| `utc_time()` | 문법·시간대·정밀도 확인 후 UTC 변환 |
+| `normalize()` | 열 매핑·필수 값·출처·UID 생성 |
+| `load_case()` | 자료별 상태·오류 분리와 시간 정렬 |
+
+다음 변경을 각각 새 출력 경로로 시험합니다.
+
+1. HOST-B source에 근거 있는 `utc_offset`을 지정하면 어떤 행이 복구되는지 확인합니다. 합성 자료에서는 `+09:00`을 사용합니다.
+2. Prefetch CSV를 헤더만 남긴 작업 사본으로 바꾸어 `empty`를 확인합니다.
+3. 매핑에 없는 열 이름을 설정해 `parse_failed`를 확인합니다.
+4. 같은 입력 파일을 두 번 선언하면 오류로 중단되는지 확인합니다.
+
+## 7. 실제 KAPE 결과로 바꾸는 절차
+
+1. 파서와 출력 프로필을 고정하고 익명화된 소량 샘플을 준비합니다.
+2. 실제 헤더와 필드 값을 확인해 manifest를 작성합니다.
+3. 복합 Payload·다중 시각·경로 결합이 필요하면 전용 어댑터를 작성합니다.
+4. 원본 몇 행을 수작업으로 대조한 뒤 전체 자료를 처리합니다.
+5. 파서·규칙 업데이트 시 같은 계약 검증을 다시 수행합니다.
+
+실제 원본 EVTX·Prefetch·하이브 파싱, KAPE 실행, 전체 사건의 모든 아티팩트 자동 식별은 이 기본 프로젝트의 구현 범위가 아닙니다.
+
+## 완료 기준
+
+- [ ] 정상·누락·빈 파일·파일 오류·행 오류를 구분합니다.
+- [ ] 14개 레코드와 1개 오류 행을 샘플과 대조합니다.
+- [ ] 시각 없는 레코드를 버리지 않습니다.
+- [ ] 원본 해시·레코드 위치·파서 버전을 보존합니다.
 
 ---
 
-다음: [13-7. 프로젝트 B - 보안 점검 결과 보고서](13-7-spreadsheet-report-project.md)
+다음: [13-7. 프로젝트 B - Windows 아티팩트 통합 분석](13-7-spreadsheet-report-project.md)
