@@ -24,37 +24,43 @@ Python 코드를 같은 조건에서 반복 실행할 수 있도록 실습 환�
 | Python + `venv` | 처음 시작하는 학습자, 이 과정의 기본 실습 | 2.2 → 2.3 → 2.4 → 2.6 → 2.7 → 2.8 |
 | Miniconda + conda 환경 | 기존 conda 사용자, 별도의 conda 환경이 필요한 학습자 | 2.2 → 2.5 → 2.6 → 2.7 → 2.8 |
 
-이 장을 마치면 교안 저장소의 프로젝트 루트에 다음과 같은 실습 자료가 준비된다. `.venv`는 기본 `venv` 경로를 선택했을 때만 생성되며, conda 환경은 저장소 밖의 conda 환경 디렉터리에서 관리된다.
+이 장에서는 직접 만든 `python-basic` 실습 폴더에 필요한 파일을 하나씩 준비한다. `.venv`는 기본 `venv` 경로를 선택했을 때만 생성되며, conda 환경은 별도의 conda 환경 디렉터리에서 관리된다.
 
 ```text
-Python/
-├── .venv/              # venv 경로에서만 생성, Git에 저장하지 않음
-├── requirements.txt    # 핵심 과정 의존성
-├── notebooks/          # Jupyter 실습 파일
-└── 03-python-basics.md
+python-basic/
+├── .venv/              # 2.4절에서 생성하는 가상환경
+├── requirements.txt    # 2.2절에서 직접 만드는 패키지 목록
+├── practice.ipynb      # 2.7절에서 만드는 Notebook
+└── verify_setup.py     # 2.8절에서 만드는 환경 검증 코드
 ```
 
 {% hint style="warning" %}
 `.venv`는 실행 환경에 따라 내용이 달라지므로 다른 사람에게 복사하거나 Git에 커밋하지 않는다. 다른 환경에서는 `requirements.txt`를 사용해 새로 만든다.
 {% endhint %}
 
-## 2.2 실습 파일 준비하기
+## 2.2 실습 폴더와 패키지 목록 준비하기
 
-GitBook은 교안을 읽는 화면이며, 터미널 실습에는 저장소 파일이 필요하다. Git이 설치돼 있다면 다음 명령으로 저장소를 내려받고 프로젝트 루트로 이동한다.
+터미널 또는 PowerShell에서 실습 자료를 보관할 위치로 이동한 뒤, 전용 폴더를 만들고 그 안으로 이동한다.
 
 ```bash
-git clone https://github.com/zxz3650/Python.git
-cd Python
+mkdir python-basic
+cd python-basic
 ```
 
-Git을 사용하지 않는다면 [GitHub 저장소](https://github.com/zxz3650/Python)에서 **Code → Download ZIP**을 선택하고 압축을 푼다. 이후 터미널이나 PowerShell에서 압축을 푼 폴더로 이동한다.
+이후 이 장의 명령은 이 **실습 폴더**에서 실행한다. 각 장의 예제 코드는 학습하면서 파일로 작성하고, 별도로 제공되는 자료는 해당 실습에서 필요한 파일만 준비한다.
 
-이후 명령은 다음 두 파일이 보이는 프로젝트 루트에서 실행한다.
+텍스트 편집기로 다음 내용을 작성해 실습 폴더에 `requirements.txt`라는 이름으로 저장한다. 파일 이름이 `requirements.txt.txt`가 되지 않도록 확장자를 확인한다.
 
-- [requirements.txt](requirements.txt): 핵심 과정 패키지 목록
-- [notebooks/README.md](notebooks/README.md): Notebook 실습 안내
+```text
+pytest>=8,<9
+numpy>=2
+pandas>=2
+jupyterlab>=4
+ipykernel>=6
+requests>=2.32,<3
+```
 
-저장소를 clone한 폴더는 보통 `Python`이고 ZIP 파일을 푼 폴더는 `Python-master`일 수 있다. 이 장에서 말하는 **프로젝트 루트**는 폴더 이름과 관계없이 `requirements.txt`와 `notebooks`가 함께 있는 위치다.
+`requirements.txt`는 설치할 패키지와 버전 조건을 한 줄씩 기록하는 텍스트 파일이다. 예를 들어 `pytest>=8,<9`는 8 이상, 9 미만 버전을 뜻한다. 2.6절에서 이 파일을 읽어 공통 실습 패키지를 설치한다.
 
 ## 2.3 Python 설치와 버전 확인
 
@@ -121,7 +127,7 @@ Linux의 시스템 Python에 `sudo pip install ...`로 패키지를 설치하지
 
 ## 2.4 `venv` 가상환경 만들기
 
-가상환경은 프로젝트마다 독립된 Python 실행 파일과 패키지 설치 위치를 제공한다. 아래 명령은 2.2절에서 확인한 프로젝트 루트에서 실행한다.
+가상환경은 프로젝트마다 독립된 Python 실행 파일과 패키지 설치 위치를 제공한다. 아래 명령은 2.2절에서 만든 실습 폴더에서 실행한다.
 
 ### Windows PowerShell
 
@@ -205,7 +211,7 @@ conda deactivate
 
 ## 2.6 과정 패키지 설치하기
 
-2.4절의 `.venv` 또는 2.5절의 conda 환경을 활성화한 상태에서 저장소의 `requirements.txt`를 사용한다.
+2.4절의 `.venv` 또는 2.5절의 conda 환경을 활성화한 상태에서 2.2절에 직접 만든 `requirements.txt`를 사용한다. 명령을 실행하는 위치에 이 파일이 있어야 한다.
 
 ```bash
 python -m pip install --upgrade pip
@@ -246,7 +252,7 @@ jupyter lab
 python -m ipykernel install --user --name python-basic --display-name "Python (python-basic)"
 ```
 
-Notebook의 첫 셀에서 실제 커널을 확인한다.
+JupyterLab의 Launcher에서 Python Notebook을 새로 만들고 `practice.ipynb`로 저장한다. 첫 셀에 다음 코드를 입력하고 `Shift+Enter`로 실행해 실제 커널을 확인한다.
 
 ```python
 import sys
@@ -352,12 +358,12 @@ python -m pip --version
 python -m pip freeze
 ```
 
-`pip freeze` 결과에는 직접 설치하지 않은 하위 의존성이나 내부 패키지 이름·다운로드 위치가 포함될 수 있다. 외부에 공유하기 전에 내용을 확인한다. 저장소의 공식 설치 기준은 `requirements.txt`이며, `pip freeze`는 현재 환경을 조사하고 문제를 재현할 때 참고 자료로 사용한다.
+`pip freeze` 결과에는 직접 설치하지 않은 하위 의존성이나 내부 패키지 이름·다운로드 위치가 포함될 수 있다. 외부에 공유하기 전에 내용을 확인한다. 이 장의 설치 기준은 2.2절에서 작성한 `requirements.txt`이며, `pip freeze`는 현재 환경을 조사하고 문제를 재현할 때 참고 자료로 사용한다.
 
 ## 완료 기준
 
 - [ ] Python 3.10 이상을 실행할 수 있다.
-- [ ] 교안 저장소의 `.venv` 또는 conda의 `python-basic` 환경을 만들고 활성화할 수 있다.
+- [ ] 실습 폴더의 `.venv` 또는 conda의 `python-basic` 환경을 만들고 활성화할 수 있다.
 - [ ] `python`과 `python -m pip`가 같은 가상환경을 가리키는지 확인할 수 있다.
 - [ ] `requirements.txt`의 패키지를 설치할 수 있다.
 - [ ] JupyterLab에서 올바른 커널을 선택할 수 있다.
