@@ -68,22 +68,17 @@ requests>=2.32,<3
 
 ### Windows
 
-1. [Python 공식 다운로드 페이지](https://www.python.org/downloads/)에서 Python 3.12 설치 프로그램을 내려받는다.
-2. 설치 화면에 `Add python.exe to PATH` 선택지가 있으면 활성화한다.
-3. 새 PowerShell 또는 명령 프롬프트를 열어 버전을 확인한다.
-
-```powershell
-py -3.12 --version
-py -0p
-```
-
-`py` 명령을 사용할 수 없다면 다음 명령을 확인한다.
+1. [Python 공식 다운로드 페이지](https://www.python.org/downloads/)에서 과정용 Python을 설치한다. Python Install Manager를 사용하는 경우 `py install 3.12`로 3.12를 설치할 수 있다. 기존 3.12 설치 프로그램을 사용하는 경우에는 `Add python.exe to PATH` 선택지가 있으면 활성화한다.
+2. 새 PowerShell 또는 명령 프롬프트를 연다. 아래 명령은 Python의 `>>>` 화면이 아닌 터미널에서 **한 줄씩** 실행한다.
 
 ```powershell
 python --version
+python -c "import sys; print(sys.executable)"
 ```
 
-`python`이나 `py`를 찾을 수 없다면 기존 터미널을 닫고 새로 연다. 그래도 찾지 못하면 설치 프로그램을 다시 실행해 Python Launcher와 PATH 설정을 확인한다.
+첫 번째 명령은 현재 선택된 Python 버전, 두 번째 명령은 실제 실행 파일의 경로를 보여 준다. 버전이 3.10 이상인지 확인하고 이 경로를 기록한다. 2.4절에서는 이 Python으로 가상환경을 만든다.
+
+`python`을 찾지 못하거나 Microsoft Store가 열리면 설치 여부와 PATH·앱 실행 별칭을 확인한 뒤 새 터미널에서 다시 실행한다. 여러 Python이 설치되어 있으면 Python Install Manager의 `py list`로 설치 목록을 확인한다. 이 명령은 Install Manager용이므로 기존 Launcher만 설치된 환경에서는 지원 여부가 다를 수 있다. 자세한 설정은 [Python의 Windows 안내](https://docs.python.org/3/using/windows.html)를 참고한다.
 
 ### macOS
 
@@ -132,13 +127,13 @@ Linux의 시스템 Python에 `sudo pip install ...`로 패키지를 설치하지
 ### Windows PowerShell
 
 ```powershell
-py -3.12 -m venv .venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python --version
 python -m pip --version
 ```
 
-Python 3.10 또는 3.11을 계속 사용한다면 `py -0p`로 설치 경로를 확인하고 `-3.12`를 실제 버전(예: `-3.11`)으로 바꾼다.
+가상환경 생성 전에는 2.3절에서 확인한 Python을 사용하고, 활성화 후에는 `sys.executable`이 실습 폴더의 `.venv\Scripts\python.exe`를 가리키는지 확인한다.
 
 PowerShell에서 스크립트 실행이 차단되면 정책을 영구 변경하기 전에 명령 프롬프트에서 다음 활성화 파일을 사용할 수 있다.
 
@@ -218,14 +213,18 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-핵심 요구사항에는 다음 패키지가 포함된다.
+패키지 목록을 현재 교안 및 실습 코드와 대조하면 다음과 같다. 작업중인 장의 예정 항목과 현재 실행 예제에서 사용하는 항목을 구분한다.
 
-| 패키지 | 사용하는 과정 |
-| --- | --- |
-| `pytest` | 09장 테스트 |
-| `numpy`, `pandas` | 05장 데이터 분석 |
-| `requests` | 07장 HTTP와 08장 자동화 |
-| `jupyterlab`, `ipykernel` | Notebook 실습 |
+| 패키지 | 실제 사용 위치 | 용도·현재 상태 |
+| --- | --- | --- |
+| `numpy` | [05-7 NumPy 배열](05-text-processing/05-7-numpy-array.md), [05-9 웹 접근 로그 분석](05-text-processing/05-9-web-log-analysis.md) | 배열·조건 마스크·수치 집계 예제에서 사용 |
+| `pandas` | [05-8 pandas와 DataFrame](05-text-processing/05-8-pandas-dataframe.md), [05-9 웹 접근 로그 분석](05-text-processing/05-9-web-log-analysis.md) | 표 데이터 변환·집계 예제에서 사용 |
+| `requests` | [07-2 requests 기초](07-http-api/07-2-requests-basics.md)부터 이어지는 HTTP 실습, 08-5 HTTP 점검기 도구화 | 07장과 08-5 실습 코드에서 사용. 08장은 작업중 |
+| `pytest` | 09장 테스트와 디버깅 | 장 개요와 학습 계획은 존재하며 작업중. 현재 02장에서는 이후 학습을 위해 선행 설치 |
+| `jupyterlab` | 이 장의 [2.7절](#27-jupyterlab과-커널-확인), 03~05장 Notebook 실습 | Notebook 작성·실행 화면 제공 |
+| `ipykernel` | 이 장의 [2.7절](#27-jupyterlab과-커널-확인) | 선택한 Python 환경을 Notebook 실행 커널로 연결 |
+
+13장의 KAPE 기본 파이프라인은 Python 표준 라이브러리만 사용한다. KAPE·Hayabusa·Chainsaw 같은 외부 분석 도구는 이 패키지 목록으로 설치되지 않는다.
 
 `pip` 대신 `python -m pip`를 사용하면 현재 `python`과 연결된 pip를 명시적으로 실행할 수 있다. 설치가 끝난 뒤 두 경로를 다시 확인한다.
 
@@ -240,7 +239,15 @@ Beautiful Soup, Scapy, pwntools, PyCryptodome 같은 패키지는 핵심 환경�
 
 ## 2.7 JupyterLab과 커널 확인
 
-Jupyter 커널은 Notebook 셀의 Python 코드를 실제로 실행하는 프로세스와 환경이다. 앞에서 선택한 가상환경을 활성화한 터미널에서 JupyterLab을 실행한다.
+Jupyter 커널은 Notebook 셀의 Python 코드를 실제로 실행하는 프로세스와 환경이다. **가상환경 생성은 2.4절(`venv`) 또는 2.5절(conda)에서 진행한다. 이 절은 생성된 환경을 Notebook에 연결하고 확인하는 단계다.**
+
+JupyterLab을 열기 전에 다음을 점검한다.
+
+- [ ] 2.4절에서 `.venv`를 만들었거나 2.5절에서 conda의 `python-basic` 환경을 만들었다.
+- [ ] 현재 터미널에서 해당 환경을 활성화했다. 새 터미널에서는 다시 활성화해야 한다.
+- [ ] `python -c "import sys; print(sys.executable)"`의 경로가 선택한 환경을 가리킨다.
+
+생성 여부가 불확실하면 2.4·2.5절로 돌아가 확인한다. 환경이 이미 있다면 다시 만들지 않고 활성화한다. 확인한 터미널에서 JupyterLab을 실행한다.
 
 ```bash
 jupyter lab
@@ -263,7 +270,7 @@ print(sys.version)
 assert sys.version_info >= (3, 10)
 ```
 
-`sys.executable`이 앞에서 선택한 환경을 가리켜야 한다. `venv` 경로라면 `.venv`가, conda 경로라면 `python-basic` 환경의 디렉터리가 출력에 포함된다. 다른 경로가 출력되면 Jupyter의 커널 선택 메뉴에서 `Python (python-basic)`을 선택한다.
+`sys.executable`이 앞에서 선택한 환경을 가리켜야 한다. `venv` 경로라면 `.venv`가, conda 경로라면 `python-basic` 환경의 디렉터리가 출력에 포함된다. 다른 경로가 출력되면 올바른 환경을 활성화한 터미널에서 위의 커널 등록 명령을 실행한 뒤, Jupyter의 커널 선택 메뉴에서 `Python (python-basic)`을 선택하고 셀을 다시 실행한다.
 
 {% hint style="warning" %}
 터미널에서 패키지를 설치했는데 Notebook에서 `ModuleNotFoundError`가 발생하면 설치 실패보다 **터미널의 Python과 Notebook 커널이 다른 경우**를 먼저 확인한다.
@@ -271,7 +278,28 @@ assert sys.version_info >= (3, 10)
 
 ## 2.8 설치 결과 검증하기
 
-다음 코드를 `verify_setup.py`로 저장하고 가상환경에서 실행한다.
+먼저 2.7절에서 확인한 `sys.executable` 경로와 현재 터미널의 Python 경로를 비교한다.
+
+```bash
+python -c "import sys; print(sys.executable)"
+python -m pip --version
+```
+
+{% hint style="warning" %}
+### 가상환경을 가리키지 않는다면
+
+2.7절의 체크리스트로 돌아가 **가상환경을 생성하고 활성화했는지** 다시 확인한다. 생성 방법은 2.4절(`venv`) 또는 2.5절(conda)에 있다.
+
+- Windows `venv`: 실습 폴더에서 `.\.venv\Scripts\Activate.ps1` 실행
+- macOS·Linux `venv`: 실습 폴더에서 `source .venv/bin/activate` 실행
+- conda: `conda activate python-basic` 실행
+
+활성화한 뒤 위 두 명령을 다시 실행한다. `venv`라면 Python과 pip의 경로에 실습 폴더의 `.venv`가 포함되어야 한다. conda라면 `conda env list`에서 활성 환경의 경로를 확인해 비교한다. Notebook도 사용한다면 2.7절에서 커널 경로를 다시 확인한다.
+
+아래 검증 코드에서 패키지가 모두 `[OK]`여도 의도한 가상환경이라는 뜻은 아니다. 전역 환경에도 같은 패키지가 설치되어 있을 수 있으므로 **경로를 먼저 확인**한다.
+{% endhint %}
+
+경로를 확인한 뒤 다음 코드를 `verify_setup.py`로 저장하고 같은 터미널에서 실행한다.
 
 ```python
 from __future__ import annotations
@@ -317,7 +345,7 @@ print("[OK] 실습 환경 검증 완료")
 python verify_setup.py
 ```
 
-검증이 실패하면 누락된 패키지만 임의로 설치하기 전에 다음 명령을 다시 실행한다.
+검증이 실패하면 먼저 위 안내에 따라 가상환경 경로를 확인한다. 올바른 환경에서 패키지가 누락된 경우 다음 명령으로 설치하고 `python verify_setup.py`를 다시 실행한다.
 
 ```bash
 python -m pip install -r requirements.txt

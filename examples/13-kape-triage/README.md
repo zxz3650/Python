@@ -26,4 +26,4 @@ python examples/13-kape-triage/pipeline.py outputs/kape-input/manifest.json --ou
 python -m unittest discover -s tests -p 'test_kape_pipeline.py' -v
 ```
 
-[프로젝트 A: 정규화](../../13-python-automate/13-6-safe-file-organizer-project.md) · [프로젝트 B: 통합 분석](../../13-python-automate/13-7-spreadsheet-report-project.md) · [도구와 해석 참고](../../13-python-automate/13-8-artifact-reference.md)
+[프로젝트 A: 정규화](../../13-python-automate/13-6-safe-file-organizer-project.md) · [프로젝트 B: 통합 분석](../../13-python-automate/13-7-spreadsheet-report-project.md)

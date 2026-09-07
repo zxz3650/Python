@@ -68,4 +68,3 @@
   - [13-5. 완료 감지·워커·재실행 관리](13-python-automate/13-5-scheduling-gui.md)
   - [13-6. 프로젝트 A - KAPE 결과 정규화](13-python-automate/13-6-safe-file-organizer-project.md)
   - [13-7. 프로젝트 B - Windows 아티팩트 통합 분석](13-python-automate/13-7-spreadsheet-report-project.md)
-  - [13-8. 도구 검증과 아티팩트 해석 참고](13-python-automate/13-8-artifact-reference.md)
