@@ -29,33 +29,36 @@ PDF와 Word를 다루는 라이브러리는 동일한 파일이라도 모든 레
 | 열 | 필수 | 자료형 | 검증 예시 |
 | --- | --- | --- | --- |
 | `date` | 예 | 날짜 | ISO `YYYY-MM-DD` |
-| `category` | 예 | 문자열 | 공백 제외 1자 이상 |
-| `item` | 예 | 문자열 | 공백 제외 1자 이상 |
-| `amount` | 예 | 숫자 | 0 이상, `Decimal` 파싱 |
+| `asset` | 예 | 문자열 | 자산 식별자, 공백 제외 1자 이상 |
+| `check_id` | 예 | 문자열 | 점검 항목 식별자 |
+| `severity` | 예 | 문자열 | `high`, `medium`, `low`, `info` |
+| `status` | 예 | 문자열 | `pass`, `fail`, `review`, `na` |
+| `evidence` | 예 | 문자열 | 판단 근거 요약 |
 
 값을 읽자마자 셀에 쓰지 말고, 먼저 Python 객체로 검증한 후 정상 행과 오류 행을 나눕니다.
 
 ```python
 from dataclasses import dataclass
 from datetime import date
-from decimal import Decimal
 
 
 @dataclass(frozen=True)
-class Sale:
+class SecurityCheck:
     date: date
-    category: str
-    item: str
-    amount: Decimal
+    asset: str
+    check_id: str
+    severity: str
+    status: str
+    evidence: str
 ```
 
 ## 3. Workbook 구조
 
 학습 프로젝트는 다음 세 시트를 사용합니다.
 
-1. `요약`: 정상 건수, 오류 건수, 총액, 분류별 집계
-2. `정상 데이터`: 검증을 통과한 입력 행
-3. `검증 오류`: 원본 행 번호, 오류 사유, 원본 값
+1. `요약`: 검증 통과·입력 오류 행 수, 상태별 건수, high 미흡 건수
+2. `점검 결과`: 검증을 통과한 모든 점검 결과. 미흡·검토 필요도 포함
+3. `입력 오류`: 원본 레코드 번호, 오류 사유, 원본 값
 
 오류 행을 버리지 않으면 수정 후 재실행할 수 있고, 요약 값의 신뢰성을 판단할 수 있습니다.
 
@@ -66,13 +69,16 @@ from openpyxl import Workbook
 
 workbook = Workbook()
 sheet = workbook.active
-sheet.title = "정상 데이터"
+sheet.title = "점검 결과"
 
-sheet.append(["날짜", "분류", "항목", "금액"])
-sheet.append([record.date, record.category, record.item, float(record.amount)])
+record = SecurityCheck(date(2026, 9, 1), "lab-web-01", "CFG-001", "high", "fail", "합성 설정 점검")
+sheet.append(["날짜", "자산", "점검 항목", "심각도", "상태", "근거"])
+sheet.append([record.date, record.asset, record.check_id, record.severity, record.status, record.evidence])
+for cell in sheet[2]:
+    if isinstance(cell.value, str):
+        cell.data_type = "s"  # 외부 문자열을 수식으로 해석하지 않음
 
 sheet["A2"].number_format = "yyyy-mm-dd"
-sheet["D2"].number_format = "#,##0.00"
 ```
 
 날짜와 숫자를 포맷된 문자열로 쓰지 않고 자료형으로 저장합니다. 화면 표시 방식은 `number_format`으로 분리합니다.
@@ -82,12 +88,16 @@ sheet["D2"].number_format = "#,##0.00"
 `openpyxl`은 수식을 쓸 수 있지만 Excel처럼 수식을 계산하지는 않습니다.
 
 ```python
-sheet["B2"] = "=SUM('정상 데이터'!D2:D100)"
+summary = workbook.create_sheet("요약")
+summary["A1"] = "미흡 건수"
+summary["B1"] = '=COUNTIF(\'점검 결과\'!E2:E100,"fail")'
 ```
 
 - 자동화 출력을 다른 프로그램이 즉시 읽어야 한다면 Python으로 계산한 요약 값도 별도로 저장합니다.
 - 사용자가 Excel에서 입력을 수정할 예정이면 수식을 유지하고 열었을 때 재계산되도록 설계합니다.
-- 수식 범위와 요약 값을 실제 입력 합계와 대조합니다.
+- 수식 범위와 요약 값을 실제 상태별 건수와 대조합니다.
+
+13-7 프로젝트에서는 예약 작업이 즉시 집계를 읽을 수 있도록 Python에서 계산한 값을 저장합니다. 위 수식은 별도 연습이며, 프로젝트의 요약을 갱신하려면 CSV를 수정한 뒤 프로그램을 다시 실행합니다.
 
 CSV 셀이 `=`, `+`, `-`, `@`로 시작하는 문자열을 포함하면 스프레드시트 프로그램이 수식으로 해석할 수 있습니다. 외부 입력은 의도된 수식인지 검증하고 텍스트로 강제할 정책을 둡니다.
 
@@ -151,9 +161,9 @@ document.save("report.docx")
 ## 실습
 
 1. CSV 필수 열과 행 검증 규칙을 정의합니다.
-2. 정상 5건, 날짜 오류 1건, 금액 오류 1건을 준비합니다.
-3. Excel에 요약·정상 데이터·검증 오류 시트를 생성합니다.
-4. Excel을 다시 열어 시트 이름, 행 수, 합계를 검증합니다.
+2. 유효한 점검 결과 5건, 날짜 오류 1건, 허용되지 않은 상태 1건을 준비합니다.
+3. Excel에 요약·점검 결과·입력 오류 시트를 생성합니다.
+4. Excel을 다시 열어 시트 이름, 행 수, 상태별 건수를 검증합니다.
 5. 수식처럼 보이는 문자열을 입력해 해석 정책을 확인합니다.
 
 ## 완료 기준

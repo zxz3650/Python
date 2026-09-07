@@ -67,5 +67,5 @@
     - [13-3. 웹 정보 수집](13-python-automate/13-3-web-collection.md)
     - [13-4. 스프레드시트와 문서 자동화](13-python-automate/13-4-spreadsheet-documents.md)
     - [13-5. 예약·알림·이미지·GUI 자동화](13-python-automate/13-5-scheduling-gui.md)
-    - [13-6. 프로젝트 A - 안전한 파일 정리기](13-python-automate/13-6-safe-file-organizer-project.md)
-    - [13-7. 프로젝트 B - Excel 요약 보고서](13-python-automate/13-7-spreadsheet-report-project.md)
+    - [13-6. 프로젝트 A - 파일 무결성 변경 탐지기](13-python-automate/13-6-safe-file-organizer-project.md)
+    - [13-7. 프로젝트 B - 보안 점검 결과 보고서](13-python-automate/13-7-spreadsheet-report-project.md)
