@@ -624,16 +624,25 @@ else:
         NOTEBOOK_DIR / "05-6-datetime.ipynb",
         learner_cells(
             "05-6. 날짜와 시간",
-            "시간대가 있는 ISO 8601 값을 UTC로 통일하고 오류 행을 나눈다.",
+            "KST(UTC+09:00)를 명시해 한국 시각을 출력하고, 로그 비교용 UTC 값과 오류 행을 구분한다.",
             "timestamp-events.jsonl",
             r'''
 import json
+from datetime import datetime, timedelta, timezone
+
+KST = timezone(timedelta(hours=9), name="KST")
+lesson_time = datetime(2026, 8, 14, 10, 30, tzinfo=KST)
+print("한국 시각:", lesson_time.isoformat())
+print("시간대:", lesson_time.tzname(), lesson_time.utcoffset())
+# 실제 현재 한국 시각이 필요하면 datetime.now(KST)를 사용한다.
+# 자동 검증에는 실행 날짜와 관계없는 lesson_time을 사용한다.
+assert lesson_time.isoformat() == "2026-08-14T10:30:00+09:00"
 
 fixture_path = FIXTURE_DIR / "timestamp-events.jsonl"
 records = [json.loads(line) for line in fixture_path.read_text(encoding="utf-8").splitlines()]
 records
 ''',
-            "`parse_utc(value)`를 완성한다. `Z`를 처리하고 naive datetime은 거부한다.",
+            "`parse_utc(value)`는 로그 비교용 UTC 값을 반환하도록 완성한다. `Z`를 처리하고 naive datetime은 거부한다. `format_kst(value)`는 aware datetime을 `astimezone(KST)`로 변환해 `+09:00`이 포함된 ISO 8601 문자열을 반환한다. 입력 시각에 9시간을 직접 더하거나 시간대 표지만 바꾸지 않는다.",
             r'''
 from datetime import datetime, timezone
 
@@ -642,6 +651,10 @@ TODO_DONE = False
 
 def parse_utc(value: str) -> datetime:
     raise NotImplementedError
+
+
+def format_kst(value: datetime) -> str:
+    raise NotImplementedError
 ''',
             r'''
 if not TODO_DONE:
@@ -649,6 +662,18 @@ if not TODO_DONE:
 else:
     assert parse_utc("2026-08-14T10:30:00+09:00").isoformat() == "2026-08-14T01:30:00+00:00"
     assert parse_utc("2026-08-14T01:30:00Z").tzinfo == timezone.utc
+    converted = parse_utc("2026-08-14T01:30:00Z")
+    assert format_kst(converted) == "2026-08-14T10:30:00+09:00"
+    assert datetime.fromisoformat(format_kst(converted)) == converted
+    late_utc = parse_utc("2026-08-14T18:30:00Z")
+    assert format_kst(late_utc) == "2026-08-15T03:30:00+09:00"
+    assert datetime.fromisoformat(format_kst(late_utc)).timestamp() == late_utc.timestamp()
+    try:
+        format_kst(datetime(2026, 8, 14, 10, 30))
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("표시 함수가 시간대 없는 값을 허용했습니다.")
     try:
         parse_utc("2026-08-14T01:30:00")
     except ValueError:
@@ -682,9 +707,11 @@ else:
         for item in sorted(fixture_valid, key=lambda item: item["timestamp_utc"])
     ] == ["login", "api"]
     assert {item["event"] for item in fixture_errors} == {"naive", "invalid"}
+    for item in sorted(fixture_valid, key=lambda item: item["timestamp_utc"]):
+        print(item["event"], "KST:", format_kst(item["timestamp_utc"]))
     print("공개 경계 검증 통과: fixture 정상 2건 / 오류 2건")
 ''',
-            "저장·비교용 UTC 값과 표시용 로컬 시간을 나눈다.",
+            "한국 시간 출력에는 KST(UTC+09:00)를 명시한다. 원문과 비교용 UTC 값을 보존하며, 한국 날짜별 집계는 KST로 변환한 뒤 날짜를 추출한다. `timezone(timedelta(hours=9))`는 이 현대 시각 실습의 고정 오프셋이며, 과거 지역 규칙은 `ZoneInfo('Asia/Seoul')`로 확인한다. 교안: `05-text-processing/05-6-datetime.md`.",
         ),
     )
 
@@ -1153,10 +1180,16 @@ print("검증 통과")
         SOLUTION_DIR / "05-6-datetime-solution.ipynb",
         solution_cells(
             "05-6. 날짜와 시간",
-            "ISO 8601 값을 UTC aware datetime으로 변환한다.",
+            "한국 시간 KST(UTC+09:00)로 결과를 표시하고 UTC 비교값·원문을 보존한다. 시간대 변환으로 한국 날짜가 바뀌는 사례를 검증한다.",
             r'''
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
+
+KST = timezone(timedelta(hours=9), name="KST")
+lesson_time = datetime(2026, 8, 14, 10, 30, tzinfo=KST)
+print("한국 시각:", lesson_time.isoformat())
+print("시간대:", lesson_time.tzname(), lesson_time.utcoffset())
+# 실제 현재 한국 시각: datetime.now(KST). 검증은 고정 시각을 사용한다.
 fixture_path = FIXTURE_DIR / "timestamp-events.jsonl"
 records = [json.loads(line) for line in fixture_path.read_text(encoding="utf-8").splitlines()]
 ''',
@@ -1172,9 +1205,15 @@ def parse_utc(value: str) -> datetime:
         parsed = datetime.fromisoformat(normalized)
     except ValueError as exc:
         raise ValueError(f"잘못된 timestamp: {value!r}") from exc
-    if parsed.tzinfo is None:
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
         raise ValueError("시간대 정보가 필요하다.")
     return parsed.astimezone(timezone.utc)
+
+
+def format_kst(value: datetime) -> str:
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError("시간대 정보가 필요하다.")
+    return value.astimezone(KST).isoformat(timespec="seconds")
 
 
 valid, errors = [], []
@@ -1184,12 +1223,30 @@ for record in records:
     except (KeyError, TypeError, ValueError) as exc:
         event = record.get("event") if isinstance(record, dict) else None
         errors.append({"event": event, "code": "INVALID_TIMESTAMP", "message": str(exc)})
-valid
+for item in sorted(valid, key=lambda item: item["timestamp_utc"]):
+    item["timestamp_kst"] = format_kst(item["timestamp_utc"])
+    print(item["event"], "KST:", item["timestamp_kst"])
 ''',
             r'''
 assert len(valid) == 2 and len(errors) == 2
 assert valid[0]["timestamp_utc"].isoformat() == "2026-08-14T01:30:00+00:00"
 assert all(item["timestamp_utc"].tzinfo == timezone.utc for item in valid)
+assert valid[0]["timestamp_kst"] == "2026-08-14T10:30:00+09:00"
+late_utc = parse_utc("2026-08-14T18:30:00Z")
+assert format_kst(late_utc) == "2026-08-15T03:30:00+09:00"
+next_day_kst = datetime.fromisoformat(format_kst(late_utc))
+assert next_day_kst == late_utc
+assert next_day_kst.timestamp() == late_utc.timestamp()
+assert next_day_kst.astimezone(timezone.utc) == late_utc
+assert next_day_kst.date().isoformat() == "2026-08-15"
+assert next_day_kst.utcoffset() == timedelta(hours=9)
+assert lesson_time.tzname() == "KST"
+try:
+    format_kst(datetime(2026, 8, 14, 10, 30))
+except ValueError:
+    pass
+else:
+    raise AssertionError("표시 함수가 시간대 없는 값을 허용했다.")
 assert [item["event"] for item in sorted(valid, key=lambda item: item["timestamp_utc"])] == ["login", "api"]
 for invalid in ("", "   ", 123, "2026-08-14ZT01:30:00"):
     try:
@@ -1200,7 +1257,7 @@ for invalid in ("", "   ", 123, "2026-08-14ZT01:30:00"):
         raise AssertionError("타입·빈 값·Z 위치 경계를 허용했다.")
 print("검증 통과")
 ''',
-            "UTC는 저장·비교 기준이며, 사용자에게 표시할 때 필요한 시간대로 변환한다.",
+            "한국 시간 출력은 `astimezone(KST)`로 변환하고 `+09:00`을 표시한다. UTC는 여러 출처의 로그를 비교하는 기준이며 원문도 보존한다. 한국 날짜별 집계는 KST로 변환한 다음 수행한다. 과거 지역 규칙이 필요하면 `ZoneInfo('Asia/Seoul')`를 사용한다. 교안: `05-text-processing/05-6-datetime.md`.",
         ),
     )
 

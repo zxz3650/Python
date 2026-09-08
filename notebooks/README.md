@@ -39,7 +39,7 @@
 - [`05-3-regex-basics.ipynb`](05-3-regex-basics.ipynb): 부분 검색과 전체 일치, 정상·경계·실패 패턴을 연습합니다.
 - [`05-4-groups-capture.ipynb`](05-4-groups-capture.ipynb): 이름 있는 그룹으로 날짜·수준·메시지를 구조화합니다.
 - [`05-5-validation.ipynb`](05-5-validation.ipynb): 필수값·형식·허용값·범위 오류를 구조화합니다.
-- [`05-6-datetime.ipynb`](05-6-datetime.ipynb): ISO 8601, `Z`, naive/aware datetime, UTC 변환을 연습합니다.
+- [`05-6-datetime.ipynb`](05-6-datetime.ipynb): KST(UTC+09:00) 설정·출력, ISO 8601, naive/aware datetime, UTC↔KST 변환과 날짜 변경을 연습합니다.
 - [`05-7-numpy-array.ipynb`](05-7-numpy-array.ipynb): 결측값·조건 마스크·벡터 집계를 연습합니다.
 - [`05-8-pandas-dataframe.ipynb`](05-8-pandas-dataframe.ipynb): 숫자 변환 오류 보존, DataFrame 집계, `chunksize` 처리를 연습합니다.
 - [`05-9-web-log-analysis.ipynb`](05-9-web-log-analysis.ipynb): strict 디코딩, IP·URL 검증, 5분 특징, NumPy 후보 마스크, 민감정보 가명처리를 통합합니다.
