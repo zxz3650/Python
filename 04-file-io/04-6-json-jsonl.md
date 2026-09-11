@@ -1,5 +1,9 @@
 # 04-6. JSON·JSON Lines와 직렬화 검증
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-6-json-jsonl.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 JSON은 문자열, 숫자, 불리언, `null`, 배열과 객체를 표현하는 텍스트 데이터 형식이다. 최상위 값은 객체나 배열뿐 아니라 JSON이 허용하는 단일 값일 수도 있지만, 업무 레코드를 교환할 때는 객체와 배열을 주로 사용한다.
 
 Python 객체를 JSON 텍스트로 바꾸는 과정을 **직렬화(serialization)**, JSON 텍스트를 Python 값으로 바꾸는 과정을 **역직렬화(deserialization)**라고 한다. 파싱에 성공했다는 사실은 데이터의 필드·자료형·범위가 업무 규칙에 맞다는 뜻이 아니므로 변환 뒤 별도 검증이 필요하다.

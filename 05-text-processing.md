@@ -1,5 +1,15 @@
 # 05. 텍스트 파싱과 데이터 분석
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[05장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-05)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/05-1-normalization.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-1-normalization.ipynb)
+
+05장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/05-1-normalization.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 파일에서 읽은 문자열을 정규화하고 필요한 필드를 추출·검증한 뒤, NumPy와 pandas로 구조화된 데이터를 집계하는 방법을 학습한다. 마지막에는 웹 접근 로그를 스트리밍하며 데이터 품질과 조사 후보를 함께 검증하는 종합 실습을 완성한다.
 
 {% hint style="info" %}

@@ -1,5 +1,15 @@
 # 10. 프로그램 구조화
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[10장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-10.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-10)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/10-program-architecture.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/10-program-architecture.ipynb)
+
+10장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/10-program-architecture.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 기능이 늘어난 프로그램을 입력·처리·출력 책임으로 나누고 재사용 가능한 패키지로 구성합니다.
 
 {% hint style="info" %}
@@ -31,6 +41,10 @@
 3. 정상·오류·경계 입력을 바꾸어 실행합니다.
 4. 기능을 작은 함수로 나누어 작성합니다.
 5. 종합 실습으로 각 절을 연결합니다.
+
+## Jupyter 예제
+
+[`notebooks/10-program-architecture.ipynb`](notebooks/10-program-architecture.ipynb)에서 입력·검증·처리·출력 책임을 분리하고, 입출력 없이 핵심 로직을 검증합니다.
 
 ## 종합 실습
 

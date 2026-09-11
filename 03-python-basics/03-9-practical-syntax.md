@@ -1,5 +1,9 @@
 # 03-9. 문법 종합 실습
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/03-9-syntax-project.ipynb) · [03장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 03장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 03-1부터 03-8까지 학습한 개념을 하나의 **메모리 기반 이벤트 검토 프로그램**으로 연결한다. 문자열 명령을 해석하고, 입력을 검증된 객체로 바꾸며, 목록·검색·집계·삭제를 수행하고, 예상 가능한 오류를 프로그램 경계에서 처리한다.
 
 파일 저장은 [04장](../04-file-io.md), 실제 네트워크 통신은 [06장](../06-network-programming.md), HTTP 요청은 [07장](../07-http-api.md), pytest 자동화는 [09장](../09-testing-debugging.md)에서 확장한다. 이 실습에서는 03장의 Python 문법과 프로그램 구조에만 집중한다.

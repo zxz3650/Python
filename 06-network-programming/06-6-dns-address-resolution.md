@@ -1,5 +1,9 @@
 # 06-6. DNS와 주소 해석
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/06-6-dns-address-resolution.ipynb) · [06장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-06.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 06장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 도메인 이름은 소켓이 직접 사용하는 IP 주소가 아닙니다. 주소 해석 과정에서 하나의 이름이 IPv4·IPv6를 포함한 여러 주소 후보로 변환될 수 있습니다.
 
 {% hint style="info" %}
@@ -92,4 +96,3 @@ DNS 실패와 TCP 연결 거부는 서로 다른 단계의 오류입니다.
 ---
 
 다음 절: [06-7. 타임아웃·오류·재시도](06-7-timeouts-errors.md)
-

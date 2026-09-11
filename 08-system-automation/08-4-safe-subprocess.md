@@ -1,5 +1,9 @@
 # 08-4. 안전한 외부 프로세스 실행
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/08-4-safe-subprocess.ipynb) · [08장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-08.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 08장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 Python만으로 처리하기 어려운 운영체제 도구나 별도 프로그램을 호출해야 할 때 `subprocess` 모듈을 사용할 수 있다. 외부 프로세스는 현재 Python 프로그램과 다른 실행 경계를 가지므로 명령 인자, 종료 상태, 출력, 실행 시간과 허용 범위를 명시적으로 통제해야 한다.
 
 {% hint style="info" %}

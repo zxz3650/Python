@@ -1,5 +1,9 @@
 # 07-5. 오류·타임아웃·재시도
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/07-5-errors-timeouts-retries.ipynb) · [07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 07장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · 응답을 못 받았거나 기대와 다른 응답을 받았다면, 멈춰야 할까요 아니면 다시 요청해야 할까요?
 
 정상 응답을 읽는 코드만으로는 자동화를 오래 실행할 수 없습니다. 서버 중단, 지연, HTTP 오류, 본문 오류를 구분해야 각 상황에 맞게 복구하거나 중단할 수 있습니다.

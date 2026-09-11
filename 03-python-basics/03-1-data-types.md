@@ -1,5 +1,9 @@
 # 03-1. 변수와 기본 자료형
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/03-1-data-types.ipynb) · [03장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 03장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 변수와 자료형은 Python이 데이터를 기억하고 해석하는 출발점이다. 같은 `443`이라도 숫자인지 문자열인지에 따라 가능한 연산과 결과가 달라진다. 이 절에서는 코드를 외우기보다 **값의 의미에 맞는 자료형을 선택하고, 실행 결과를 설명하는 것**을 목표로 한다.
 
 {% hint style="info" %}

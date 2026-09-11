@@ -1,5 +1,9 @@
 # 04-9. 파일 분석기 종합 실습
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-9-file-analyzer.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 04장에서 학습한 경로 검증, 파일 조작, 텍스트·바이너리, 인코딩, CSV·JSON, 스트리밍, 오류 복구, 원자적 저장을 하나의 프로그램으로 연결한다. 완성한 분석기는 허가된 로컬 파일을 실행하거나 변경하지 않고 기본 정보와 형식별 통계를 JSON 보고서로 저장한다.
 
 {% hint style="info" %}

@@ -1,5 +1,15 @@
 # 03. Python 기초 문법
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[03장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-03)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/03-1-data-types.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/03-1-data-types.ipynb)
+
+03장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/03-1-data-types.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 Python 프로그램을 읽고 직접 작성하기 위한 언어의 기본 규칙을 학습한다. 교육용 이벤트 데이터를 일관된 예제로 사용하지만, 목표는 특정 보안 도구가 아니라 값, 흐름, 함수, 오류, 모듈, 객체의 개념을 정확히 이해하고 다른 문제에도 적용하는 것이다.
 
 {% hint style="info" %}

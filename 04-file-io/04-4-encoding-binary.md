@@ -1,5 +1,9 @@
 # 04-4. 인코딩·bytes와 바이너리 구조
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-4-encoding-binary.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 컴퓨터는 텍스트를 저장할 때 문자를 정해진 규칙에 따라 바이트로 바꾼다. **인코딩(encoding)**은 `str`을 `bytes`로 변환하는 과정이고, **디코딩(decoding)**은 `bytes`를 `str`로 해석하는 과정이다.
 
 바이너리 파일은 바이트의 위치·길이·순서 자체가 의미를 가진다. 따라서 내용을 읽는 것만으로 끝내지 않고 형식이 요구하는 길이, 식별자, 바이트 순서와 오프셋을 함께 검증해야 한다.

@@ -1,5 +1,9 @@
 # 04-2. 파일·디렉터리 조작과 작업 범위
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-2-filesystem-operations.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 경로를 조회하는 작업과 파일 시스템을 변경하는 작업은 위험도가 다르다. 이 절에서는 실습 전용 기준 디렉터리 안에서 파일을 생성·복사·이동·삭제한다. 각 작업에서 원본·목적지·충돌 정책을 먼저 확인하고, 실제 작업 중 발생한 예외까지 처리하는 습관을 익힌다.
 
 {% hint style="info" %}

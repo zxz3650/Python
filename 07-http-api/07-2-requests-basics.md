@@ -1,5 +1,9 @@
 # 07-2. requests 기초
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/07-2-requests-basics.ipynb) · [07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 07장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · HTTP 메시지를 직접 조립하지 않고 Python에서 상태·헤더·본문을 어떻게 읽을까요?
 
 `requests`는 HTTP 클라이언트 라이브러리입니다. 06장에서 직접 다룬 연결과 바이트 처리를 감싸서 URL과 요청 조건을 전달하면 `Response` 객체를 돌려줍니다. 이 객체에는 본문 외에도 상태와 헤더가 들어 있습니다.

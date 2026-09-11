@@ -1,5 +1,9 @@
 # 06-7. 타임아웃·오류·재시도
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/06-7-timeouts-errors.ipynb) · [06장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-06.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 06장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 네트워크 작업은 상대 프로그램, 이름 해석, 경로, 운영체제 상태에 영향을 받습니다. 무기한 대기하지 않도록 시간과 데이터 크기를 제한하고 오류 단계별로 대응합니다.
 
 {% hint style="info" %}

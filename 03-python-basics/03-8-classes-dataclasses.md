@@ -1,5 +1,9 @@
 # 03-8. 클래스 기초
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/03-8-classes-dataclasses.ipynb) · [03장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 03장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 클래스는 관련 데이터와 그 데이터를 다루는 동작을 하나의 **새로운 자료형**으로 정의한다. 단순히 변수와 함수를 class 블록 안으로 옮기는 것이 아니라, 객체가 어떤 상태를 가질 수 있고 어떤 규칙을 지켜야 하는지 표현하는 도구다.
 
 {% hint style="info" %}

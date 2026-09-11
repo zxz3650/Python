@@ -1,5 +1,15 @@
 # 07. HTTP와 API
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-07)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/07-1-url-http-messages.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/07-1-url-http-messages.ipynb)
+
+07장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/07-1-url-http-messages.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 ![HTTP는 요청과 응답의 규칙, JSON은 본문의 데이터 형식, Python은 이를 해석하고 검증하는 도구](assets/07-http-api-overview.svg)
 
 06장에서는 소켓으로 바이트를 주고받았습니다. 이제 **“서버에 무엇을 요청했고, 받은 결과를 어떻게 읽을 것인가?”**를 배웁니다. 같은 바이트라도 요청 경로, 처리 결과, 데이터 형식에 대한 약속이 있어야 프로그램끼리 의미를 이해할 수 있습니다. 이 약속을 HTTP와 API로 살펴봅니다.
@@ -52,6 +62,10 @@ Python은 이 본문을 `dict`로 바꾼 뒤 `data["status"]`로 필요한 값�
 | [07-5. 오류·타임아웃·재시도](07-http-api/07-5-errors-timeouts-retries.md) | 실패하면 중단할까, 다시 보낼까? | 원인별 처리와 자원 제한 |
 | [07-6. HTTP 보안 검증 기초](07-http-api/07-6-http-security-validation.md) | 어떤 관찰을 근거로 남길까? | 관찰값·판정·한계를 나눈 기록 |
 | [07-7. 로컬 네트워크·웹 보안 점검 프로젝트](07-http-api/07-7-local-web-security-project.md) | 배운 내용을 어떻게 하나로 연결할까? | 로컬 점검 JSON 보고서 |
+
+### Jupyter 예제
+
+서버를 실행하기 전에 [`notebooks/07-1-url-http-messages.ipynb`](notebooks/07-1-url-http-messages.ipynb)부터 [`notebooks/07-7-local-web-security-project.ipynb`](notebooks/07-7-local-web-security-project.ipynb)까지 순서대로 실행할 수 있습니다. Notebook은 가짜 응답과 합성 헤더를 사용하므로 외부 HTTP 요청을 보내지 않습니다.
 
 ## 4. 실습 환경을 먼저 준비합니다
 

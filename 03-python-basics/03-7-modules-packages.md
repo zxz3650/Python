@@ -1,5 +1,9 @@
 # 03-7. 모듈과 패키지
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/03-7-modules-packages.ipynb) · [03장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 03장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 프로그램이 길어지면 한 파일에서 모든 입력, 검증, 처리, 출력을 관리하기 어렵다. **모듈**은 코드를 파일 단위로 나누고, **패키지**는 관련 모듈을 이름 공간 아래 묶는다. 이 절에서는 파일을 나누는 것뿐 아니라 Python이 모듈을 찾고 실행하는 규칙까지 학습한다.
 
 {% hint style="info" %}

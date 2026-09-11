@@ -1,6 +1,15 @@
 # 주피터 실습
 
-03장과 04장 노트북은 Python 3.10 이상에서 실행하며 Python 3.12를 권장합니다. 커널 버전은 첫 셀을 실행하기 전에 `import sys; print(sys.version)`으로 확인하세요.
+처음 자료를 받는다면 [실습 자료 받기와 시작하기](../PRACTICE.md)를 먼저 읽습니다. 챕터별 교육자료 ZIP과 개별 노트북 다운로드, 커널 확인과 해당 장만 갱신하는 방법을 안내합니다. 이 페이지는 각 노트북의 학습 내용과 활용 시점을 설명하는 색인입니다.
+
+01~13장 노트북은 Python 3.10 이상에서 실행하며 Python 3.12를 권장합니다. 커널 버전은 첫 셀을 실행하기 전에 `import sys; print(sys.version)`으로 확인하세요.
+
+## 01~02장 시작 및 환경 점검
+
+- [`01-python-first-step.ipynb`](01-python-first-step.ipynb): 입력·처리·검증·출력의 흐름을 작은 이벤트 집계로 처음 실행합니다.
+- [`02-environment-check.ipynb`](02-environment-check.ipynb): 현재 커널의 Python 버전과 과정용 패키지 설치 상태를 변경 없이 점검합니다.
+
+02장 Notebook은 패키지를 직접 설치하지 않습니다. 누락 항목은 과정용 가상환경을 활성화한 터미널에서 `python -m pip install -r requirements.txt`로 설치합니다.
 
 ## 절별 기초 실습
 
@@ -45,6 +54,62 @@
 - [`05-9-web-log-analysis.ipynb`](05-9-web-log-analysis.ipynb): strict 디코딩, IP·URL 검증, 5분 특징, NumPy 후보 마스크, 민감정보 가명처리를 통합합니다.
 
 05장의 절별 Notebook은 함수 시그니처·TODO·공개 경계 검증을 담은 **학습자용** 파일입니다. 실습 입력은 [`../fixtures/05-text-processing/`](../fixtures/05-text-processing/README.md)에 있으며, 자신의 구현을 먼저 완성한 뒤 [`solutions/`](solutions/README.md)의 풀이 검증용 Notebook과 비교합니다. 공개 저장소의 풀이는 평가 정답을 숨기지 못하므로 실제 평가에서는 교수자용 비공개 테스트를 별도로 사용합니다.
+
+## 06장 네트워크 프로그래밍 예제
+
+- [`06-1-network-socket-basics.ipynb`](06-1-network-socket-basics.ipynb): IP·포트·주소 체계와 루프백 작업 범위를 검증합니다.
+- [`06-2-tcp-client.ipynb`](06-2-tcp-client.ipynb): 부분 수신과 연결 종료를 가짜 소켓으로 재현합니다.
+- [`06-3-tcp-server.ipynb`](06-3-tcp-server.ipynb): 외부 포트 없이 한 요청을 처리하는 서버 경계를 확인합니다.
+- [`06-4-message-framing.ipynb`](06-4-message-framing.ipynb): 길이 접두사 프레임과 불완전 버퍼를 처리합니다.
+- [`06-5-udp.ipynb`](06-5-udp.ipynb): 데이터그램 단위 크기·인코딩 오류를 분리합니다.
+- [`06-6-dns-address-resolution.ipynb`](06-6-dns-address-resolution.ipynb): localhost의 IPv4·IPv6 결과와 허용 범위를 확인합니다.
+- [`06-7-timeouts-errors.ipynb`](06-7-timeouts-errors.ipynb): 제한된 재시도와 지수형 대기 계획을 검증합니다.
+- [`06-8-echo-project.ipynb`](06-8-echo-project.ipynb): 제공 프로토콜 모듈로 로컬 Echo 왕복을 검증합니다.
+
+실제 `bind()`·`listen()`·클라이언트 연결은 터미널 예제에서 수행합니다. Notebook은 외부 주소에 연결하거나 포트 스캔을 수행하지 않습니다.
+
+## 07장 HTTP와 API 예제
+
+- [`07-1-url-http-messages.ipynb`](07-1-url-http-messages.ipynb): URL 구성요소와 HTTP 요청 대상을 구분합니다.
+- [`07-2-requests-basics.ipynb`](07-2-requests-basics.ipynb): 가짜 응답으로 상태·Content-Type·응답 크기 제한을 확인합니다.
+- [`07-3-json-api.ipynb`](07-3-json-api.ipynb): JSON 문법·중복 키·응답 계약 오류를 구분합니다.
+- [`07-4-sessions-cookies-auth.ipynb`](07-4-sessions-cookies-auth.ipynb): 쿠키 속성과 인증 헤더 마스킹을 연습합니다.
+- [`07-5-errors-timeouts-retries.ipynb`](07-5-errors-timeouts-retries.ipynb): 상태·메서드·횟수별 재시도 정책을 계산합니다.
+- [`07-6-http-security-validation.ipynb`](07-6-http-security-validation.ipynb): 루프백 범위와 보안 헤더 관찰 결과를 검증합니다.
+- [`07-7-local-web-security-project.ipynb`](07-7-local-web-security-project.ipynb): 고정된 가짜 응답으로 점검 보고서를 통합합니다.
+
+Notebook은 외부 HTTP 요청을 보내지 않습니다. 실제 로컬 서버 점검은 `examples/07-local-web-security-lab`에서 수행합니다.
+
+## 08장 시스템 자동화 예제
+
+- [`08-1-cli-exit-status.ipynb`](08-1-cli-exit-status.ipynb): `main(argv)`와 종료 상태를 검증합니다.
+- [`08-2-configuration-environment.ipynb`](08-2-configuration-environment.ipynb): 기본값·JSON·환경 변수·CLI 우선순위를 적용합니다.
+- [`08-3-logging-observability.ipynb`](08-3-logging-observability.ipynb): 이벤트 중심 로그와 민감정보 비기록을 확인합니다.
+- [`08-4-safe-subprocess.ipynb`](08-4-safe-subprocess.ipynb): 현재 Python을 인자 목록과 시간 제한으로 실행합니다.
+- [`08-5-toolization-project.ipynb`](08-5-toolization-project.ipynb): 부작용 없는 dry-run 실행 계획을 만듭니다.
+
+CLI 도움말·표준 출력·표준 오류·실제 종료 코드는 터미널 테스트가 기준입니다. Notebook은 분리된 핵심 함수의 이해와 경계값 검증을 보조합니다.
+
+## 09~12장 통합 예제
+
+- [`09-testing-debugging.ipynb`](09-testing-debugging.ipynb): 정상·오류·경계값 테스트를 `unittest`로 실행합니다.
+- [`10-program-architecture.ipynb`](10-program-architecture.ipynb): 입력·검증·처리·출력 책임을 작은 함수로 분리합니다.
+- [`11-concurrency.ipynb`](11-concurrency.ipynb): 제한된 스레드·비동기 작업과 부분 실패 보존을 확인합니다.
+- [`12-capstone.ipynb`](12-capstone.ipynb): 임시 파일의 메타데이터·해시·JSON 저장을 하나의 파이프라인으로 통합합니다.
+
+09~12장은 현재 장별 개요 교안이므로 절별 정답 노트북이 아니라 개념을 연결하는 장별 예제를 제공합니다.
+
+## 13장 DFIR 자동화 예제
+
+- [`13-1-automation-design.ipynb`](13-1-automation-design.ipynb): 분석 입력·출력·제외 범위를 계약으로 만듭니다.
+- [`13-2-file-batch.ipynb`](13-2-file-batch.ipynb): manifest와 실제 파일을 대조해 처리·누락 상태를 구분합니다.
+- [`13-3-web-collection.ipynb`](13-3-web-collection.ipynb): 아티팩트별 파서 명령 계획을 실행 없이 검증합니다.
+- [`13-4-spreadsheet-documents.ipynb`](13-4-spreadsheet-documents.ipynb): 원문 시각·UTC·시각 의미를 공통 스키마로 보존합니다.
+- [`13-5-scheduling-gui.ipynb`](13-5-scheduling-gui.ipynb): 완료 감지와 워커 상태 전이를 검증합니다.
+- [`13-6-safe-file-organizer-project.ipynb`](13-6-safe-file-organizer-project.ipynb): 합성 KAPE 파서 CSV를 14개 공통 레코드로 정규화합니다.
+- [`13-7-spreadsheet-report-project.ipynb`](13-7-spreadsheet-report-project.ipynb): 정규화 기록에서 근거 UID가 연결된 검토 항목을 생성합니다.
+
+13장 Notebook은 실제 사건 자료나 외부 분석 엔진을 사용하지 않습니다. 제공 합성 자료를 임시 디렉터리에서 생성하고 결과 건수와 근거 연결을 검증합니다.
 
 ## 03장 통합 실습
 

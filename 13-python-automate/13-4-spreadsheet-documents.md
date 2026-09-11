@@ -1,5 +1,9 @@
 # 13-4. 공통 스키마·시간 정규화·보고서
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/13-4-spreadsheet-documents.ipynb) · [13장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-13.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 13장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · 여러 CSV에 모두 Time 열이 있다면 그대로 합쳐도 될까요?
 
 이벤트 생성 시각, Prefetch의 마지막 실행 시각, 레지스트리 키 LastWrite, MFT의 파일 생성 시각은 서로 다른 사실을 나타냅니다. 하나의 타임라인에 표시하더라도 원래 의미를 보존해야 합니다.

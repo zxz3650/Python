@@ -1,5 +1,9 @@
 # 04-8. 임시 파일과 원자적 저장
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-8-safe-output.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 결과 파일에 직접 쓰다가 프로그램이 중단되면 기존 결과를 잃거나 불완전한 파일을 남길 수 있다. 이 절에서는 출력 파일과 같은 디렉터리에 고유한 임시 파일을 만들고, 쓰기와 검증을 모두 마친 결과만 최종 경로로 교체하는 절차를 학습한다.
 
 {% hint style="info" %}

@@ -2,6 +2,16 @@
 
 # 02. 개발 및 실습 환경
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[02장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-02.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-02)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/02-environment-check.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/02-environment-check.ipynb)
+
+[02장](02-python-setup.md)의 환경 구성을 마친 뒤 02장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/02-environment-check.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 Python 코드를 같은 조건에서 반복 실행할 수 있도록 실습 환경을 구성한다. 이 과정은 Python 3.10 이상을 지원하며, 교안과 실습 예제는 Python 3.12 사용을 권장한다. 기본 경로는 Python 표준 가상환경인 `venv`이며, 기존에 conda를 사용하는 학습자를 위한 선택 경로도 함께 제시한다.
 
 {% hint style="info" %}

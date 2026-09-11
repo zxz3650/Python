@@ -1,5 +1,15 @@
 # 04. 파일 입출력과 데이터 형식
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-04)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/04-1-paths-filesystem.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/04-1-paths-filesystem.ipynb)
+
+04장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/04-1-paths-filesystem.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 프로그램의 데이터는 실행이 끝나면 메모리에서 사라진다. 파일은 데이터를 다음 실행까지 보존하고 다른 프로그램과 교환하는 가장 기본적인 수단이다. 이 장에서는 허용된 작업 범위 안에서 파일을 안전하게 다루고, 텍스트·바이너리·CSV·JSON·JSON Lines 형식을 목적에 맞게 처리한다. 마지막에는 앞 절의 기능을 연결해 원본을 변경하지 않는 파일 분석기를 완성한다.
 
 {% hint style="info" %}

@@ -1,5 +1,15 @@
 # 13. Python Automate 실무 자동화
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[13장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-13.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-13)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/13-1-automation-design.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/13-1-automation-design.ipynb)
+
+13장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/13-1-automation-design.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 ![KAPE 수집 자료와 파서 출력을 공통 레코드로 정규화하고 통합 검토 보고서를 만드는 흐름](assets/13-kape-pipeline.svg)
 
 이 장에서는 **KAPE 결과와 Windows 아티팩트를 통합하는 오프라인 분석 파이프라인**을 만듭니다. 여러 도구가 만든 결과를 같은 형식으로 정리하고, 호스트·시간·계정·파일 경로를 기준으로 함께 살펴봅니다.
@@ -45,6 +55,10 @@ DFIR은 디지털 포렌식과 사고 대응을 뜻합니다. **아티팩트**�
 | [13-5. 완료 감지·워커·재실행 관리](13-python-automate/13-5-scheduling-gui.md) | 쓰는 중인 파일을 언제 처리할까? | 자동 분석 작업의 상태 관리 |
 | [13-6. 프로젝트 A - KAPE 결과 정규화](13-python-automate/13-6-safe-file-organizer-project.md) | 자료를 빠뜨리지 않고 통합할 수 있나? | 공통 타임라인·입력 오류 |
 | [13-7. 프로젝트 B - Windows 아티팩트 통합 분석](13-python-automate/13-7-spreadsheet-report-project.md) | 여러 근거로 검토 대상을 좁힐 수 있나? | 검토 보고서·같은 경로가 기록된 자료 목록 |
+
+### Jupyter 예제
+
+각 단계의 안전한 축소 예제는 [`notebooks/13-1-automation-design.ipynb`](notebooks/13-1-automation-design.ipynb)부터 [`notebooks/13-7-spreadsheet-report-project.ipynb`](notebooks/13-7-spreadsheet-report-project.ipynb)까지 순서대로 실행합니다. 실제 사건 자료나 외부 분석 엔진을 사용하지 않고 합성 CSV와 임시 디렉터리만 사용합니다.
 
 ## 4. 먼저 실행해 보기
 

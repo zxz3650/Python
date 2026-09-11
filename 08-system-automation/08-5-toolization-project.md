@@ -1,5 +1,9 @@
 # 08-5. 로컬 HTTP 점검기 도구화 프로젝트
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/08-5-toolization-project.ipynb) · [08장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-08.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 08장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 07장에서 만든 로컬 HTTP 점검기는 한 번 실행해 결과를 확인하는 스크립트였다. 이번 프로젝트에서는 점검 로직에 설정, CLI, 종료 코드, 실행 로그와 JSON 보고서를 연결해 **다른 사람과 다른 프로그램도 반복해서 사용할 수 있는 도구**로 발전시킨다.
 
 새로운 공격 기능을 만드는 프로젝트가 아니다. 점검 대상은 `localhost`와 loopback IP 주소로 제한하고, 07장에서 사용한 연결성·응답 계약·보안 헤더·리다이렉트 검사만 자동화한다.

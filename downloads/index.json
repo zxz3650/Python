@@ -1,0 +1,119 @@
+[
+  {
+    "archive_root": "chapter-01-4149cae882da",
+    "chapter": "01",
+    "file": "chapter-01.zip",
+    "sha256": "4947a595ff85c5622152638b0a8901859a864934f56e4c48db9aeac5d0bcdff2",
+    "size_bytes": 2900,
+    "title": "Python 소개",
+    "version": "4149cae882da"
+  },
+  {
+    "archive_root": "chapter-02-92c1b4fd8a2f",
+    "chapter": "02",
+    "file": "chapter-02.zip",
+    "sha256": "c458199593fb4b155b16bd51ac616112155cbc99cf2f035367730d622dfa1afb",
+    "size_bytes": 3366,
+    "title": "개발 및 실습 환경",
+    "version": "92c1b4fd8a2f"
+  },
+  {
+    "archive_root": "chapter-03-4f90241cd8bd",
+    "chapter": "03",
+    "file": "chapter-03.zip",
+    "sha256": "72ce0c627a3df0f6927dd6660cdeb39b21e3ad5234940871af50b9f448b6380a",
+    "size_bytes": 49048,
+    "title": "Python 기초 문법",
+    "version": "4f90241cd8bd"
+  },
+  {
+    "archive_root": "chapter-04-1137c2b69e11",
+    "chapter": "04",
+    "file": "chapter-04.zip",
+    "sha256": "1fdc09a900e8797a8aed6e074c0a62df2a5e27b18c4c1049abd14e0ebefd0142",
+    "size_bytes": 54657,
+    "title": "파일 입출력과 데이터 형식",
+    "version": "1137c2b69e11"
+  },
+  {
+    "archive_root": "chapter-05-0eb36e3a1444",
+    "chapter": "05",
+    "file": "chapter-05.zip",
+    "sha256": "a57c9dbe84364e85f857123284cea3c73757792784b9454545d179524957aad8",
+    "size_bytes": 53831,
+    "title": "텍스트 파싱과 데이터 분석",
+    "version": "0eb36e3a1444"
+  },
+  {
+    "archive_root": "chapter-06-c15861175a86",
+    "chapter": "06",
+    "file": "chapter-06.zip",
+    "sha256": "976c3939ff49ae88c6842f67d3a5eb4a418ac2e17045d0ba9b2c65213e358f83",
+    "size_bytes": 17235,
+    "title": "네트워크 프로그래밍",
+    "version": "c15861175a86"
+  },
+  {
+    "archive_root": "chapter-07-1acd0e65e7db",
+    "chapter": "07",
+    "file": "chapter-07.zip",
+    "sha256": "cf9b0345065b12cdf8259e41c97444eb6effb94671b1d40b3c077ab88d6acba3",
+    "size_bytes": 18588,
+    "title": "HTTP와 API",
+    "version": "1acd0e65e7db"
+  },
+  {
+    "archive_root": "chapter-08-8c24ab33f25d",
+    "chapter": "08",
+    "file": "chapter-08.zip",
+    "sha256": "7e0b6661b3b68ac282fc786f74cbe69a5d661fd28ab9ff189afd85a2e719c014",
+    "size_bytes": 26265,
+    "title": "시스템 자동화",
+    "version": "8c24ab33f25d"
+  },
+  {
+    "archive_root": "chapter-09-e5ff545e0011",
+    "chapter": "09",
+    "file": "chapter-09.zip",
+    "sha256": "0e427df236cb1eda19549012214fe18297ebcd6ad5be9706b1e8683e447d0e4d",
+    "size_bytes": 3360,
+    "title": "테스트와 디버깅",
+    "version": "e5ff545e0011"
+  },
+  {
+    "archive_root": "chapter-10-567fac40ad42",
+    "chapter": "10",
+    "file": "chapter-10.zip",
+    "sha256": "a1bad91613857fa860a4f42d0d33708a3955bc868eacafbb0bfa83b4448bf46d",
+    "size_bytes": 3264,
+    "title": "프로그램 구조화",
+    "version": "567fac40ad42"
+  },
+  {
+    "archive_root": "chapter-11-9b5783f306b6",
+    "chapter": "11",
+    "file": "chapter-11.zip",
+    "sha256": "b851875a904726eaf327d0f5e46c9b32a157b6a18c5af13f173174f820c18d30",
+    "size_bytes": 3503,
+    "title": "동시성과 비동기 처리",
+    "version": "9b5783f306b6"
+  },
+  {
+    "archive_root": "chapter-12-0e7efd75be74",
+    "chapter": "12",
+    "file": "chapter-12.zip",
+    "sha256": "738b6a317643b68cb84f7958cc4dc568d053a9c6734984d0f94609584e4c08a3",
+    "size_bytes": 3666,
+    "title": "Python 활용 종합 프로젝트",
+    "version": "0e7efd75be74"
+  },
+  {
+    "archive_root": "chapter-13-7022e723e6a2",
+    "chapter": "13",
+    "file": "chapter-13.zip",
+    "sha256": "6648b05c6edce3f89bac4888e9efa11a55cb22df221be10994fee22341dd416f",
+    "size_bytes": 28312,
+    "title": "Python Automate 실무 자동화",
+    "version": "7022e723e6a2"
+  }
+]

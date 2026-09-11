@@ -1,5 +1,9 @@
 # 06-4. 메시지 경계와 프로토콜 설계
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/06-4-message-framing.ipynb) · [06장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-06.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 06장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 TCP는 메시지 목록이 아니라 순서가 보장되는 바이트 스트림입니다. 한 번 전송한 데이터가 여러 번의 `recv()`로 나뉘거나 여러 전송이 한 번에 수신될 수 있으므로 애플리케이션이 메시지 경계를 정의해야 합니다.
 
 {% hint style="info" %}
@@ -111,4 +115,3 @@ JSON은 데이터 구조를 표현하고 길이 접두어는 메시지 경계를
 ---
 
 다음 절: [06-5. UDP 통신](06-5-udp.md)
-

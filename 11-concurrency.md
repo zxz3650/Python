@@ -1,5 +1,15 @@
 # 11. 동시성과 비동기 처리
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[11장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-11.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-11)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/11-concurrency.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/11-concurrency.ipynb)
+
+11장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/11-concurrency.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 여러 입출력 작업을 효율적으로 처리하기 위한 동시성 개념을 학습합니다. 빠른 실행보다 요청 제한·취소·오류 수집을 포함한 안전한 제어에 집중합니다.
 
 {% hint style="info" %}
@@ -31,6 +41,10 @@
 3. 정상·오류·경계 입력을 바꾸어 실행합니다.
 4. 기능을 작은 함수로 나누어 작성합니다.
 5. 종합 실습으로 각 절을 연결합니다.
+
+## Jupyter 예제
+
+[`notebooks/11-concurrency.ipynb`](notebooks/11-concurrency.ipynb)에서 제한된 스레드와 비동기 작업을 실행하고 일부 실패가 다른 결과를 숨기지 않는지 확인합니다.
 
 ## 종합 실습
 

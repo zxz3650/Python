@@ -1,5 +1,9 @@
 # 05-9. 웹 접근 로그 분석 종합 실습
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/05-9-web-log-analysis.ipynb) · [05장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 05장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 04장에서 익힌 스트리밍 파일 처리와 05장의 문자열·정규표현식·날짜·NumPy·pandas를 연결해 웹 접근 로그 분석기를 완성한다. 단순히 요청 수를 세는 데서 끝내지 않고 **입력 품질 확인 → 필드 검증 → 경로 정규화 → 시간창별 특징 생성 → 조사 후보 선별 → 민감정보를 줄인 결과 저장**의 순서로 분석한다.
 
 {% hint style="info" %}

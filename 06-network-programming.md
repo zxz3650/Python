@@ -1,5 +1,15 @@
 # 06. 네트워크 프로그래밍
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[06장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-06.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-06)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/06-1-network-socket-basics.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/06-1-network-socket-basics.ipynb)
+
+06장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/06-1-network-socket-basics.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 파일에 저장된 데이터를 분석하는 단계에서 벗어나, 네트워크를 통해 다른 프로그램과 데이터를 주고받는 방법을 학습합니다. 이 장은 포트 스캔이나 취약점 공격이 아니라 TCP·UDP·이름 해석·메시지 경계·타임아웃 같은 통신의 기본 원리를 코드로 확인하는 과정입니다.
 
 {% hint style="info" %}
@@ -30,6 +40,10 @@
 6. [06-6. DNS와 주소 해석](06-network-programming/06-6-dns-address-resolution.md)
 7. [06-7. 타임아웃·오류·재시도](06-network-programming/06-7-timeouts-errors.md)
 8. [06-8. 로컬 Echo 통신 프로젝트](06-network-programming/06-8-echo-project.md)
+
+## Jupyter 예제
+
+각 절의 핵심 동작은 [`notebooks/06-1-network-socket-basics.ipynb`](notebooks/06-1-network-socket-basics.ipynb)부터 [`notebooks/06-8-echo-project.ipynb`](notebooks/06-8-echo-project.ipynb)까지 순서대로 확인할 수 있습니다. Notebook은 외부 네트워크에 연결하지 않으며 실제 서버·클라이언트 실행은 터미널 프로젝트에서 진행합니다.
 
 ## 이 장에서 연결되는 개념
 
@@ -86,4 +100,3 @@
 ---
 
 다음 장: [07. HTTP와 API](07-http-api.md)
-

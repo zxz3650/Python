@@ -1,5 +1,9 @@
 # 05-2. 분리·검색·치환
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/05-2-split-search-replace.ipynb) · [05장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 05장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 문자열 메서드는 구분자와 필드 순서가 일정한 텍스트를 가장 읽기 쉽게 처리하는 도구다. 정규표현식을 사용하기 전에 `split()`, `partition()`, `startswith()` 같은 메서드로 해결할 수 있는지 확인한다. 파싱 성공은 문자열을 나누었다는 뜻이지, 각 필드가 올바른 값임을 보장하지는 않는다.
 
 {% hint style="info" %}

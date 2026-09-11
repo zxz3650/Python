@@ -1,5 +1,9 @@
 # 04-3. 텍스트 파일·모드·with·줄바꿈
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/04-3-text-files.ipynb) · [04장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 04장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 텍스트 파일 입출력은 파일의 바이트를 지정한 인코딩으로 해석해 `str`로 읽거나, `str`을 인코딩해 파일에 저장하는 작업이다. 파일을 열 때는 읽기·쓰기 목적에 맞는 모드와 인코딩을 명시하고, `with`로 파일 자원의 수명을 관리한다. 이 절에서는 전체 읽기와 줄 단위 처리, 덮어쓰기와 추가, 줄바꿈 정규화의 차이를 익힌다.
 
 {% hint style="info" %}

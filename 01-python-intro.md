@@ -2,6 +2,16 @@
 
 # 01. Python 소개
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[01장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-01.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-01)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/01-python-first-step.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/01-python-first-step.ipynb)
+
+[02장](02-python-setup.md)의 환경 구성을 마친 뒤 01장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/01-python-first-step.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 Python이 보안·데이터 처리·업무 자동화에서 널리 쓰이는 이유와 이 과정의 학습 경로를 살펴본다. 이 과정은 문법을 암기하는 데 그치지 않고, 반복 작업을 작은 프로그램으로 바꾸고 그 결과를 검증하는 능력을 기르는 데 초점을 둔다. 먼저 Python의 공통 기반을 익힌 뒤 파일, 데이터, 네트워크, HTTP, 시스템 자동화 문제로 적용 범위를 넓힌다.
 
 {% hint style="info" %}

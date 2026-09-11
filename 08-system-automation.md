@@ -1,5 +1,15 @@
 # 08. 시스템 자동화
 
+{% hint style="info" %}
+### 실습 자료 준비
+
+[08장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-08.zip)로 이 장의 노트북과 필요한 코드·입력 데이터를 준비한다. 구성과 개별 파일은 [이 장의 노트북 목록](PRACTICE.md#chapter-08)에서 확인한다. 자료가 수정되면 이 장의 ZIP만 새로 받는다.
+
+[첫 노트북 보기](notebooks/08-1-cli-exit-status.ipynb) · [첫 노트북 원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/08-1-cli-exit-status.ipynb)
+
+08장 ZIP을 푼 폴더에서 `python -m jupyterlab`을 실행하고 `notebooks/08-1-cli-exit-status.ipynb`를 연다. 자세한 저장·커널 확인 방법은 [자료 준비·실행 안내](PRACTICE.md#download)를 따른다.
+{% endhint %}
+
 앞 장에서 만든 프로그램을 터미널에서 반복 실행할 수 있는 도구로 발전시킨다. 명령줄 입력, 설정, 환경 변수, 종료 상태와 실행 로그를 하나의 실행 계약으로 묶고, 필요한 경우에만 외부 프로세스를 제한적으로 호출한다. 마지막에는 07장의 로컬 HTTP 점검기에 이러한 요소를 적용해 재현 가능한 명령줄 도구를 완성한다.
 
 {% hint style="info" %}
@@ -48,6 +58,10 @@
 3. [08-3. 실행 로그와 관찰 가능성](08-system-automation/08-3-logging-observability.md)
 4. [08-4. 안전한 외부 프로세스 실행](08-system-automation/08-4-safe-subprocess.md)
 5. [08-5. 로컬 HTTP 점검기 도구화 프로젝트](08-system-automation/08-5-toolization-project.md)
+
+### Jupyter 예제
+
+분리된 핵심 함수는 [`notebooks/08-1-cli-exit-status.ipynb`](notebooks/08-1-cli-exit-status.ipynb)부터 [`notebooks/08-5-toolization-project.ipynb`](notebooks/08-5-toolization-project.ipynb)까지 순서대로 검증합니다. 실제 CLI 인자·표준 출력·표준 오류·종료 상태는 아래 안내처럼 터미널에서 최종 확인합니다.
 
 ### 이 순서로 학습하는 이유
 

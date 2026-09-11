@@ -1,5 +1,9 @@
 # 07-3. JSON API와 응답 검증
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/07-3-json-api.ipynb) · [07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 07장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · 본문의 글을 Python 데이터로 바꾸는 일과, 그 데이터를 사용해도 되는지 판단하는 일은 어떻게 다를까요?
 
 07-2에서 `/health`의 본문을 출력했습니다. 사람은 `"status": "ok"`를 보고 의미를 읽지만, 프로그램이 조건문으로 판정하려면 이름과 값을 구조적으로 꺼낼 수 있어야 합니다. 이 절에서는 **문자열 → Python 객체 → 검증된 데이터**의 순서로 진행합니다.

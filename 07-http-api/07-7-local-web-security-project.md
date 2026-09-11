@@ -1,5 +1,9 @@
 # 07-7. 로컬 네트워크·웹 보안 점검 프로젝트
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/07-7-local-web-security-project.ipynb) · [07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 07장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · HTTP로 받은 데이터와 우리가 만든 점검 결과를 어떻게 연결해 설명할까요?
 
 06장의 TCP 연결 확인과 07장의 HTTP 검증을 결합합니다. 학습용 서버를 `127.0.0.1`에서 실행하고, 점검기가 연결성·응답 계약·보안 헤더·리다이렉트를 확인해 JSON 보고서를 만듭니다.

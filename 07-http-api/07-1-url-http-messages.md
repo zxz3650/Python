@@ -1,5 +1,9 @@
 # 07-1. URL과 HTTP 메시지
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/07-1-url-http-messages.ipynb) · [07장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 07장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · 서버에 “어디의 무엇”을 요청하고, 응답의 어느 부분에서 결과를 읽을까요?
 
 06장의 소켓 연결은 데이터를 주고받을 통로를 만듭니다. HTTP는 그 통로에서 요청과 응답을 해석할 규칙을 제공합니다. 먼저 메시지를 읽을 수 있어야 다음 절의 `requests.get()`이 대신 처리하는 일을 이해할 수 있습니다.

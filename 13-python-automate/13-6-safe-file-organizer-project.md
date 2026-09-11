@@ -1,5 +1,9 @@
 # 13-6. 프로젝트 A - KAPE 결과 정규화
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/13-6-safe-file-organizer-project.ipynb) · [13장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-13.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 13장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · 분석 조건을 적용하기 전에 자료를 같은 기준으로 읽고 출처를 보존할 수 있을까요?
 
 프로젝트 A에서는 파서 출력 CSV를 공통 레코드로 바꾸는 부분을 구현합니다. 프로젝트 B는 같은 레코드에서 검토 항목과 관련 근거를 추출합니다. 제공하는 `pipeline.py`에는 두 단계가 함께 있으므로 먼저 `load_case()`와 `normalize()`를 읽고 결과를 대조합니다.

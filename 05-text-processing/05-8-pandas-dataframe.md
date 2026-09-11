@@ -1,5 +1,9 @@
 # 05-8. pandas와 DataFrame 기반 대용량 처리
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/05-8-pandas-dataframe.ipynb) · [05장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 05장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 pandas는 행과 열로 이루어진 표 데이터를 조회·변환·집계하는 도구이다. 작은 CSV는 하나의 DataFrame으로 처리할 수 있지만, 큰 파일은 필요한 열만 읽고 청크별 결과를 증분 집계해야 한다. 이 절에서는 **원문 확인 → 명시적 자료형 변환 → 오류 행 분리 → 유효 행 집계 → 안전한 결과 저장**의 흐름을 익힌다.
 
 {% hint style="info" %}

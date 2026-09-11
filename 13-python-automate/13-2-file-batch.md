@@ -1,5 +1,9 @@
 # 13-2. KAPE 결과 구조와 증거 목록
 
+> 실습 준비: [이 절의 노트북 보기](../notebooks/13-2-file-batch.ipynb) · [13장 교육자료 ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-13.zip) · [자료 준비·실행 안내](../PRACTICE.md#download)
+>
+> 13장 ZIP을 새 폴더에 풀고 폴더 구조를 유지한다. 다음 갱신 때도 이 장의 자료 버전이 바뀐 경우에만 다시 받는다.
+
 > **핵심 질문** · CSV가 여러 개 있을 때, 어느 호스트의 어떤 원본에서 나온 결과인지 어떻게 알 수 있을까요?
 
 KAPE의 Target(`.tkape`)은 수집할 아티팩트를 정의하고 Module(`.mkape`)은 도구를 실행해 수집 자료를 처리하는 작업을 정의합니다. `kape.exe`는 명령줄 실행에, `gkape.exe`는 GUI 구성에 사용됩니다. 수집 결과가 항상 CSV인 것은 아닙니다. EVTX·레지스트리 하이브 등은 전용 파서를 거쳐야 합니다. [KapeFiles 공식 저장소](https://github.com/EricZimmerman/KapeFiles)
