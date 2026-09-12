@@ -10,7 +10,7 @@
 | 02. 개발 및 실습 환경 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-02.zip) | `92c1b4fd8a2f` | 3.3 KiB |
 | 03. Python 기초 문법 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-03.zip) | `4f90241cd8bd` | 47.9 KiB |
 | 04. 파일 입출력과 데이터 형식 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-04.zip) | `1137c2b69e11` | 53.4 KiB |
-| 05. 텍스트 파싱과 데이터 분석 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip) | `0eb36e3a1444` | 52.6 KiB |
+| 05. 텍스트 파싱과 데이터 분석 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-05.zip) | `46696d5ad668` | 59.0 KiB |
 | 06. 네트워크 프로그래밍 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-06.zip) | `c15861175a86` | 16.8 KiB |
 | 07. HTTP와 API | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-07.zip) | `1acd0e65e7db` | 18.2 KiB |
 | 08. 시스템 자동화 | [ZIP 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/downloads/chapter-08.zip) | `8c24ab33f25d` | 25.6 KiB |

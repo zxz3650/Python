@@ -32,7 +32,7 @@ CHAPTERS = {
 EXTRA_PATHS = {
     "03": ("examples/03-9-event-review-starter",),
     "04": ("examples/04-file-analyzer",),
-    "05": ("fixtures/05-text-processing", "notebooks/solutions"),
+    "05": ("fixtures/05-text-processing", "notebooks/solutions", "examples/05-security-regex"),
     "06": ("examples/06-network-echo",),
     "07": ("examples/07-local-web-security-lab",),
     "08": ("examples/08-toolization-project", "examples/07-local-web-security-lab"),

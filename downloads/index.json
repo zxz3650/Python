@@ -36,13 +36,13 @@
     "version": "1137c2b69e11"
   },
   {
-    "archive_root": "chapter-05-0eb36e3a1444",
+    "archive_root": "chapter-05-46696d5ad668",
     "chapter": "05",
     "file": "chapter-05.zip",
-    "sha256": "a57c9dbe84364e85f857123284cea3c73757792784b9454545d179524957aad8",
-    "size_bytes": 53831,
+    "sha256": "ea389713ae9a275dac6065839be3119593a998eda2b18b4895ff4f7bd0fd8c91",
+    "size_bytes": 60460,
     "title": "텍스트 파싱과 데이터 분석",
-    "version": "0eb36e3a1444"
+    "version": "46696d5ad668"
   },
   {
     "archive_root": "chapter-06-c15861175a86",

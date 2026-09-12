@@ -15,6 +15,7 @@
 - ASCII 범위와 유니코드 범위의 차이를 검증한다.
 - 탐욕적·비탐욕적 수량자의 결과를 비교한다.
 - 정상·오류·경계 입력을 함께 사용해 패턴을 검증한다.
+- 웹로그·SSH 로그·CloudTrail의 필드 특성에 맞게 패턴을 적용한다.
 {% endhint %}
 
 ## 학습 방법
@@ -224,6 +225,155 @@ print(multiline_start.findall("INFO one\nERROR two"))
 
 플래그는 패턴 전체의 의미를 바꾸므로 상수 이름과 주변 설명으로 의도를 남긴다.
 
+## 8-1. 보안 분석 데이터에 적용하기
+
+보안 로그에서는 **어느 필드를 검사하는지**가 패턴 자체만큼 중요하다. 원문 전체에서 `404`를 찾으면 응답 상태가 아니라 URL이나 User-Agent 안의 숫자까지 찾는다. 먼저 로그 형식을 확인하고 필요한 위치나 필드에 패턴을 적용한다.
+
+| 데이터 | 분석 질문 | 방법 |
+| --- | --- | --- |
+| 웹 접근 로그 | 실제 응답 상태가 4xx·5xx인가? | 상태 필드 위치를 고정한 전체 일치 |
+| SSH 인증 로그 | 지정한 인증 실패 메시지인가? | 접두부 확인·메시지 전체 일치 |
+| CloudTrail | 변경 동작처럼 보이는 이벤트명인가? | JSON 파싱 후 eventName 패턴 검사 |
+| CloudTrail | 접근 거부 코드 또는 CLI 버전 접두부가 있는가? | errorCode 전체 일치·userAgent 시작 일치 |
+| 계정 ID·파일 해시 | 정해진 ASCII 문자와 길이를 따르는가? | 문자 클래스·반복 횟수 검사 |
+
+05-3에서는 후보 선택에 집중한다. 이름 있는 그룹으로 필드를 꺼내는 방법은 [05-4](05-4-groups-capture.md), IP·날짜의 의미 검증은 [05-5](05-5-validation.md)에서 이어간다. 아래 `(?:A|B)`는 A 또는 B를 한 단위로 묶되 별도로 캡처하지 않는 표현이다.
+
+### 8-1-1. 웹 접근 로그: 응답 상태 위치 확인하기
+
+다음은 Apache Combined 형식을 본뜬 합성 로그다. 실제 Apache·Nginx의 로그 필드는 설정에 따라 달라지므로 수집 환경의 형식을 먼저 확인한다. [Apache 로그 형식 안내](https://httpd.apache.org/docs/2.4/logs.html)
+
+```text
+192.0.2.10 - - [12/Sep/2026:09:00:00 +0900] "GET /missing HTTP/1.1" 404 120 "-" "Mozilla/5.0"
+192.0.2.11 - - [12/Sep/2026:09:00:02 +0900] "GET /help/404 HTTP/1.1" 200 240 "-" "client-500"
+```
+
+첫 행은 404 응답이다. 둘째 행에는 404와 500이 있지만 실제 응답은 200이다.
+
+```python
+import re
+
+WEB_ERROR = re.compile(
+    r'[^ \t\r\n"]{1,64} [^ \t\r\n"]{1,64} [^ \t\r\n"]{1,64} '
+    r'\[[^\]\r\n]{1,64}\] '
+    r'"[A-Z]{1,16} [^ \t\r\n"]{1,2048} HTTP/[0-9]\.[0-9]" '
+    r'[45][0-9]{2} (?:[0-9]{1,12}|-) '
+    r'"[^"\r\n]{0,2048}" "[^"\r\n]{0,2048}"'
+)
+```
+
+| 부분 | 의미 |
+| --- | --- |
+| 앞의 공백 없는 필드 3개 | 클라이언트 주소·식별 정보 위치 |
+| `\[[^\]\r\n]{1,64}\]` | 대괄호 안의 시각 표현; 실제 날짜는 별도 검증 |
+| 따옴표로 닫힌 요청 부분 | 메서드·요청 대상·HTTP 버전 |
+| `[45][0-9]{2}` | 요청 필드 다음의 세 자리 4xx·5xx 상태 |
+| `(?:[0-9]{1,12}|-)` | 응답 크기 숫자 또는 - |
+| 마지막 따옴표 필드 2개 | Referer·User-Agent 위치 |
+
+`WEB_ERROR.fullmatch(line.rstrip("\r\n"))`으로 검사한다. 이 패턴은 수업용 형식과 길이 제한에 맞춘 예제다. 따옴표 이스케이프, 다른 필드 순서, 요청 필드가 `"-"`인 행은 지원하지 않는다. **불일치는 정상 응답 또는 형식 미지원일 수 있으므로 정상 판정과 같지 않다.** 실무 파서는 형식 오류를 따로 기록하고 파싱된 상태 코드로 집계한다.
+
+4xx·5xx는 사용자 실수나 서버 장애에서도 발생한다. 일치만으로 공격을 확정하지 않고 시각·경로·빈도 등을 함께 확인한다.
+
+### 8-1-2. SSH 인증 로그: 실패 메시지 경계 확인하기
+
+다음은 특정 OpenSSH 메시지 형태를 본뜬 합성 입력이다. 운영체제·수집기·인증 방식에 따라 실제 표현이 달라질 수 있다.
+
+```text
+Sep 12 09:00:00 lab sshd[101]: Failed password for invalid user trainee from 192.0.2.20 port 54321 ssh2
+Sep 12 09:00:01 lab sshd[102]: Failed password for learner from 2001:db8::20 port 54322 ssh2
+Sep 12 09:00:02 lab sshd[103]: Accepted publickey for learner from 192.0.2.20 port 54323 ssh2
+```
+
+```python
+SSH_FAILURE = re.compile(
+    r'Failed password for (?:invalid user )?[A-Za-z0-9_.-]{1,64} '
+    r'from [0-9A-Fa-f:.]{2,45} port [0-9]{1,5} ssh2'
+)
+```
+
+`(?:invalid user )?`는 생략 가능한 문구다. IP 부분은 IPv4·IPv6에서 쓰는 문자만 허용하며 주소 유효성을 보장하지 않는다. `999.999.999.999`나 범위를 벗어난 포트도 형태상 통과할 수 있다. 추출 후 `ipaddress.ip_address()`와 포트 범위로 검증한다.
+
+실행 예제는 `sshd[번호]: ` 접두부를 확인한 뒤 메시지에 `fullmatch()`를 적용한다. 설명문에 실패 문구가 인용된 경우까지 이벤트로 세지 않기 위해서다. 이 패턴이 모든 SSH 실패를 포괄하지는 않으며, 단일 실패가 무차별 대입 공격을 뜻하지도 않는다.
+
+### 8-1-3. CloudTrail: JSON을 읽고 필드별로 검사하기
+
+CloudTrail 로그 파일은 `Records` 배열에 이벤트 객체를 담는 JSON이다. JSON 전체에서 CreateUser를 검색하면 설명 필드까지 이벤트명으로 오인할 수 있다. 먼저 구조를 파싱한다. [AWS 로그 파일 예제](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-examples.html)
+
+```python
+import json
+
+payload = json.loads(
+    '{"Records": [{"eventName": "ListUsers", '
+    '"requestParameters": {"description": "CreateUser"}}]}'
+)
+event = payload["Records"][0]
+CHANGE_EVENT = re.compile(
+    r'(?:Create|Delete|Update|Put|Attach|Detach)[A-Za-z0-9]{1,80}'
+)
+assert CHANGE_EVENT.fullmatch(event["eventName"]) is None
+```
+
+이 패턴은 이름이 특정 동사로 시작하는 **검토 후보**를 찾는다. 읽기·쓰기 동작의 완전한 분류 규칙은 아니다. 예를 들어 StopLogging은 이 패턴에서 빠진다. 중요 이벤트가 정해져 있다면 서비스와 이벤트명의 정확한 조합이 더 명확하다.
+
+```python
+review_events = {
+    ("cloudtrail.amazonaws.com", "StopLogging"),
+    ("iam.amazonaws.com", "CreateAccessKey"),
+}
+candidate = (event.get("eventSource"), event.get("eventName")) in review_events
+```
+
+로그를 검토하는 조건이며 실제 API를 호출하지 않는다. 허가된 관리 작업도 일치하므로 사용자·변경 승인·호출 결과를 함께 확인한다.
+
+```python
+ACCESS_DENIED = re.compile(r'AccessDenied(?:Exception)?|UnauthorizedOperation')
+CLI_AGENT = re.compile(r'aws-cli/[0-9]+\.[0-9]+\.[0-9]+(?:[ \t]|$)')
+
+assert ACCESS_DENIED.fullmatch("AccessDeniedException") is not None
+assert ACCESS_DENIED.fullmatch("AccessDeniedButAllowed") is None
+assert CLI_AGENT.match("aws-cli/2.0.0 Python/3.12") is not None
+assert CLI_AGENT.match("custom aws-cli/2.0.0") is None
+```
+
+errorCode는 선택 필드이며 다른 위치에 오류를 기록하는 이벤트도 있다. userAgent 역시 누락될 수 있고 표기만으로 실제 호출 도구를 확정할 수 없다. sourceIPAddress에는 IP뿐 아니라 서비스 이름이나 AWS 내부 호출 표기도 들어갈 수 있다. IP 파싱 실패를 곧바로 잘못된 이벤트로 처리하지 않는다. [AWS 이벤트 필드 정의](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html)
+
+### 8-1-4. 계정 ID·파일 해시: 형태와 신뢰성 구분하기
+
+```python
+ACCOUNT_ID = re.compile(r'[0-9]{12}')
+SHA256 = re.compile(r'[A-Fa-f0-9]{64}')
+
+assert ACCOUNT_ID.fullmatch("123456789012") is not None
+assert ACCOUNT_ID.fullmatch("１２３４５６７８９０１２") is None
+assert SHA256.fullmatch("a" * 64) is not None
+assert SHA256.fullmatch("g" * 64) is None
+```
+
+실제 AWS 계정의 존재 여부나 원본 파일의 해시 일치 여부는 이 패턴으로 알 수 없다. 해시는 파일에서 직접 계산한 값과 대조한다. URL·도메인·파일 경로 역시 전용 파서와 운영체제 규칙으로 의미를 검증한다.
+
+### 8-1-5. 실행과 추가 과제
+
+05장 ZIP의 [실행 코드](../examples/05-security-regex/security_regex.py)와 [보충 노트북](../notebooks/05-3-security-log-patterns.ipynb)을 사용한다. 기존 05-3 TODO 노트북으로 문법을 익힌 뒤 실행한다. 입력은 모두 합성이며 외부 서비스에 접속하지 않는다.
+
+```bash
+python examples/05-security-regex/security_regex.py
+```
+
+| 입력 | 기대 결과 |
+| --- | --- |
+| 웹로그 4행 | 1·2행만 상태 필터 일치 |
+| SSH 로그 3행 | 1·2행만 실패 메시지 일치 |
+| CloudTrail training-01 | 변경 동사 후보·CLI 접두부 일치 |
+| CloudTrail training-02·03 | 접근 거부 코드 후보 일치 |
+| CloudTrail training-04 | 변경 동사 패턴 불일치, 정확한 이벤트 목록 일치 |
+
+1. 상태 200인 행의 URL·User-Agent에 404를 넣고 제외되는지 확인한다.
+2. SSH 메시지 끝에 임의 문자열을 붙이고 전체 일치가 실패하는지 확인한다.
+3. CloudTrail userAgent를 생략하거나 null로 바꾸고, 배열로 넣었을 때와 처리를 구분한다.
+4. JSON의 필드 순서를 바꿔도 결과가 같은지 확인한다.
+5. 형태는 맞지만 의미가 잘못된 IP를 찾아 05-5에서 처리할 항목으로 기록한다.
+
 ## 9. 오류·경계 사례
 
 | 상황 | 문제 | 수정 방향 |
@@ -287,6 +437,9 @@ for case_id, value, expected in cases:
 4. `$`를 사용한 패턴이 최종 개행을 허용할 수 있는 이유는 무엇인가?
 5. 동적 문자열에 `re.escape()`가 필요한 조건은 무엇인가?
 6. 탐욕성을 줄이면 HTML 파싱 문제가 완전히 해결되는가?
+7. 응답 상태가 200인 웹로그에 404가 들어 있어도 오류 응답이 아닌 이유는 무엇인가?
+8. CloudTrail의 JSON 전체 검색과 eventName 필드 검사는 어떻게 다른가?
+9. 패턴 불일치·형식 미지원·정상 행위를 같은 결과로 처리해도 되는가?
 
 ```python
 assert EVENT_ID_PATTERN.fullmatch("AB-2026") is not None

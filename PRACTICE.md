@@ -135,6 +135,7 @@ python -m jupyterlab
 | 05-1. 문자열 정규화 | [05-1-normalization.ipynb](notebooks/05-1-normalization.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-1-normalization.ipynb) |
 | 05-2. 분리·검색·치환 | [05-2-split-search-replace.ipynb](notebooks/05-2-split-search-replace.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-2-split-search-replace.ipynb) |
 | 05-3. 정규표현식 기초 | [05-3-regex-basics.ipynb](notebooks/05-3-regex-basics.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-3-regex-basics.ipynb) |
+| 05-3. 보안 로그 정규식 보충 예제 | [05-3-security-log-patterns.ipynb](notebooks/05-3-security-log-patterns.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-3-security-log-patterns.ipynb) |
 | 05-4. 그룹과 캡처 | [05-4-groups-capture.ipynb](notebooks/05-4-groups-capture.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-4-groups-capture.ipynb) |
 | 05-5. 데이터 검증 | [05-5-validation.ipynb](notebooks/05-5-validation.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-5-validation.ipynb) |
 | 05-6. 날짜와 시간 | [05-6-datetime.ipynb](notebooks/05-6-datetime.ipynb) | [원본 받기](https://github.com/zxz3650/Python/raw/refs/heads/master/notebooks/05-6-datetime.ipynb) |

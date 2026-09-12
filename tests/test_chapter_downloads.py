@@ -79,7 +79,7 @@ class ChapterDownloadsTests(unittest.TestCase):
         # 05장 TODO 본문은 미완성 상태가 의도되어 있어 입력 경로를 준비하는 첫 셀만 실행한다.
         cases = {
             "04": [("04-9-file-analyzer.ipynb", None)],
-            "05": [("05-1-normalization.ipynb", 1)],
+            "05": [("05-1-normalization.ipynb", 1), ("05-3-security-log-patterns.ipynb", None)],
             "06": [("06-8-echo-project.ipynb", None)],
             "08": [("08-4-safe-subprocess.ipynb", None)],
             "13": [("13-6-safe-file-organizer-project.ipynb", None),
